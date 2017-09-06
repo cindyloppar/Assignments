@@ -1,0 +1,24 @@
+<DOCTYPE html>
+<html>
+<head>
+<title>Regex example3</title>
+<script async src="//jsfiddle.net/38L2s9zr/embed/"></script>
+<script>
+function checkSentenceType(){
+  var value = document.getElementById("value").value;
+  if (value.match(/\?/)) {
+    console.log("Sentence is a question");
+  }
+  else if (value.match(/\!/)){
+    console.log("Sentence is a strong statement");
+  }
+}
+</script>
+</head>
+<body>
+<input type="text" id="value" />
+<button onclick="checkSentenceType()">
+  Check Sentence
+</button>
+</body>
+</html>
