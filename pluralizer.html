@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Pluralize</title>
+
+</head>
+
+<body>
+    <script>
+        function pluralise(number, noun) {
+            var string = number + " " + noun;
+            var collectiveNouns = ["geese","sheep",""];  
+            
+            if (number > 1 && (collectiveNouns.indexOf(noun) > -1)) {
+                string = number + noun + "s";
+            }
+
+            console.log(string);
+        }
+        this.pluralise(5, "ship");
+    </script>
+
+</body>
+
+</html>
