@@ -13,26 +13,27 @@
             for (var i = 0; i < array.length; i++) {
                 average += array[i] / array.length;
             }
-             if (average < 60) {
-                 Grade = "F";
-             }
+            if (average < 60) {
+                Grade = "F";
+            }
             else if (average < 70) {
-                 Grade = "D";
-             }
-             else if (average < 80) {
-                 Grade = "C";
-             }
-             else if (average < 90) {
-                 Grade = "B";
-             }
-             else {
-                 Grade = "A";
-             }
-            return  average  +  Grade ;
+                Grade = "D";
+            }
+            else if (average < 80) {
+                Grade = "C";
+            }
+            else if (average < 90) {
+                Grade = "B";
+            }
+            else {
+                Grade = "A";
+            }
+            return average + Grade;
         }
 
         console.log(calculateAverageMarks());
-</script>
+
+    </script>
 
 </head>
 
