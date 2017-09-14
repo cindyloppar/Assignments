@@ -6,9 +6,10 @@
     <title>Compute the average marks and grade</title>
 
     <script>
-        var array = [60, 77, 88, 95, 45];
-            var Grade = " ";
-            var average = 0;
+        var array = [["Themba", 60], ["Zandi", 77], ["Lerato", 88], ["Tshepo", 95], ["Thomas", 45]];
+        var array = [""];
+        var Grade = " ";
+        var average = 0;
 
         function calculateAverageMarks() {
             for (var i = 0; i < array.length; i++) {
@@ -23,7 +24,7 @@
             else if (average < 80) {
                 Grade = "C";
             }
-            else if (average < 90) {
+            else if (average < 90 || average <= 100) {
                 Grade = "B";
             }
             else {
@@ -33,7 +34,6 @@
         }
 
         console.log(calculateAverageMarks());
-
     </script>
 
 </head>
