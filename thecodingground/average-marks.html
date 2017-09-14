@@ -9,9 +9,31 @@
 <body>
     <script>
         function averageMarks() {
-
+            var array = [60, 77, 88, 95, 45];
+            var Grade;
+            var average = 0;
+            for (var i = 0; i < array.length; i++) {
+                average += array[i] / array.length;
+            }
+             if (average < 60) {
+                 Grade = "F";
+             }
+            else if (average < 70) {
+                 Grade = "D";
+             }
+             else if (average < 80) {
+                 Grade = "C";
+             }
+             else if (average < 90) {
+                 Grade = "B";
+             }
+             else {
+                 Grade = "A";
+             }
+            return "Average is " + average + " and grade is " + Grade;
         }
 
+        console.log(averageMarks());
     </script>
 
 </body>
