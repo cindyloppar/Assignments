@@ -4,13 +4,11 @@
 <head>
     <meta charset=utf-8 />
     <title>Compute the average marks and grade</title>
-</head>
 
-<body>
     <script>
-        function averageMarks() {
+        function calculateAverageMarks() {
             var array = [60, 77, 88, 95, 45];
-            var Grade;
+            var Grade = "";
             var average = 0;
             for (var i = 0; i < array.length; i++) {
                 average += array[i] / array.length;
@@ -30,11 +28,15 @@
              else {
                  Grade = "A";
              }
-            return "Average is " + average + " and grade is " + Grade;
+            return  average  +  Grade ;
         }
 
-        console.log(averageMarks());
-    </script>
+        console.log(calculateAverageMarks());
+</script>
+
+</head>
+
+<body>
 
 </body>
 
