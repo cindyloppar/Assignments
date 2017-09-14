@@ -6,10 +6,11 @@
     <title>Compute the average marks and grade</title>
 
     <script>
-        function calculateAverageMarks() {
-            var array = [60, 77, 88, 95, 45];
-            var Grade = "";
+        var array = [60, 77, 88, 95, 45];
+            var Grade = " ";
             var average = 0;
+
+        function calculateAverageMarks() {
             for (var i = 0; i < array.length; i++) {
                 average += array[i] / array.length;
             }
