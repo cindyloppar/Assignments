@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>even and odd numbers</title>
+    <script>
+        var answer = " ";
+        var result;
+        
+        function calculateEvenAndOddNum(maxNum) {
+
+            for (i = 1; i <= maxNum; i++) {
+                if (i % 2 === 0) {
+                    answer = `${i} is even \n`;
+                }
+                else if (i % 2 != 0) {
+                    {
+                        answer = `${i} is odd \n` ;
+                    }
+                }
+               result += answer;
+            }
+            return result;
+        }
+console.log(this.calculateEvenAndOddNum(100));
+        
+    </script>
+
+</head>
+
+<body>
+</body>
+
+</html>
