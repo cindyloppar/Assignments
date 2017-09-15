@@ -10,18 +10,21 @@
 
 <body>
     <script>
-        function smallInteger(a,b) {
-             var result;
-            if (a < b) {
-                result = "the smallerNumber between " + a + " and " + b + " is " + a;
+        var firstInteger = 5;
+        var secondInteger =10 ;
+        function calculateSmallerInteger(firstInteger, secondInteger) {
+             var result = "";
+            if (firstInteger < secondInteger) {
+                result = "the smallerNumber between " + firstInteger + " and " + secondInteger + " is " + firstInteger;
             }
-            else if (a < b) {
-                result = "the smallerNumber between " + a + " and " + b + " is " + b;
+            else if (firstInteger < secondInteger) {
+                result = "the smallerNumber between " + firstInteger + " and " + secondInteger + " is " + secondInteger;
 
             }
             return result;
         }
-            console.log(smallInteger(20,40));
+
+            console.log(calculateSmallerInteger(5,9));
     </script>
 </body>
 

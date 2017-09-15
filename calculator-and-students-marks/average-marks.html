@@ -6,34 +6,51 @@
     <title>Compute the average marks and grade</title>
 
     <script>
-        var array = [["Themba", 60], ["Zandi", 77], ["Lerato", 88], ["Tshepo", 95], ["Thomas", 45]];
-        var array = [""];
-        var Grade = " ";
-        var average = 0;
+        var students = [["Themba", 60], ["Zandi", 77], ["Lerato", 88], ["Tshepo", 95], ["Thomas", 45]];
 
-        function calculateAverageMarks() {
-            for (var i = 0; i < array.length; i++) {
-                average += array[i] / array.length;
+
+        function calculateAverageMarks(students) {
+
+            var average = 0;
+
+            for (var i = 0; i < students.length; i++) {
+                average += students[i][1] / students.length;
             }
-            if (average < 60) {
-                Grade = "F";
-            }
-            else if (average < 70) {
-                Grade = "D";
-            }
-            else if (average < 80) {
-                Grade = "C";
-            }
-            else if (average < 90 || average <= 100) {
-                Grade = "B";
-            }
-            else {
-                Grade = "A";
-            }
-            return average + Grade;
+            return average;
         }
 
-        console.log(calculateAverageMarks());
+        function determineGrade(average) {
+
+            var grade = " ";
+
+            if (average < 60) {
+                grade = "F";
+            }
+            else if (average < 70) {
+                grade = "D";
+            }
+            else if (average < 80) {
+                grade = "C";
+            }
+            else if (average < 90 || average > 100) {
+                grade = "B";
+            }
+            else {
+                grade = "A";
+            }
+            return grade;
+
+        }
+        var studentsAverage = calculateAverageMarks(students);
+        var studentsGrade = determineGrade(studentsAverage);
+        console.log(studentsAverage);
+        console.log(determineGrade(studentsAverage));
+        
+        var students2 = [["Themba", 58], ["Zandi", 67], ["Lerato", 56], ["Tshepo", 26], ["Thomas", 15]];
+        var students2Average = calculateAverageMarks(students2);
+        var students2Grade = determineGrade(students2Average);
+        console.log(students2Average);
+        console.log(determineGrade(students2Average));
     </script>
 
 </head>
