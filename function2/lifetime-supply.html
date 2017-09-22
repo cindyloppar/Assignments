@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>lifetime supply</title>
+    <script>
+        
+
+        function calculateSuppy(age, amountPerDay) {
+            var maxAge = 70;
+            var remainingAge = maxAge - age ;
+            var amountPerYear = amountPerDay * 365; 
+            
+            return `You will need  ${amountPerYear * remainingAge} to last you until the ripe old age of ${maxAge}`;
+        }
+               console.log(calculateSuppy(53,3));  
+               console.log(calculateSuppy(61,2));
+               console.log(calculateSuppy(69,1));
+    </script>
+
+</head>
+
+<body>
+</body>
+
+</html>
