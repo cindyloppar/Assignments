@@ -7,28 +7,20 @@
 </title>
 <script>
     var numbers = (1, 2, 3, 4);
+    var string = ("xyz");
+    var array = ([1,2,3,4]);
         var num = 0;
         var result = "";
-        function number(numbers) {
-            for (var i in numbers) {
+        function number(numbers,string,array) {
+            for (var i in numbers, -1) {
                 num += numbers[i];
                
             }
             return result
         }
-console.log(numbers);
+console.log(numbers,string,array);
 
-   
-    var string = ("xyz")
-        var result = "";
-        function number(string) {
-            for (var i in string) {
-                result+= string[i];
-               string.push(result).pop();
-            }
-            return result
-        }
-console.log(string);
+
    
 
 </script>
