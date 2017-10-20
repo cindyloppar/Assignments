@@ -10,7 +10,7 @@
         var num = 0;
         var result = "";
         function number(numbers) {
-            for (i = 0; i < numbers.length; i++) {
+            for (var i in numbers) {
                 num += numbers[i];
                
             }
@@ -22,7 +22,7 @@ console.log(numbers);
     var string = ("xyz")
         var result = "";
         function number(string) {
-            for (i = 0; i < string.length; i++) {
+            for (var i in string) {
                 result+= string[i];
                string.push(result).pop();
             }

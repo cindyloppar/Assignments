@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>duplicate argument values</title>
+    <script>
+        var num = (1, 2, 3);
+        var numbers = 0;
+        var result = "";
+        function duplicatedArguments(num) {
+            for (var i in num) {
+                numbers += num[i];
+                if (num >= 1) {
+                    result = true;
+                }else{
+                    result = false;
+                }
+            }
+            return result
+        }
+console.log(1,6,"u");
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>

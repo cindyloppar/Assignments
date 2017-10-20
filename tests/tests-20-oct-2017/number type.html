@@ -9,16 +9,16 @@
         var num = 0;
         var result = "";
         function number(numbers) {
-            for (i = 0; i < numbers.length; i++) {
-                num += numbers[i];
-                if (num >= 1) {
-                    result = true;
-                }else{
-                    result = false;
-                }
+            for(var i in numbers){
+                nun += numbers[i];
             }
-            return result
+            if(num == numbers){
+               
+            }
+             result = true;
+             return result
         }
+        
 console.log(number(numbers));
     </script>
 </head>
