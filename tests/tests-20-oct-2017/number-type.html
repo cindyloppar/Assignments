@@ -5,21 +5,22 @@
 <head>
     <title>Number type</title>
     <script>
-        var numbers = (1, 4, 3, 2, 5);
-        var num = 0;
-        var result = "";
-        function number(numbers) {
-            for(var i in numbers){
-                num += numbers[i];
+    
+        var number = [1, 4, "r", 2, 5];
+        function numbers(num) {
+            var arr = 0;
+            var results = "";
+            for (var i = 0; i < num.length; i++) {
+                arr += num[i];
+                if (arr > 0) {
+                    results = true;
+                } else
+                    results = false;
             }
-            if(num == numbers ){
-               
-            }
-             result = true;
-             return result
+            return results
+
         }
-        
-console.log(number(numbers));
+        console.log(numbers(number))
     </script>
 </head>
 
