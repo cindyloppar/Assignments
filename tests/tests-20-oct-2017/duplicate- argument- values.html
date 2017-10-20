@@ -11,7 +11,7 @@
         function duplicatedArguments(num) {
             for (var i in num) {
                 numbers += num[i];
-                if (num >= 1) {
+                if (numbers >= num) {
                     result = true;
                 }else{
                     result = false;
@@ -19,7 +19,7 @@
             }
             return result
         }
-console.log(duplicatedArguments(num));
+console.log();
     </script>
 </head>
 
