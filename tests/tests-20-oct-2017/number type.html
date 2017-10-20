@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Number type</title>
+    <script>
+        var numbers = (1, 4, 3, 2, 5);
+        var num = 0;
+        var result = "";
+        function number(numbers) {
+            for (i = 0; i < numbers.length; i++) {
+                num += numbers[i];
+                if (num >= 1) {
+                    result = true;
+                }else{
+                    result = false;
+                }
+            }
+            return result
+        }
+console.log(number(numbers));
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
