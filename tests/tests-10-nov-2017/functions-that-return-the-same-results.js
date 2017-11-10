@@ -1,8 +1,4 @@
-<html>
-<title>
-    functions that return the same results
-</title>
-<script>
+
     function bragFirst() {
         return {
             brag: "Ska ba forgiva!"
@@ -17,7 +13,3 @@
     }
     console.log(bragFirst())
      console.log(bragAgain())
-
-</script>
-
-</html>
