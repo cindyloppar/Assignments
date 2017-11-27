@@ -3,8 +3,10 @@
  function multiply(a,b) {
    return a * b;
 }
-typeof function multiply(){
+typeof function multiply(a,b){
     return a * b;
+
 }
+
 console.log(multiply(3, 3));
 console.log(multiply(3)(3));
