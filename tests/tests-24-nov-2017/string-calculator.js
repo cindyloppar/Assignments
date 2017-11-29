@@ -1,31 +1,28 @@
 
 function addIntStringMethod(str) {
-var sum = 0;
-   
-    var replace = str.replace(/ \n/g,",");
 
+    var sum = 0;
+    var replace = str.replace(/ \n/g, ",");
     var splitedString = replace.split(",")
-   
 
     for (var i = 0; i < splitedString.length; i++) {
-        if(str === ''){
+
+        if (str === '') {
             return 0;
-        }else if (/,\n/g.test(str) === true){
-            return new Error (`we cant have two separators next to each other!`);
-        }else if(/\/\//g.test(str) === true){
+        }
+        else if (/,\n/g.test(str) === true) {
+            return new Error(`we cant have two separators next to each other!`);
+        }
+        else if (/\/\//g.test(str) === true) {
             return delimiters(str, splitedString);
         }
-sum += parseInt(splitedString[i])
-        
-        if (splitedString.length === 0) {
-            return 0;
+        else if (splitedString[i] < 0) {
+            var message = `Negative numbers are not allowed: ${splitedString.filter((element) => element < 0)}`
+            return new Error(message);
         }
+        sum += parseInt(splitedString[i])
+
     }
-    /*sum = splitedString.reduce(function (a, b) {
-        return parseInt(a) + parseInt(b);
-
-    });*/
-
     return sum;
 }
 
