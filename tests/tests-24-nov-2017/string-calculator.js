@@ -1,16 +1,20 @@
 
 function addIntStringMethod(str) {
-
-    var arr = [];
-    var replace = str.replace(/(\n)|(\W)/g,"");
 var sum = 0;
-    var splitedString = replace.split("")
-    /*var sumOfNumbers = splitedString.reduce(function (a, b) {
-        return parseInt(a) + parseInt(b);
+   
+    var replace = str.replace(/ \n/g,",");
 
-    });*/
+    var splitedString = replace.split(",")
+   
 
     for (var i = 0; i < splitedString.length; i++) {
+        if(str === ''){
+            return 0;
+        }else if (/,\n/g.test(str) === true){
+            return new Error (`we cant have two separators next to each other!`);
+        }else if(/\/\//g.test(str) === true){
+            return delimiters(str, splitedString);
+        }
 sum += parseInt(splitedString[i])
         
         if (splitedString.length === 0) {
