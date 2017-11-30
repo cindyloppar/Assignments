@@ -2,8 +2,8 @@
 function addIntStringMethod(str) {
 
     var sum = 0;
-    var replace = str.replace(/ \n/g, ",");
-    var splitedString = replace.split(",")
+    var replacedCharacters = str.replace(/\n/g, ",");
+    var splitedString = replacedCharacters.split(",")
 
     for (var i = 0; i < splitedString.length; i++) {
 
@@ -20,7 +20,7 @@ function addIntStringMethod(str) {
             var message = `Negative numbers are not allowed: ${splitedString.filter((element) => element < 0)}`
             return new Error(message);
         }
-        sum += parseInt(splitedString[i])
+        sum += Number(splitedString[i])
 
     }
     return sum;
@@ -28,8 +28,9 @@ function addIntStringMethod(str) {
 
 function delimiters(str, splitedString){
     var delimiter = splitedString[0][2];
-    return splitedString[1].split(delimiter).reduce((a,b) => Number(a) + Number(B));
+    return splitedString[1].split(delimiter).reduce((a, b) => Number(a) + Number(b));
 }
+
 console.log(addIntStringMethod(''));
 console.log(addIntStringMethod('1,2'));
 console.log(addIntStringMethod('785,9087,5653'));
