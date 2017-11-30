@@ -26,6 +26,10 @@ function addIntStringMethod(str) {
     return sum;
 }
 
+function delimiters(str, splitedString){
+    var delimiter = splitedString[0][2];
+    return splitedString[1].split(delimiter).reduce((a,b) => Number(a) + Number(B));
+}
 console.log(addIntStringMethod(''));
 console.log(addIntStringMethod('1,2'));
 console.log(addIntStringMethod('785,9087,5653'));
