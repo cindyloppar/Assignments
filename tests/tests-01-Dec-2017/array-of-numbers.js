@@ -3,17 +3,13 @@ function arrayOfNumbers(arr, num, string) {
     var array = [];
 
     for (var i = 0; i < arr.length; i++) {
+        if (string === "LessThan" && arr[i] < num) {
+            array.push(arr[i]);
 
-        if (string === "GreaterOrEqual") {
-            if (arr[i] >= num) {
-                array.push(arr[i]);
-            }
-
-        } if (string === "Lessthan") {
-            if (arr[i] <= num) {
-                array.push(arr[i]);
-            }
+        } else if (string === "GreaterOrEqual" && arr[i] >= num) {
+            array.push(arr[i]);
         }
+
     }
     return array;
 }
