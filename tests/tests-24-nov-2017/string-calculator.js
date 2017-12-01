@@ -26,7 +26,7 @@ function addIntStringMethod(str) {
     return sum;
 }
 
-function delimiters(str, splitedString){
+function delimiters(str, splitedString) {
     var delimiter = splitedString[0][2];
     return splitedString[1].split(delimiter).reduce((a, b) => Number(a) + Number(b));
 }
