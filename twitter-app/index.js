@@ -4,7 +4,7 @@ var request = require('request');
 var express = require("express");
 var myapp = express();
 var qs = require('querystring')
-//  var req_data = qs.parse(body)
+var req_data = qs.parse(body)
 
 myapp.get("/tweet", function (req, res) {
 
