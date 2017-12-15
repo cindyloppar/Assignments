@@ -24,15 +24,15 @@ myapp.get("/tweet", function (req, res) {
         }
     };
 
-    request.post(statusUpdateOptions, function (err, postResponse, body) {
-        console.log('error', err);
-        if (err || postResponse.statusCode.status >= 400) {
-            res.status(500).end();
+   request.post(statusUpdateOptions,
+               function(err,httpResponse,body){
+                 console.log("http response code", httpResponse.statusCode);
+                 console.log("http response body", httpResponse.body);
 
-      
-    }
-    
-    });
+                 if (err){
+                   console.log(err);
+                 }
+               });
 });
 
 
