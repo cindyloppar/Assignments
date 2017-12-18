@@ -8,19 +8,20 @@ myapp.get("/", function (req, res) {
     var url = "https://api.twitter.com/1.1/statuses/update.json";
 
 });
+
 const config = {
     consumerKey: "IPuxZ08g4OGleP6jjlR9pIgg7",
     consumerSecret: "W6mbeS8gHWpN9yvrNsxsRQkgEbFFCc8z7Zme9TSfDqShGHl52J",
 }
+
 myapp.get('/authorize/twitter', (req, res) => {
     getRequestToken((err, data) => {
         if (err) {
-            res.statusCode(500).end();
+            res.statusCode(500);
         }
         res.send("<a href='https://api.twitter.com/oauth/authorize?oauth_token=" + data.oauth_token + "'>Authorization</a>");
     });
 });
-
 
 const url = 'https://api.twitter.com/1.1/statuses/update.json';
 
@@ -35,7 +36,7 @@ var statusUpdateOptions = {
     url: url,
     oauth: oauth,
     qs: {
-        status: "testing app "
+        status: "twitter app "
     }
 };
 
@@ -45,12 +46,13 @@ function getRequestToken(cb) {
         , consumer_key: config.consumerKey
         , consumer_secret: config.consumerSecret
     };
+
     request.post({
         url: 'https://api.twitter.com/oauth/request_token',
         oauth: oauth
-    }, function (e, r, body) {
-        if (e) {
-            console.log(e);
+    }, function (err, r, body) {
+        if (err) {
+            console.log(err);
             cb(e);
             return;
         };
@@ -59,7 +61,6 @@ function getRequestToken(cb) {
         cb(null, data);
     });
 }
-
 
 request.post(statusUpdateOptions,
     function (err, httpResponse, body) {
@@ -83,14 +84,13 @@ function getAccessToken(oauthVerifier, requestToken, cb) {
         url: 'https://api.twitter.com/oauth/access_token',
         oauth: oauth,
         qs: { oauth_verifier: oauthVerifier }
-    }, function (e, r, body) {
+    }, function (err, r, body) {
         console.log("body = ", body);
-        if (e) {
-            console.log(e);
-            cb(e);
+        if (err) {
+            console.log(err);
+            cb(err);
             return;
         };
-
 
         var data = qs.parse(body);
         cb(null, data);
@@ -104,13 +104,14 @@ function getRequestToken(cb) {
         , consumer_key: config.consumerKey
         , consumer_secret: config.consumerSecret
     };
+    
     request.post({
         url: 'https://api.twitter.com/oauth/request_token',
         oauth: oauth
-    }, function (e, r, body) {
-        if (e) {
-            console.log(e);
-            cb(e);
+    }, function (err, r, body) {
+        if (err) {
+            console.log(err);
+            cb(err);
             return;
         };
 
