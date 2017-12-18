@@ -17,7 +17,7 @@ myapp.get('/authorize/twitter', (req, res) => {
         if (err) {
             res.statusCode(500).end();
         }
-        res.send("<a href='https://api.twitter.com/oauth/authorize?oauth_token=" + data.oauth_token + "'>Authorize Twitter</a>");
+        res.send("<a href='https://api.twitter.com/oauth/authorize?oauth_token=" + data.oauth_token + "'>Authorization</a>");
     });
 });
 
@@ -35,7 +35,7 @@ var statusUpdateOptions = {
     url: url,
     oauth: oauth,
     qs: {
-        status: "testing my twitter  "
+        status: "testing app "
     }
 };
 
