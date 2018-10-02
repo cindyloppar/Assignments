@@ -30,5 +30,3 @@ INSERT INTO location(address) VALUES ('125 Tshepo Section');
 INSERT INTO unit_types(unit_type_name, unit_width) VALUES ('garage', '3 meters');
 INSERT INTO block(block_name) VALUES ('serial');
 
--- SELECT * FROM block;
--- SELECT * FROM unit INNER JOIN unit_types ON unit.unit_type_id = unit_types.id WHERE unit_width = '3 meters' 
