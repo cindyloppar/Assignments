@@ -6,9 +6,10 @@ import MyForm from './App';
 const enhancers = compose( window.devToolsExtension ? window.devToolsExtension() : f => f)
 
 const initialUser = {
-  firstName: '',
-  lastName: '',
-  
+  businessName: '',
+  contactName: '',
+  telephoneNumber: '',
+  contactEmail: '',
 };
 
 export const store = createStore(combineForms({

@@ -7,6 +7,10 @@ import * as serviceWorker from './serviceWorker';
 import { combineForms } from 'redux';
 import { Provider } from 'react-redux';
 import {store} from './reducer';
+
+
+    
+
 ReactDOM.render(
     <Provider store={store}>
         <MyForm />
