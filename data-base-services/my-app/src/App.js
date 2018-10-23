@@ -11,20 +11,11 @@ class MyForm extends Component {
 
 
 
-  handleSubmit(values) {
-    console.log(values);
+  async handleSubmit(values) {
     this.setState({ values })
+    axios.post('http://localhost:3001/business', values)
   }
 
-  componentDidMount() {
-    const sendData = async () => {
-      var post = await axios.post('/', { name: 'cindy' })
-      console.log("values", this.state.values)
-      console.log('post', post);
-
-    }
-    sendData()
-  }
 
   render() {
     return (
@@ -32,6 +23,7 @@ class MyForm extends Component {
       <Form
         model="user"
         onSubmit={(val) => this.handleSubmit(val)}
+      
       >
         <div className='field' >
           <label>Business name: </label>
@@ -52,7 +44,8 @@ class MyForm extends Component {
           <Control.text model="user.contactEmail" />
         </div>
 
-        <button>Submit</button>
+        <button className='next'>Next > </button>
+        {/* <button className='next'>Next</button> */}
       </Form>
     );
   }
