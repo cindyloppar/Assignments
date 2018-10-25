@@ -17,8 +17,8 @@ class locationForm extends Component {
     }
 
     async handleSubmit(values) {
-        this.setState({ values })
-        axios.post('http://localhost:3001/business', values);
+        this.setState({ values });
+        axios.post('http://localhost:3001/location', values);
     }
 
     render() {
@@ -37,9 +37,9 @@ class locationForm extends Component {
                 <div className='field' >
                     <label>Select Business</label>
                 </div>
-                <div className='selectCountry'>
+                <div className='selectBusiness'>
                     <Control.select model="location.selectBusiness">
-                        <option>'Select Business'</option>
+                        <option>Select Business</option>
                         {this.state.businessValues.map(element =>{
                             return<option>{element.business_name}</option>
                         })}
@@ -66,10 +66,10 @@ class locationForm extends Component {
                     <label>Country</label>
                 </div>
                 <div className='selectCountry'>
-                    <Control.select model="location.selectCountry">
+                    <Control.select model="location.country">
                         <option>Select Country</option>
-                        <option value="country">South Africa</option>
-                        <option value="country">America</option>
+                        <option value="South Africa">South Africa</option>
+                        <option value="America">America</option>
                     </Control.select>
                 </div>
 
@@ -77,13 +77,13 @@ class locationForm extends Component {
                     <label>Region</label>
                 </div>
                 <div className='selectRegion'>
-                    <Control.select model="location.selectRegion">
+                    <Control.select model="location.region">
                         <option>Select Region</option>
-                        <option value="region">Bloemfontein</option>
-                        <option value="region">Cape Town</option>
-                        <option value="region">Durban</option>
-                        <option value="region">Johannesburg</option>
-                        <option value="region">Pretoria</option>
+                        <option value="Bloemfontein">Bloemfontein</option>
+                        <option value="Cape Town">Cape Town</option>
+                        <option value="Durban">Durban</option>
+                        <option value="Johannesburg">Johannesburg</option>
+                        <option value="Pretoria">Pretoria</option>
                     </Control.select>
                 </div>
 
@@ -91,13 +91,13 @@ class locationForm extends Component {
                     <label>Store</label>
                 </div>
                 <div className='selectStore'>
-                    <Control.select model="location.selectSize">
+                    <Control.select model="location.store">
                         <option>Select Store</option>
-                        <option value="store">Boksburg</option>
-                        <option value="store">Fourways</option>
-                        <option value="store">Edenvale</option>
-                        <option value="store">Johannesburg City</option>
-                        <option value="store">Kempton park</option>
+                        <option value="Boksburg">Boksburg</option>
+                        <option value="Fourways">Fourways</option>
+                        <option value="Edenvale">Edenvale</option>
+                        <option value="Johannesburg">Johannesburg City</option>
+                        <option value="Kempton park">Kempton park</option>
                     </Control.select>
                 </div>
                 <button className='submit'>submit > </button>

@@ -44,7 +44,7 @@ class MyForm extends Component {
           <Control.text model="user.contactEmail" />
         </div>
 
-        <button className='next'>Next > </button>
+        <button className='submit'>submit > </button>
         {/* <button className='next'>Next</button> */}
       </Form>
     );

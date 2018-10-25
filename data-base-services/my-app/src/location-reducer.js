@@ -9,6 +9,7 @@ const initialState = {
   country: '',
   region: '',
   store: '',
+  selectBusiness:''
 };
 export default function locationDetails(state = initialState, action) {
   switch (action.type) {
