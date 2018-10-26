@@ -38,7 +38,6 @@ app.get("/location", async (req, res) => {
 
 app.get("/blocks", async (req, res) => {
   const findAllQuery = 'SELECT * FROM blocks';
-  console.log('findAllQuery :', findAllQuery);
   try {
     const { rows, rowCount } = await client.query(findAllQuery);
     return res.status(200).send({ rows, rowCount });
@@ -49,7 +48,6 @@ app.get("/blocks", async (req, res) => {
 
 app.get("/unittypes", async (req, res) => {
   const findAllQuery = 'SELECT * FROM unit_types';
-  console.log('findAllQuery :', findAllQuery);
   try {
     const { rows, rowCount } = await client.query(findAllQuery);
     return res.status(200).send({ rows, rowCount });
@@ -60,7 +58,7 @@ app.get("/unittypes", async (req, res) => {
 
 app.post('/business', async (req, res) => {
   const text = `INSERT INTO
-      business(business_name, contact_name, telephone_number, contact_email)
+  business(business_name, contact_name, telephone_number, contact_email)
       VALUES($1, $2, $3, $4)
       returning *`;
   const values = [
@@ -69,9 +67,9 @@ app.post('/business', async (req, res) => {
     req.body.telephoneNumber,
     req.body.contactEmail,
   ];
-
   try {
-    return res.status(201).end();
+    const { rows, rowCount } = await client.query(text, values);
+    return res.status(201).send(rows[0]);
   } catch (error) {
     return res.status(400).send(error);
   }
@@ -79,12 +77,14 @@ app.post('/business', async (req, res) => {
 
 
   app.post('/location', async (req, res) => {
+
     try {
       var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
+
       const text = `INSERT INTO
-            location(address_line1, address_line2, suburb, country ,region, store, business_id)
-            VALUES($1, $2, $3, $4, $5, $6)
-            returning *`;
+          location(address_line1, address_line2, suburb, country ,region, store, business_id)
+          VALUES($1, $2, $3, $4, $5, $6, $7)
+          returning *`;
       const values = [
         req.body.address_line1,
         req.body.address_line2,
@@ -92,36 +92,36 @@ app.post('/business', async (req, res) => {
         req.body.country,
         req.body.region,
         req.body.store,
-        businessId.rows[0].id
-      ];
+        businessId.rows[0].id,
 
-      await client.query(text, values);
-      return res.status(201).end();
+      ];
+      const { rows, rowCount } = await client.query(text, values);
+      return res.status(201).send(rows[0]);
     } catch (error) {
       return res.status(400).send(error);
     }
   }),
 
 
-  app.post('/blocks', async(req, res) => {
-    
+  app.post('/blocks', async (req, res) => {
     try {
-      var locationId = await client.query("SELECT id FROM location", [req.body.rows])
+      var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation])
       const text = `INSERT INTO
-        blocks(name, location_id)
-        VALUES($1)
-        returning *`;
+      blocks(name, location_id)
+      VALUES($1,$2)
+      returning *`;
       const values = [
         req.body.name,
-        locationId.rows[0]
+        locationId.rows[0].id
       ];
-      return res.status(201).end();
+      const { rows, rowCount } = await client.query(text, values);
+      return res.status(201).send(rows[0]);
     } catch (error) {
       return res.status(400).send(error);
     }
   }),
 
-  app.post('/unittypes', async(req, res) => {
+  app.post('/unittypes', async (req, res) => {
     const text = `INSERT INTO
       unit_types(name, length, width, height)
       VALUES($1, $2, $3, $4)
@@ -133,31 +133,28 @@ app.post('/business', async (req, res) => {
       req.body.height,
     ];
     try {
-      return res.status(201).end();
+      const { rows, rowCount } = await client.query(text, values);
+      return res.status(201).send(rows[0]);
     } catch (error) {
       return res.status(400).send(error);
     }
   }),
 
-  app.post('/units', async(req, res) => {
-    
+  app.post('/units', async (req, res) => {
     try {
-      var unitsId = await client.query("SELECT id FROM units", [req.body.rows]);
-      var unitTypesId = await client.query("SELECT id FROM unit_types", [req.body.rows]);
-      console.log('unitsId :', unitsId);
-      console.log('unitTypes :', unitTypesId);
-      
+      var unitsId = await client.query("SELECT id FROM blocks WHERE name = $1", [req.body.selectBlock]);
+      var unitTypesId = await client.query("SELECT id FROM unit_types WHERE name = $1", [req.body.selectUnitType]);
+
       const text = `INSERT INTO
-       units(name, blocks_id, unit_types_id)
-        VALUES($1,$2,$3)
-        returning *`;
+     units(name, blocks_id, unit_types_id)
+      VALUES($1,$2,$3)
+      returning *`;
       const values = [
         req.body.name,
-        unitsId.rows[0],
-        unitTypesId.rows[0]
+        unitsId.rows[0].id,
+        unitTypesId.rows[0].id
       ];
       const { rows } = await client.query(text, values);
-      console.log('rows :', rows);
       return res.status(201).send(rows[0]);
     } catch (error) {
       return res.status(400).send(error);

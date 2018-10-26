@@ -61,7 +61,7 @@ class unitForm extends Component {
 
         <div className='field' >
           <label>Name: </label>
-          <Control.text model="units.businessName" />
+          <Control.text model="units.name" />
         </div>
 
         <button className='submit'>submit > </button>

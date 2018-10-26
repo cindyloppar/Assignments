@@ -14,20 +14,16 @@ import locationForm from './location';
 import blocksForm from './blocks';
 
 
-
-
-
-
 ReactDOM.render(
     <Provider store={store}>
         <Router>
             <div>
-                <Route exact path="/" component={MyForm} />
+                <Route exact path="/business" component={MyForm} />
                 <Route exact path="/units" component={unitsForm} />
                 <Route exact path="/location" component={locationForm} />
                 <Route exact path="/blocks" component={blocksForm} />
                 <Route exact path="/unittypes" component={unitTypeForm} />
-
+            
             </div>
 
         </Router>

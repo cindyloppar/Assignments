@@ -45,7 +45,7 @@ class blocksForm extends Component {
 
         <div className='field' >
           <label>Name: </label>
-          <Control.text model="blocks.blockName" />
+          <Control.text model="blocks.name" />
         </div>
 
         <button className='submit'>submit > </button>

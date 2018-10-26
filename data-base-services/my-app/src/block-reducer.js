@@ -3,7 +3,8 @@ import { combineForms } from 'react-redux-form';
 import blocksForm from './blocks';
 
 const initialState = {
- blockName: '',
+ name: '',
+ selectLocation: ''
 };
 export default function blocksDetails(state = initialState, action) {
   switch (action.type) {

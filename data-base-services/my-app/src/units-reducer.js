@@ -4,9 +4,6 @@ import unitsForm from './units';
 
 const initialState = {
  name: '',
- length: '',
- width: '',
- height: '',
  selectBlock: '',
  selectUnitType: ''
 };

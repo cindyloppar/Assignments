@@ -37,9 +37,9 @@ class locationForm extends Component {
                 <div className='field' >
                     <label>Select Business</label>
                 </div>
-                <div className='selectBusiness'>
+                <div className='field'>
                     <Control.select model="location.selectBusiness">
-                        <option>Select Business</option>
+                        {/* <option>Select Business</option> */}
                         {this.state.businessValues.map(element =>{
                             return<option>{element.business_name}</option>
                         })}

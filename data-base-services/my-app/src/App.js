@@ -10,7 +10,6 @@ class MyForm extends Component {
   }
 
 
-
   async handleSubmit(values) {
     this.setState({ values })
     axios.post('http://localhost:3001/business', values)
@@ -23,7 +22,7 @@ class MyForm extends Component {
       <Form
         model="user"
         onSubmit={(val) => this.handleSubmit(val)}
-      
+        
       >
         <div className='field' >
           <label>Business name: </label>
