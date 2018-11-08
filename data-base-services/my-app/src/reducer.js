@@ -6,6 +6,8 @@ import locationDetails from './location-reducer';
 import blocksDetails from './block-reducer';
 import unitTypesDetails from './unit-types-reducer';
 import unitsDetails from './units-reducer';
+import signDetails from './sign-up-reducer';
+import logDetails from './log-in-reducer';
 
 const enhancers = compose( window.devToolsExtension ? window.devToolsExtension() : f => f)
 
@@ -21,6 +23,8 @@ export const store = createStore(combineForms({
   location: locationDetails,
   blocks: blocksDetails,
   unitTypes: unitTypesDetails,
-  units: unitsDetails
+  units: unitsDetails,
+  signUp:signDetails,
+  log: logDetails
 }),enhancers);
       

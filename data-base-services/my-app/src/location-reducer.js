@@ -5,10 +5,8 @@ import locationForm from './location';
 const initialState = {
   address_line1: '',
   address_line2: '',
+  city: '',
   suburb: '',
-  country: '',
-  region: '',
-  store: '',
   selectBusiness:''
 };
 export default function locationDetails(state = initialState, action) {

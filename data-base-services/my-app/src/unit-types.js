@@ -14,6 +14,8 @@ class unitTypesForm extends Component {
   async handleSubmit(values) {
     this.setState({ values })
     axios.post('http://localhost:3001/unittypes', values)
+    this.props.history.push('/units');
+    
   }
 
   render() {
@@ -76,7 +78,7 @@ class unitTypesForm extends Component {
         <div>
           <label>Recommended for: </label>
         </div>
-        <button className='submit'>submit > </button>
+        <button className='submit'>Next > </button>
 
       </Form>
     );

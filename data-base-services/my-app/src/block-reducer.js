@@ -4,6 +4,7 @@ import blocksForm from './blocks';
 
 const initialState = {
  name: '',
+ blocksName: '',
  selectLocation: ''
 };
 export default function blocksDetails(state = initialState, action) {

@@ -12,14 +12,15 @@ class blocksForm extends Component {
 
   async componentDidMount() {
     var locationDetails = await axios.get('http://localhost:3001/location');
-    console.log('locationDetails :', locationDetails.data.rows);
-    this.setState({ locationValues: locationDetails.data.rows })
+    this.setState({ locationValues: locationDetails.data.rows });
   }
 
 
   async handleSubmit(values) {
     this.setState({ values })
-    axios.post('http://localhost:3001/blocks', values)
+    axios.post('http://localhost:3001/blocks', values);
+    this.props.history.push('/unittypes');
+    
   }
 
   render() {
@@ -48,7 +49,7 @@ class blocksForm extends Component {
           <Control.text model="blocks.name" />
         </div>
 
-        <button className='submit'>submit > </button>
+        <button className='submit'>Next > </button>
       </Form>
     );
   }

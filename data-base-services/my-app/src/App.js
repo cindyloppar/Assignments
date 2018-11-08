@@ -13,15 +13,18 @@ class MyForm extends Component {
   async handleSubmit(values) {
     this.setState({ values })
     axios.post('http://localhost:3001/business', values)
+    this.props.history.push('/location');
+    
   }
-
-
+  
+  
   render() {
     return (
-
+      
       <Form
-        model="user"
-        onSubmit={(val) => this.handleSubmit(val)}
+      model="user"
+      onSubmit={(val) => this.handleSubmit(val)
+      }
         
       >
         <div className='field' >
@@ -43,8 +46,7 @@ class MyForm extends Component {
           <Control.text model="user.contactEmail" />
         </div>
 
-        <button className='submit'>submit > </button>
-        {/* <button className='next'>Next</button> */}
+        <button className='submit'>Next > </button>
       </Form>
     );
   }

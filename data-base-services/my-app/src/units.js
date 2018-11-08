@@ -13,8 +13,7 @@ class unitForm extends Component {
     var blockDetails = await axios.get('http://localhost:3001/blocks');
     var unitTypeDetails = await axios.get('http://localhost:3001/unittypes');    
     console.log('blockDetails :', blockDetails.data.rows);
-    console.log('unitTypeDetails :', unitTypeDetails.data.rows);
-    
+    console.log('unitTypeDetails :', unitTypeDetails.data.rows);  
     this.setState({ blockValues: blockDetails.data.rows, unitTypeValues: unitTypeDetails.data.rows })
   }
 
@@ -31,6 +30,10 @@ class unitForm extends Component {
         onSubmit={(val) => this.handleSubmit(val)}
       >
 
+      <div className='field' >
+          <label>Name: </label>
+          <Control.text model="units.name" />
+        </div>
 
         <div className='field' >
           <label>Select block</label>
@@ -59,12 +62,7 @@ class unitForm extends Component {
           </Control.select>
         </div>
 
-        <div className='field' >
-          <label>Name: </label>
-          <Control.text model="units.name" />
-        </div>
-
-        <button className='submit'>submit > </button>
+        <button className='submit'>submit </button>
         
       </Form>
     );

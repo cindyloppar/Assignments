@@ -1,32 +1,44 @@
 import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
+import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 import './App.css';
 import axios from 'axios';
 
 class locationForm extends Component {
     constructor() {
         super();
-        this.state = { values: '', businessValues: [] }
+        this.state = { values: '', businessValues: [], country: '', region: '' }
 
     }
 
-   async componentDidMount() {
-      var businessDetails =  await axios.get('http://localhost:3001/business');
-      console.log('businessDetails :', businessDetails);
-        this.setState({businessValues:businessDetails.data.rows})
+    async componentDidMount() {
+        var businessDetails = await axios.get('http://localhost:3001/business');
+        this.setState({ businessValues: businessDetails.data.rows })
     }
 
     async handleSubmit(values) {
         this.setState({ values });
         axios.post('http://localhost:3001/location', values);
+        this.props.history.push('/blocks');
+
+    }
+
+    selectCountry(val) {
+        this.setState({ country: val });
+    }
+
+    selectRegion(val) {
+        this.setState({ region: val });
     }
 
     render() {
+        const { country, region } = this.state;
         return (
 
             <Form
                 model="location"
                 onSubmit={(val) => this.handleSubmit(val)}
+
             >
 
                 <div className='field' >
@@ -40,8 +52,8 @@ class locationForm extends Component {
                 <div className='field'>
                     <Control.select model="location.selectBusiness">
                         {/* <option>Select Business</option> */}
-                        {this.state.businessValues.map(element =>{
-                            return<option>{element.business_name}</option>
+                        {this.state.businessValues.map(element => {
+                            return <option>{element.business_name}</option>
                         })}
                     </Control.select>
                 </div>
@@ -57,50 +69,19 @@ class locationForm extends Component {
 
                 </div>
 
+
+                <div className='field' >
+                    <label>City</label>
+                    <Control.text model='location.city' />
+
+                </div>
+
                 <div className='field' >
                     <label>Suburb</label>
                     <Control.text model='location.suburb' />
                 </div>
 
-                <div className='field' >
-                    <label>Country</label>
-                </div>
-                <div className='selectCountry'>
-                    <Control.select model="location.country">
-                        <option>Select Country</option>
-                        <option value="South Africa">South Africa</option>
-                        <option value="America">America</option>
-                    </Control.select>
-                </div>
-
-                <div className='field' >
-                    <label>Region</label>
-                </div>
-                <div className='selectRegion'>
-                    <Control.select model="location.region">
-                        <option>Select Region</option>
-                        <option value="Bloemfontein">Bloemfontein</option>
-                        <option value="Cape Town">Cape Town</option>
-                        <option value="Durban">Durban</option>
-                        <option value="Johannesburg">Johannesburg</option>
-                        <option value="Pretoria">Pretoria</option>
-                    </Control.select>
-                </div>
-
-                <div className='field' >
-                    <label>Store</label>
-                </div>
-                <div className='selectStore'>
-                    <Control.select model="location.store">
-                        <option>Select Store</option>
-                        <option value="Boksburg">Boksburg</option>
-                        <option value="Fourways">Fourways</option>
-                        <option value="Edenvale">Edenvale</option>
-                        <option value="Johannesburg">Johannesburg City</option>
-                        <option value="Kempton park">Kempton park</option>
-                    </Control.select>
-                </div>
-                <button className='submit'>submit > </button>
+                <button className='submit'>Next > </button>
             </Form>
         );
     }
