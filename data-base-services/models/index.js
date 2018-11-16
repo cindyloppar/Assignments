@@ -5,8 +5,13 @@ const bodyParser = require('body-parser')
 const pg = require('pg');
 const cors = require('cors');
 const app = express();
-const path = require('path')
+const path = require('path');
 const port = 3001;
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+
+
 
 const connectionString = process.env.DATABASE_URL || 'postgres://cindy:loppar123@localhost:5432/storage_unit';
 app.use(bodyParser.json())
@@ -21,7 +26,7 @@ app.get("/business", async (req, res) => {
     const { rows, rowCount } = await client.query(findAllQuery);
     return res.status(200).send({ rows, rowCount });
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(400);
   }
 })
 
@@ -32,7 +37,7 @@ app.get("/location", async (req, res) => {
     const { rows, rowCount } = await client.query(findAllQuery);
     return res.status(200).send({ rows, rowCount });
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(400);
   }
 })
 
@@ -42,7 +47,7 @@ app.get("/blocks", async (req, res) => {
     const { rows, rowCount } = await client.query(findAllQuery);
     return res.status(200).send({ rows, rowCount });
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(400);
   }
 })
 
@@ -52,7 +57,7 @@ app.get("/unittypes", async (req, res) => {
     const { rows, rowCount } = await client.query(findAllQuery);
     return res.status(200).send({ rows, rowCount });
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(400);
   }
 })
 
@@ -71,7 +76,7 @@ app.post('/business', async (req, res) => {
     const { rows, rowCount } = await client.query(text, values);
     return res.status(201).send(rows[0]);
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(400);
   }
 }),
 
@@ -89,25 +94,25 @@ app.post('/business', async (req, res) => {
         req.body.address_line1,
         req.body.address_line2,
         req.body.suburb,
-        req.body.country,
-        req.body.region,
-        req.body.store,
+        req.body.city,
         businessId.rows[0].id,
 
       ];
       const { rows, rowCount } = await client.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(400);
     }
   }),
 
 
   app.post('/blocks', async (req, res) => {
+
     try {
-      var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation])
+      var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation]);
+
       const text = `INSERT INTO
-      blocks(name, location_id)
+      blocks(name,location_id)
       VALUES($1,$2)
       returning *`;
       const values = [
@@ -117,7 +122,7 @@ app.post('/business', async (req, res) => {
       const { rows, rowCount } = await client.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(400);
     }
   }),
 
@@ -136,7 +141,8 @@ app.post('/business', async (req, res) => {
       const { rows, rowCount } = await client.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {
-      return res.status(400).send(error);
+      console.log('error :', error);
+      return res.status(400);
     }
   }),
 
@@ -157,7 +163,56 @@ app.post('/business', async (req, res) => {
       const { rows } = await client.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(400);
+    }
+  }),
+
+
+
+  app.post('/signup', async (req, res) => {
+    var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    const text = `INSERT INTO
+    sign_up(name, last_name, email, password)
+    VALUES($1, $2, $3,$4)
+    returning *`;
+    const values = [
+      req.body.name,
+      req.body.last_name,
+      req.body.email,
+      hashedPassword
+    ];
+    try {
+      const { rows, rowCount } = await client.query(text, values);
+      return res.status(201).send(rows[0]);
+    } catch (error) {
+      console.log('error :', error);
+      return res.status(400);
+    }
+  }),
+
+
+  app.post('/login', async (req, res) => {
+    // var signUpId = await client.query("SELECT id FROM sign_up WHERE email = $1", [req.body.email]);
+    try {
+      const text = `SELECT * FROM sign_up WHERE email = $1`;
+      const values = [
+        req.body.email];
+      const { rows, rowCount } = await client.query(text, values);
+      if (rowCount > 0 && req.body.password) {
+        var passwordsMatch = await bcrypt.compare(req.body.password, rows[0].password);
+      } else {
+        return res.status(202).send('Invalid password, Please check password').end();
+      }
+
+      if (!passwordsMatch) {
+        return res.status(202).send('Invalid password, Please check password').end()
+      } else {
+        return res.status(201).end();
+      }
+      // console.log('rows :', rows);
+    } catch (error) {
+      console.log('error :', error);
+      return res.status(400);
     }
   }),
 

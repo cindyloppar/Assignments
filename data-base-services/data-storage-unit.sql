@@ -10,9 +10,7 @@ CREATE TABLE IF NOT EXISTS location(
     address_line1 VARCHAR (250) NOT NULL,
     address_line2 VARCHAR (250) NOT NULL,
     suburb VARCHAR (250) NOT NULL,
-    country VARCHAR (250) NOT NULL,
-    region VARCHAR (250) NOT NULL,
-    store VARCHAR (250) NOT NULL,
+    city VARCHAR (250) NOT NULL,
     business_id INT REFERENCES business(id)
 ); 
 CREATE TABLE IF NOT EXISTS blocks(
@@ -33,7 +31,23 @@ CREATE TABLE IF NOT EXISTS unit_types(
     blocks_id INT REFERENCES blocks(id),
     unit_types_id INT REFERENCES unit_types(id)
 );
-
+CREATE TABLE IF NOT EXISTS customer_units(
+    id serial PRIMARY KEY,
+    units_id INT REFERENCES units(id)
+);
+CREATE TABLE IF NOT EXISTS sign_up(
+    id serial PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    last_name VARCHAR (100) NOT NULL UNIQUE,
+    email VARCHAR (100) NOT NULL UNIQUE,
+    password VARCHAR (100)NOT NULL UNIQUE
+);
+CREATE TABLE IF NOT EXISTS log_in(
+    id serial PRIMARY KEY,
+    email VARCHAR (100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    sign_up INT REFERENCES sign_up(id)
+);
 
 INSERT INTO business(business_name, contact_name, telephone_number, contact_email) VALUES ('Tutu.com', 'Temba', '0726263325', 'ssdressers@gmail.com');
 INSERT INTO location(address_line1) VALUES ('258 Fourways');

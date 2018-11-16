@@ -4,10 +4,9 @@ import signUpForm from './sign-up';
 
 const initialState = {
     name: '',
-    lastName: '',
+    last_name: '',
     email: '',
-    password: '',
-    repeatPassword: ''
+    password: ''
 };
 export default function signDetails(state = initialState, action) {
     switch (action.type) {

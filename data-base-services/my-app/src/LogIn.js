@@ -6,47 +6,47 @@ import axios from 'axios';
 
 
 class logIn extends Component {
-    constructor() {
-        super();
-        this.state = { values: '' }
+  constructor() {
+    super();
+    this.state = { values: '', username: '', password: '', errorMessage: '' }
 
+  }
+
+  async handleSubmit(values) {
+    console.log("testing")
+    var userLoggingIn = await axios.post('http://localhost:3001/login', values);
+    console.log('userLoggingIn :', userLoggingIn);
+    this.setState({ values, errorMessage: userLoggingIn.data })
+    if (userLoggingIn.data.length <= 0) {
+      this.props.history.push('/location');
     }
+  }
 
-    async handleSubmit(values) {
-        this.setState({ values })
+  render() {
+    console.log('this.state :', this.state);
+    return (
+      <Form
+        model="log"
+        onSubmit={(val) => this.handleSubmit(val)}
+      >
+        <p>{this.state.errorMessage}</p>
+        <div className="field">
+          <label>Email </label>
+          <Control.text model="log.email"
+          />
+        </div>
 
-        // axios.post('http://localhost:3001/blocks', values)
-    }
+        <div className='field' >
+          <label>Password:</label>
+          <Control.text model="log.password" />
+        </div>
 
-    render() {
-        return (
-            <logInForm
-                model="log"
-                onSubmit={(val) => this.handleSubmit(val)}
-            >
+        <button className='submit' >Log in</button>
 
-                <div className='field' >
-                    <label>Name: </label>
-                    <Control.text model="log.businessName" />
-                </div>
 
-                <div className='field' >
-                    <label>Password:</label>
-                    <Control.text model="log.contactName" />
-                </div>
-
-                <div className="field">
-                    <label>
-                        <Control.checkbox model="log.remember" value={true} />
-                        Remember me
-          </label>
-                </div>
-
-                <button className='submit'>submit </button>
-
-            </logInForm>
-        );
-    }
+      </Form>
+    );
+  }
 }
 
 export default logIn; 

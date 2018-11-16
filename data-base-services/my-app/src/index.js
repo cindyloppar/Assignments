@@ -6,14 +6,16 @@ import MyForm from './App';
 import * as serviceWorker from './serviceWorker';
 import { combineForms } from 'redux';
 import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
+import logger from 'redux-logger';
 import { store } from './reducer';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import unitTypeForm from './unit-types';
 import unitsForm from './units';
 import locationForm from './location';
 import blocksForm from './blocks';
-import logInForm from './LogIn';
-import signUpForm from './sign-up';
+import logIn from './LogIn';
+import signUp from './sign-up';
 import MainScreen from './main-screen'
 import LocationUser from './location-user';
 
@@ -31,8 +33,8 @@ ReactDOM.render(
                         )
                 )} /> */}
                 <Route exact path="/" component={MainScreen} />                
-                <Route exact path="/login" component={logInForm} />
-                <Route exact path="/signup" component={signUpForm} />
+                <Route exact path="/login" component={logIn} />
+                <Route exact path="/signup" component={signUp} />
                 <Route exact path="/locationuser" component={LocationUser} />
                 <Route exact path="/business" component={MyForm} />
                 <Route exact path="/units" component={unitsForm} />

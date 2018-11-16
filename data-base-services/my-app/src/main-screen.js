@@ -38,7 +38,7 @@ class MainScreen extends Component {
                 </header>
                 
                 <button className='submit'>Rent Storage</button>
-                    <button className='Next'>Business Owner</button>
+                    {/* <button className='Next'>Business Owner</button> */}
                 
             </div>
         );

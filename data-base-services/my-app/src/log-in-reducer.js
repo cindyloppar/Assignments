@@ -3,9 +3,9 @@ import { combineForms } from 'react-redux-form';
 import logInForm from './LogIn';
 
 const initialState = {
-    name: '',
+    email: '',
     password: '',
-    remember: ''
+   
 };
 export default function logDetails(state = initialState, action) {
     switch (action.type) {
@@ -15,3 +15,25 @@ export default function logDetails(state = initialState, action) {
             return state
     }
 }
+
+const postLogin = (values) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (![ 'john', 'paul', 'george', 'ringo' ].includes(values.username)) {
+          reject({
+            '': 'Login failed!',
+            username: 'User does not exist',
+          });
+        } else if (values.password !== 'beatles') {
+          reject({
+            '': 'Login failed!',
+            password: 'Wrong password',
+          });
+        } else {
+          resolve(true);
+          alert('Successfully submitted!');
+          console.log(values);
+        }
+      });
+    });
+  }
