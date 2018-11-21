@@ -33,12 +33,20 @@ class logIn extends Component {
         <div className="field">
           <label>Email </label>
           <Control.text model="log.email"
-          />
+            validators={{
+              required: (val) => val.length,
+              length: (val) => val.length > 4
+            }} required />
         </div>
 
         <div className='field' >
           <label>Password:</label>
-          <Control.text model="log.password" />
+          <Control.text model="log.password" validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required />
+
+
         </div>
 
         <button className='submit' >Log in</button>

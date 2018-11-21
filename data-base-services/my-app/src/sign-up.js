@@ -30,6 +30,8 @@ class signUp extends Component {
             }
             return results;
         };
+
+
         return (
 
             <Form
@@ -42,12 +44,18 @@ class signUp extends Component {
                 )}
                 <div className='field' >
                     <label>Name: </label>
-                    <Control.text model="signUp.name" />
+                    <Control.text model="signUp.name" validators={{
+                        required: (val) => val.length,
+                        length: (val) => val.length > 4
+                    }} required />
                 </div>
 
                 <div className='field' >
                     <label>Last Name:</label>
-                    <Control.text model="signUp.last_name" />
+                    <Control.text model="signUp.last_name" validators={{
+                        required: (val) => val.length,
+                        length: (val) => val.length > 4
+                    }} required />
                 </div>
 
                 <div className='field' >
@@ -60,7 +68,10 @@ class signUp extends Component {
 
                 <div className='field' >
                     <label> Password: </label>
-                    <Control.text model="signUp.password" />
+                    <Control.text model="signUp.password" validators={{
+                        required: (val) => val.length,
+                        length: (val) => val.length > 4
+                    }} required />
                 </div>
 
                 <button className='submit'>sign up</button>

@@ -192,24 +192,27 @@ app.post('/business', async (req, res) => {
 
 
   app.post('/login', async (req, res) => {
-    // var signUpId = await client.query("SELECT id FROM sign_up WHERE email = $1", [req.body.email]);
     try {
+      // var unitsId = await client.query("SELECT id FROM blocks WHERE name = $1", [req.body.selectBlock]);
+      
       const text = `SELECT * FROM sign_up WHERE email = $1`;
       const values = [
-        req.body.email];
+        req.body.email
+        // req.body.password
+      ];
       const { rows, rowCount } = await client.query(text, values);
       if (rowCount > 0 && req.body.password) {
         var passwordsMatch = await bcrypt.compare(req.body.password, rows[0].password);
       } else {
-        return res.status(202).send('Invalid password, Please check password').end();
+        return res.status(202).send('Please check your password and email').end();
       }
 
       if (!passwordsMatch) {
-        return res.status(202).send('Invalid password, Please check password').end()
+        return res.status(202).send('Please check your password and email ').end()
       } else {
         return res.status(201).end();
       }
-      // console.log('rows :', rows);
+      
     } catch (error) {
       console.log('error :', error);
       return res.status(400);

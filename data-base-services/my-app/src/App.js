@@ -29,21 +29,41 @@ class MyForm extends Component {
       >
         <div className='field' >
           <label>Business name: </label>
-          <Control.text model="user.businessName" />
+          <Control.text model="user.businessName" 
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          />
         </div>
 
         <div className='field' >
           <label>Contact name:</label>
-          <Control.text model="user.contactName" />
+          <Control.text model="user.contactName" 
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          />
         </div>
 
         <div className='field' >
           <label>Telephone number: </label>
-          <Control.text model="user.telephoneNumber" />
+          <Control.text model="user.telephoneNumber" 
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          />
         </div>
         <div className='field' >
           <label>Contact email:</label>
-          <Control.text model="user.contactEmail" />
+          <Control.text model="user.contactEmail" 
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          />
         </div>
 
         <button className='submit'>Next > </button>

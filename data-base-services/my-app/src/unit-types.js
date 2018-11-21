@@ -28,13 +28,23 @@ class unitTypesForm extends Component {
 
         <div className='field' >
           <label>Name:</label>
-          <Control.text model="unitTypes.name" />
+          <Control.text model="unitTypes.name" 
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          />
         </div>
         <div>
           <label className='selectComp'>Select your unit size</label>
         </div>
         <div className='selectOption'>
-          <Control.select model="unitTypes.length">
+          <Control.select model="unitTypes.length" 
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          >
             <option>Length</option>
             <option value="1">1</option>
             <option value="3">3</option>
@@ -45,7 +55,12 @@ class unitTypesForm extends Component {
         </div>
 
         <div className='selectOption'>
-          <Control.select model="unitTypes.width">
+          <Control.select model="unitTypes.width"
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          >
             <option>Width</option>
             <option value="1">1</option>
             <option value="3">3</option>
@@ -56,7 +71,12 @@ class unitTypesForm extends Component {
         </div>
 
         <div className='selectOption'>
-          <Control.select model="unitTypes.height">
+          <Control.select model="unitTypes.height"
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          >
             <option>height</option>
             <option value="1">1</option>
             <option value="3">3</option>

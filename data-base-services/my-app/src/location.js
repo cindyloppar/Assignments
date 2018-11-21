@@ -50,35 +50,62 @@ class locationForm extends Component {
                     <label>Select Business</label>
                 </div>
                 <div className='field'>
-                    <Control.select model="location.selectBusiness">
+                    <Control.select model="location.selectBusiness"
+                     validators={{
+                        required: (val) => val.length,
+                        length: (val) => val.length > 4
+                    }} required
+                    >
                         {/* <option>Select Business</option> */}
                         {this.state.businessValues.map(element => {
                             return <option>{element.business_name}</option>
                         })}
+
+                       
                     </Control.select>
                 </div>
 
                 <div className='field' >
                     <label>Address line 1 </label>
-                    <Control.text model='location.address_line1' />
+                    <Control.text model='location.address_line1'
+                        validators={{
+                            required: (val) => val.length,
+                            length: (val) => val.length > 4
+                        }} required
+                    />
                 </div>
 
                 <div className='field' >
                     <label>Address line 2 </label>
-                    <Control.text model='location.address_line2' />
+                    <Control.text model='location.address_line2'
+                        validators={{
+                            required: (val) => val.length,
+                            length: (val) => val.length > 4
+                        }} required
+                    />
 
                 </div>
 
 
                 <div className='field' >
                     <label>City</label>
-                    <Control.text model='location.city' />
+                    <Control.text model='location.city'
+                        validators={{
+                            required: (val) => val.length,
+                            length: (val) => val.length > 4
+                        }} required
+                    />
 
                 </div>
 
                 <div className='field' >
                     <label>Suburb</label>
-                    <Control.text model='location.suburb' />
+                    <Control.text model='location.suburb'
+                        validators={{
+                            required: (val) => val.length,
+                            length: (val) => val.length > 4
+                        }} required
+                    />
                 </div>
 
                 <button className='submit'>Next > </button>

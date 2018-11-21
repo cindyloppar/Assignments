@@ -32,7 +32,12 @@ class unitForm extends Component {
 
       <div className='field' >
           <label>Name: </label>
-          <Control.text model="units.name" />
+          <Control.text model="units.name" 
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          />
         </div>
 
         <div className='field' >
@@ -54,7 +59,12 @@ class unitForm extends Component {
         </div>
         
         <div className='selectUnitType'>
-          <Control.select model="units.selectUnitType">
+          <Control.select model="units.selectUnitType" 
+          validators={{
+            required: (val) => val.length,
+            length: (val) => val.length > 4
+          }} required
+          >
             <option>Select unit_type</option>
             {this.state.unitTypeValues.map(element => {
               return <option>{element.name}</option>
