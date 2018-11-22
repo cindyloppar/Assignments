@@ -18,6 +18,7 @@ import logIn from './LogIn';
 import signUp from './sign-up';
 import MainScreen from './main-screen'
 import LocationUser from './location-user';
+import About from './about'
 
 
 ReactDOM.render(
@@ -25,13 +26,7 @@ ReactDOM.render(
         <Router>
 
             <div>
-                {/* <Route exact path="/login" render={() => (
-                    logInForm ? (
-                        <Redirect to="/location" />
-                    ) : (
-                            <locationForm />
-                        )
-                )} /> */}
+                
                 <Route exact path="/" component={MainScreen} />                
                 <Route exact path="/login" component={logIn} />
                 <Route exact path="/signup" component={signUp} />
@@ -41,6 +36,7 @@ ReactDOM.render(
                 <Route exact path="/location" component={locationForm} />
                 <Route exact path="/blocks" component={blocksForm} />
                 <Route exact path="/unittypes" component={unitTypeForm} />
+                <Route exact path="/about" component={About}/>
 
 
             </div>

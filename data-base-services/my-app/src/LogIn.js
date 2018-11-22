@@ -8,7 +8,7 @@ import axios from 'axios';
 class logIn extends Component {
   constructor() {
     super();
-    this.state = { values: '', username: '', password: '', errorMessage: '' }
+    this.state = { values: '', errorMessage: '' }
 
   }
 

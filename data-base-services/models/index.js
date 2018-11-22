@@ -61,6 +61,16 @@ app.get("/unittypes", async (req, res) => {
   }
 })
 
+app.get("/units", async (req, res) => {
+  const findAllQuery = 'SELECT * FROM location';
+  try {
+    const { rows, rowCount } = await client.query(findAllQuery);
+    return res.status(200).send({ rows, rowCount });
+  } catch (error) {
+    return res.status(400);
+  }
+})
+
 app.post('/business', async (req, res) => {
   const text = `INSERT INTO
   business(business_name, contact_name, telephone_number, contact_email)
@@ -170,49 +180,55 @@ app.post('/business', async (req, res) => {
 
 
   app.post('/signup', async (req, res) => {
-    var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-    const text = `INSERT INTO
-    sign_up(name, last_name, email, password)
-    VALUES($1, $2, $3,$4)
-    returning *`;
-    const values = [
-      req.body.name,
-      req.body.last_name,
-      req.body.email,
-      hashedPassword
-    ];
     try {
-      const { rows, rowCount } = await client.query(text, values);
-      return res.status(201).send(rows[0]);
+      var userExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
+      if (userExists.rowCount > 0) {
+        return res.send('Email already exists').status(200).end();
+      } else {
+      
+        var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+        const text = `INSERT INTO
+        sign_up(name, last_name, email, password)
+        VALUES($1, $2, $3,$4)
+        returning *`;
+        const values = [
+          req.body.name,
+          req.body.last_name,
+          req.body.email,
+          hashedPassword
+        ];
+        const { rows, rowCount } = await client.query(text, values);
+        return res.status(201).send(rows[0]);
+      }
     } catch (error) {
       console.log('error :', error);
       return res.status(400);
     }
+
+
   }),
 
 
   app.post('/login', async (req, res) => {
     try {
-      // var unitsId = await client.query("SELECT id FROM blocks WHERE name = $1", [req.body.selectBlock]);
-      
-      const text = `SELECT * FROM sign_up WHERE email = $1`;
+
+      const text = `SELECT * FROM users WHERE email = $1`;
       const values = [
         req.body.email
-        // req.body.password
       ];
       const { rows, rowCount } = await client.query(text, values);
       if (rowCount > 0 && req.body.password) {
         var passwordsMatch = await bcrypt.compare(req.body.password, rows[0].password);
       } else {
-        return res.status(202).send('Please check your password and email').end();
+        return res.status(302).send('Please check your password and email').end();
       }
 
       if (!passwordsMatch) {
-        return res.status(202).send('Please check your password and email ').end()
+        return res.status(302).send('Please check your password and email ').end()
       } else {
         return res.status(201).end();
       }
-      
+
     } catch (error) {
       console.log('error :', error);
       return res.status(400);

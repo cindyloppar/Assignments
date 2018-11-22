@@ -13,11 +13,18 @@ class signUp extends Component {
     }
 
     async handleSubmit(values) {
-        this.setState({ values });
-        var signingUserUp = await axios.post('http://localhost:3001/signup', values)
-        console.log('signingUserUp :', signingUserUp);
-        this.props.history.push('/login');
+        var checkUserEmail = await axios.post('http://localhost:3001/signup', values);
+        console.log('checkUserEmail :', checkUserEmail);
+        if (checkUserEmail.status === 200) {
+            this.setState({ values, errorPresent: true, errorMessage: checkUserEmail.data })
+        }
+        else if(checkUserEmail.status === 201){
+            this.props.history.push('/login');
 
+        }else{
+            this.setState({ values, errorPresent: true, errorMessage: "Opps! Something went wrong please try again later" })
+            
+        }
     }
     render() {
         const isEmail = (val) => {
@@ -31,7 +38,7 @@ class signUp extends Component {
             return results;
         };
 
-
+        console.log(this.state);
         return (
 
             <Form
@@ -75,6 +82,9 @@ class signUp extends Component {
                 </div>
 
                 <button className='submit'>sign up</button>
+
+                {/* <button className='submit'>log in</button> */}
+
             </Form>
         );
     }
