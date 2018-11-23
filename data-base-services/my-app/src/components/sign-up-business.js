@@ -1,11 +1,10 @@
-
 import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
 import './App.css';
 import axios from 'axios';
 
 
-class signUp extends Component {
+class signUpBusiness extends Component {
     constructor() {
         super()
         this.state = { values: '', errorMessage: "", errorPresent: false }

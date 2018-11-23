@@ -17,6 +17,7 @@ Form {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  text-decoration: none;
   width: 100%;
 }
 
@@ -55,12 +56,14 @@ input {
   /* display: block; */
   margin-top: 2%;
 }
-.box{
+
+.box {
   font-family: Lato, Helvetica, sans-serif;
   padding: 1rem;
   display: flex;
   margin-bottom: 0.5rem;
   flex-direction: column;
+  text-decoration: none;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
@@ -137,11 +140,20 @@ input {
 }
 
 .topnav a:hover {
-  /* background: #ddd;
-  color: black; */
+  background: #ddd;
+  color: black;
 }
 
-/* .topnav a.active {
+.topnav a.active {
   background-color: rgb(138, 204, 140);
   color: white;
-} */
+}
+
+.welcome {
+  text-align: center;
+  color: #1695A3;
+  font-size: 2rem;
+  font-family: Georgia, serif;;
+  ;
+  /* font-family: Lato, Helvetica, sans-serif; */
+}

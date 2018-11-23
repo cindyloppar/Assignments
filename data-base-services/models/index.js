@@ -71,6 +71,18 @@ app.get("/units", async (req, res) => {
   }
 })
 
+
+app.get("/locationuser", async (req, res) => {
+  const findAllQuery = 'SELECT * FROM location';
+  try {
+    const { rows, rowCount } = await client.query(findAllQuery);
+    return res.status(200).send({ rows, rowCount });
+  } catch (error) {
+    return res.status(400);
+  }
+})
+
+
 app.post('/business', async (req, res) => {
   const text = `INSERT INTO
   business(business_name, contact_name, telephone_number, contact_email)
@@ -178,17 +190,16 @@ app.post('/business', async (req, res) => {
   }),
 
 
-
   app.post('/signup', async (req, res) => {
     try {
       var userExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
+      console.log('userExists');
       if (userExists.rowCount > 0) {
         return res.send('Email already exists').status(200).end();
       } else {
-      
         var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
         const text = `INSERT INTO
-        sign_up(name, last_name, email, password)
+        users(name, last_name, email, password)
         VALUES($1, $2, $3,$4)
         returning *`;
         const values = [
@@ -197,17 +208,17 @@ app.post('/business', async (req, res) => {
           req.body.email,
           hashedPassword
         ];
+
         const { rows, rowCount } = await client.query(text, values);
         return res.status(201).send(rows[0]);
       }
+
     } catch (error) {
       console.log('error :', error);
       return res.status(400);
     }
 
-
   }),
-
 
   app.post('/login', async (req, res) => {
     try {

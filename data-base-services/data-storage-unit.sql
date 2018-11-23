@@ -34,19 +34,14 @@ CREATE TABLE IF NOT EXISTS unit_types(
 CREATE TABLE IF NOT EXISTS customer_units(
     id serial PRIMARY KEY,
     units_id INT REFERENCES units(id)
+
 );
-CREATE TABLE IF NOT EXISTS sign_up(
+CREATE TABLE IF NOT EXISTS users(
     id serial PRIMARY KEY,
     name VARCHAR (100) NOT NULL,
     last_name VARCHAR (100) NOT NULL ,
     email VARCHAR (100) NOT NULL UNIQUE,
     password VARCHAR (100)NOT NULL 
-);
-CREATE TABLE IF NOT EXISTS log_in(
-    id serial PRIMARY KEY,
-    email VARCHAR (100) NOT NULL,
-    password VARCHAR(100) NOT NULL,
-    sign_up INT REFERENCES sign_up(id)
 );
 
 INSERT INTO business(business_name, contact_name, telephone_number, contact_email) VALUES ('Tutu.com', 'Temba', '0726263325', 'ssdressers@gmail.com');
@@ -70,6 +65,12 @@ SELECT * FROM business INNER JOIN location ON location.business_id = business.id
 SELECT * FROM units INNER JOIN unit_types ON units.unit_types_id = unit_types.id WHERE unit_types.name = 'Storage';
 SELECT * FROM units INNER JOIN unit_types ON units.unit_types_id = unit_types.id WHERE unit_types.width > '3';
 
+-- SELECT * FROM units INNER JOIN blocks on units.blocks_id = blocks.id 
+-- INNER JOIN location on blocks.location_id = location.id 
+-- WHERE location.address_line1 = req.body.address_line1 
+-- AND location.address_line2 = req.body.address_line2 
+-- AND location.suburb = req.body.suburb
+-- AND location.city = req.body.city;
 
 -- INNER JOIN locations
 -- ON businesses.id=locations.businesses_id

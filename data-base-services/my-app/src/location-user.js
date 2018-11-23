@@ -6,101 +6,32 @@ import axios from 'axios';
 class LocationUser extends Component {
     constructor() {
         super();
-        this.state = { values: '' }
+        this.state = { values: '',  locationValues: [] }
     }
-
+    async componentDidMount() {
+        var locationDetails = await axios.get('http://localhost:3001/location');
+        this.setState({ locationValues: locationDetails.data.rows })
+    }
 
     render() {
         return (
             <div>
-                <h1>Locations</h1>
+             <h2>Select Location</h2>
+             <div className='field'>
+                    <Control.select model="location.selectLocation"
+                     validators={{
+                        required: (val) => val.length,
+                        length: (val) => val.length > 4
+                    }} required
+                    >
 
+                     {this.state.locationValues.map(element => {
+                            return <option>{element.address_line1}</option>
+                        })}
 
-                <div>
-                    <h1>
-                        Durban
-                    </h1>
-                </div>
-                <div>
-                    <ul>
-                        <li>
-                            Berea
-                        </li>
-                        <li>
-                            Durban City
-                        </li>
-                        <li>
-                            Glen Anil
-                        </li>
-                        <li>
-                            Springfield
-                        </li>
-                        <li>
-                            Waterfall
-                        </li>
-                    </ul>
-                </div>
-
-
-                <div>
-
-                    <h1>Johannesburg</h1>
-                </div>
-                <div>
-                    <ul>
-                        <li>
-                            Boksburg
-                        </li>
-                        <li>
-                            Bryanston
-                        </li>
-                        <li>
-                            Edenvale
-                        </li>
-                        <li>
-                            Johannesburg City
-                            </li>
-                        <li>
-                            Kempton Park
-                        </li>
-                        <li>
-                            Midrand
-                        </li>
-                        <li>
-                            Randburg
-                        </li>
-                        <li>
-                            Sunninghill
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h1>
-                        Pretoria
-                    </h1>
-                </div>
-                <div>
-                    <ul>
-                        <li>
-                            Brooklyn
-                        </li>
-                        <li>
-                            Centurion
-                        </li>
-                        <li>
-                            Irene
-                        </li>
-                        <li>
-                            Pretoria West
-                        </li>
-                        <li>
-                            Silver Lakes
-                        </li>
-                    </ul>
-                </div>
-
-
-
+                       
+                    </Control.select>
+                    </div>
             </div>
         );
     }

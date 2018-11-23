@@ -4,30 +4,33 @@ import './App.css';
 import axios from 'axios';
 
 class MainScreen extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { values: '' }
     }
     async handleSubmit(values) {
-        this.setState({ values })
-        this.props.history.push('/singup');
+        this.setState({ values });
+        this.props.history.push('/signup');
 
     }
 
     render() {
+
         return (
+            <Form
+            model="signUp"
+            onSubmit={(val) => this.handleSubmit(val) }
+            >
             <div>
-                <div className="topnav">
-                    <a className="active" href="http://localhost:3000/">Home</a>
-                    <a href="http://localhost:3000/">Rent Storage</a>
-                    <a href="http://localhost:3000/business">Business Owner</a>
-                    <a href="http://localhost:3000/about">About</a>
-                </div>
-                <div className="box" style={{marginTop: '8%'}}>
-                    <button className='submit'>Sing Up</button>
-                    <button className='submit'>Log in</button>
+
+                <h3 className="welcome">Welcome to Lauper Rental Storage</h3>
+
+                <div className="box" style={{ marginTop: '8%', color: '#f2f2f2', textDecoration: 'none' }}>
+                    <button className='submit' >Rent Storage</button>
+                    <button className='submit'>Business Owner</button>
                 </div>
             </div>
+            </Form>
         );
     }
 
