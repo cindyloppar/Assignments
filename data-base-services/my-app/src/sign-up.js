@@ -13,7 +13,6 @@ class signUp extends Component {
     }
 
     async handleSubmit(values) {
-        console.log('checkUserEmail ', checkUserEmail);
         var checkUserEmail = await axios.post('http://localhost:3001/signup', values);
         if (checkUserEmail.status === 200) {
             this.setState({ values, errorPresent: true, errorMessage:checkUserEmail.data })

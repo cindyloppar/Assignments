@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
-import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 import './App.css';
 import axios from 'axios';
 
@@ -32,7 +31,6 @@ class locationForm extends Component {
     }
 
     render() {
-        const { country, region } = this.state;
         return (
 
             <Form
@@ -56,7 +54,6 @@ class locationForm extends Component {
                         length: (val) => val.length > 4
                     }} required
                     >
-                        {/* <option>Select Business</option> */}
                         {this.state.businessValues.map(element => {
                             return <option>{element.business_name}</option>
                         })}

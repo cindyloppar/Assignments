@@ -1,6 +1,3 @@
-import { createStore, compose } from 'redux';
-import { combineForms } from 'react-redux-form';
-import signUpBusiness from '../sign-up-business';
 
 const initialState = {
     name: '',

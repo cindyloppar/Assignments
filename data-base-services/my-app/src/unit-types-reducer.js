@@ -1,6 +1,4 @@
-import { createStore, compose } from 'redux';
-import { combineForms } from 'react-redux-form';
-import unitTypesForm from './unit-types';
+
 
 const initialState = {
  name: '',

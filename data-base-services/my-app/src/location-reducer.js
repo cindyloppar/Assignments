@@ -1,6 +1,4 @@
-import { createStore, compose } from 'redux';
-import { combineForms } from 'react-redux-form';
-import locationForm from './location';
+
 
 const initialState = {
   address_line1: '',

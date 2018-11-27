@@ -43,6 +43,13 @@ CREATE TABLE IF NOT EXISTS users(
     email VARCHAR (100) NOT NULL UNIQUE,
     password VARCHAR (100)NOT NULL 
 );
+CREATE TABLE IF NOT EXISTS business_owners(
+    id serial PRIMARY KEY,
+    name VARCHAR (100) NOT NULL,
+    last_name VARCHAR (100) NOT NULL ,
+    email VARCHAR (100) NOT NULL UNIQUE,
+    password VARCHAR (100)NOT NULL 
+);
 
 INSERT INTO business(business_name, contact_name, telephone_number, contact_email) VALUES ('Tutu.com', 'Temba', '0726263325', 'ssdressers@gmail.com');
 INSERT INTO location(address_line1) VALUES ('258 Fourways');

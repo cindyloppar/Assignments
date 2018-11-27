@@ -246,6 +246,63 @@ app.post('/business', async (req, res) => {
     }
   }),
 
+
+  app.post('/signupbusinessowner', async (req, res) => {
+    try {
+      var businessExists = await client.query(`SELECT * FROM business_owners WHERE email = $1`, [req.body.email]);
+      console.log('businessExists');
+      if (businessExists.rowCount > 0) {
+        return res.send('Email already exists').status(200).end();
+      } else {
+        var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+        const text = `INSERT INTO
+        business_owners(name, last_name, email, password)
+        VALUES($1, $2, $3,$4)
+        returning *`;
+        const values = [
+          req.body.name,
+          req.body.last_name,
+          req.body.email,
+          hashedPassword
+        ];
+
+        const { rows, rowCount } = await client.query(text, values);
+        return res.status(201).send(rows[0]);
+      }
+
+    } catch (error) {
+      console.log('error :', error);
+      return res.status(400);
+    }
+
+  }),
+
+  app.post('/loginbusinessowner', async (req, res) => {
+    try {
+
+      const text = `SELECT * FROM business_owners WHERE email = $1`;
+      const values = [
+        req.body.email
+      ];
+      const { rows, rowCount } = await client.query(text, values);
+      if (rowCount > 0 && req.body.password) {
+        var passwordsMatch = await bcrypt.compare(req.body.password, rows[0].password);
+      } else {
+        return res.status(302).send('Please check your password and email').end();
+      }
+
+      if (!passwordsMatch) {
+        return res.status(302).send('Please check your password and email ').end()
+      } else {
+        return res.status(201).end();
+      }
+
+    } catch (error) {
+      console.log('error :', error);
+      return res.status(400);
+    }
+  }),
+
   app.listen(port, () => console.log('server is running ' + port))
 
 

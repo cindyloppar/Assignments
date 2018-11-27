@@ -1,15 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { Form, Control } from 'react-redux-form';
 import MyForm from './App';
 import * as serviceWorker from './serviceWorker';
-import { combineForms } from 'redux';
 import { Provider } from 'react-redux';
-import ReduxThunk from 'redux-thunk';
-import logger from 'redux-logger';
 import { store } from './reducer';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import unitTypeForm from './unit-types';
 import unitsForm from './units';
 import locationForm from './location';
@@ -18,7 +14,9 @@ import logIn from './LogIn';
 import signUp from './sign-up';
 import MainScreen from './main-screen'
 import LocationUser from './location-user';
-import About from './about'
+import About from './about';
+import logInBusiness from './log-in-business-owner';
+import signUpBusiness from './sign-up-business';
 
 
 ReactDOM.render(
@@ -37,6 +35,8 @@ ReactDOM.render(
                 <Route exact path="/blocks" component={blocksForm} />
                 <Route exact path="/unittypes" component={unitTypeForm} />
                 <Route exact path="/about" component={About}/>
+                <Route exact path="/singupbusinessowner" component={signUpBusiness}/>
+                <Route exact path="/logginbusinessowner" component={logInBusiness}/>
 
 
             </div>
