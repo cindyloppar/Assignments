@@ -43,7 +43,6 @@ input {
 }
 
 .submit {
-  /* padding: 1rem 2rem; */
   text-transform: uppercase;
   font-size: 80%;
   background: #1695A3;
@@ -53,7 +52,6 @@ input {
   margin-right: 0.2rem;
   width: 30%;
   height: 40px;
-  /* display: block; */
   margin-top: 2%;
 }
 
@@ -155,5 +153,4 @@ input {
   font-size: 2rem;
   font-family: Georgia, serif;;
   ;
-  /* font-family: Lato, Helvetica, sans-serif; */
 }

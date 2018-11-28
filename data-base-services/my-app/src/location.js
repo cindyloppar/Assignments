@@ -6,7 +6,7 @@ import axios from 'axios';
 class locationForm extends Component {
     constructor() {
         super();
-        this.state = { values: '', businessValues: [], country: '', region: '' }
+        this.state = { values: '', businessValues: [] }
 
     }
 
@@ -49,10 +49,7 @@ class locationForm extends Component {
                 </div>
                 <div className='field'>
                     <Control.select model="location.selectBusiness"
-                     validators={{
-                        required: (val) => val.length,
-                        length: (val) => val.length > 4
-                    }} required
+                    required
                     >
                         {this.state.businessValues.map(element => {
                             return <option>{element.business_name}</option>
@@ -65,20 +62,14 @@ class locationForm extends Component {
                 <div className='field' >
                     <label>Address line 1 </label>
                     <Control.text model='location.address_line1'
-                        validators={{
-                            required: (val) => val.length,
-                            length: (val) => val.length > 4
-                        }} required
+                         required
                     />
                 </div>
 
                 <div className='field' >
                     <label>Address line 2 </label>
                     <Control.text model='location.address_line2'
-                        validators={{
-                            required: (val) => val.length,
-                            length: (val) => val.length > 4
-                        }} required
+                        required
                     />
 
                 </div>
@@ -87,10 +78,7 @@ class locationForm extends Component {
                 <div className='field' >
                     <label>City</label>
                     <Control.text model='location.city'
-                        validators={{
-                            required: (val) => val.length,
-                            length: (val) => val.length > 4
-                        }} required
+                        required
                     />
 
                 </div>
@@ -98,10 +86,7 @@ class locationForm extends Component {
                 <div className='field' >
                     <label>Suburb</label>
                     <Control.text model='location.suburb'
-                        validators={{
-                            required: (val) => val.length,
-                            length: (val) => val.length > 4
-                        }} required
+                         required
                     />
                 </div>
 

@@ -72,15 +72,15 @@ app.get("/units", async (req, res) => {
 })
 
 
-app.get("/locationuser", async (req, res) => {
-  const findAllQuery = 'SELECT * FROM location';
-  try {
-    const { rows, rowCount } = await client.query(findAllQuery);
-    return res.status(200).send({ rows, rowCount });
-  } catch (error) {
-    return res.status(400);
-  }
-})
+// app.get("/locationuser", async (req, res) => {
+//   const findAllQuery = 'SELECT * FROM location';
+//   try {
+//     const { rows, rowCount } = await client.query(findAllQuery);
+//     return res.status(200).send({ rows, rowCount });
+//   } catch (error) {
+//     return res.status(400);
+//   }
+// })
 
 
 app.post('/business', async (req, res) => {
@@ -277,9 +277,8 @@ app.post('/business', async (req, res) => {
 
   }),
 
-  app.post('/loginbusinessowner', async (req, res) => {
+  app.post('/logginbusinessowner', async (req, res) => {
     try {
-
       const text = `SELECT * FROM business_owners WHERE email = $1`;
       const values = [
         req.body.email

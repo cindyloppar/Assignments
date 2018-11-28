@@ -16,7 +16,7 @@ import MainScreen from './main-screen'
 import LocationUser from './location-user';
 import About from './about';
 import logInBusiness from './log-in-business-owner';
-import signUpBusiness from './sign-up-business';
+import SignUpBusiness from './sign-up-business';
 
 
 ReactDOM.render(
@@ -35,7 +35,7 @@ ReactDOM.render(
                 <Route exact path="/blocks" component={blocksForm} />
                 <Route exact path="/unittypes" component={unitTypeForm} />
                 <Route exact path="/about" component={About}/>
-                <Route exact path="/singupbusinessowner" component={signUpBusiness}/>
+                <Route exact path="/signupbusinessowner" component={SignUpBusiness}/>
                 <Route exact path="/logginbusinessowner" component={logInBusiness}/>
 
 

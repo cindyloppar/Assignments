@@ -32,34 +32,29 @@ class blocksForm extends Component {
       >
 
         <div className='field' >
-          <label>Select Business</label>
+          <label>Select Location</label>
         </div>
         
         <div className='selectLocation'>
-          <Control.select model="blocks.selectLocation"
-           validators={{
-            required: (val) => val.length,
-            length: (val) => val.length > 4
-          }} required
-          >
+        
+          <Control.select model="blocks.selectLocation" required>
             <option>Select Location</option>
+
             {this.state.locationValues.map(element => {
               return <option>{element.address_line1}</option>
             })}
+
           </Control.select>
         </div>
 
         <div className='field' >
           <label>Name: </label>
           <Control.text model="blocks.name" 
-          validators={{
-            required: (val) => val.length,
-            length: (val) => val.length > 4
-          }} required
+           required
           />
         </div>
 
-        <button className='submit'>Next > </button>
+        <button className='submit'>Next ></button>
       </Form>
     );
   }

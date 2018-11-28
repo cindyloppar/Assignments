@@ -4,7 +4,7 @@ import './App.css';
 import axios from 'axios';
 
 
-class signUpBusiness extends Component {
+class SignUpBusiness extends Component {
     constructor() {
         super()
         this.state = { values: '', errorMessage: "", errorPresent: false }
@@ -12,7 +12,8 @@ class signUpBusiness extends Component {
     }
 
     async handleSubmit(values) {
-        var checkUserEmail = await axios.post('http://localhost:3001/signup', values);
+        var checkUserEmail = await axios.post('http://localhost:3001/signupbusinessowner', values);
+        console.log(checkUserEmail);
         if (checkUserEmail.status === 200) {
             this.setState({ values, errorPresent: true, errorMessage:checkUserEmail.data })
         }else if(checkUserEmail.status === 201){
@@ -23,7 +24,7 @@ class signUpBusiness extends Component {
     }
     render() {
         const isEmail = (val) => {
-             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+             var re = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
             var results = re.test(val);
             if (!results && val.length > 0) {
                 this.setState({ errorPresent: true, errorMessage: "invalid email, please check your email!" })
@@ -44,34 +45,26 @@ class signUpBusiness extends Component {
                 )}
                 <div className='field' >
                     <label>Name: </label>
-                    <Control.text model="signUpBusiness.name" validators={{
-                        required: (val) => val.length,
-                        length: (val) => val.length > 4
-                    }} required />
+                    <Control.text model="signUpBusiness.name" 
+                     required />
                 </div>
 
                 <div className='field' >
                     <label>Last Name:</label>
-                    <Control.text model="signUpBusiness.last_name" validators={{
-                        required: (val) => val.length,
-                        length: (val) => val.length > 4
-                    }} required />
+                    <Control.text model="signUpBusiness.last_name" required />
                 </div>
 
                 <div className='field' >
                     <label>Email:</label>
                     <Control.text model="signUpBusiness.email" validators={{
                         required: (val) => val && val.length,
-                        isEmail, // ES6 property shorthand
+                        isEmail,
                     }} required />
                 </div>
 
                 <div className='field' >
                     <label> Password: </label>
-                    <Control.text model="signUpBusiness.password" validators={{
-                        required: (val) => val && val.length,
-                        length: (val) => val.length > 4
-                    }} required />
+                    <Control.text model="signUpBusiness.password"  required />
                 </div>
 
                 <button className='submit'>sign up</button>
@@ -80,4 +73,4 @@ class signUpBusiness extends Component {
         );
     }
 }
-export default signUpBusiness
+export default SignUpBusiness

@@ -5,6 +5,7 @@ import './App.css';
 import axios from 'axios';
 
 
+const longEnough = (val) => val && val.length > 8;
 class logIn extends Component {
   constructor() {
     super();
@@ -13,14 +14,13 @@ class logIn extends Component {
   }
 
   async handleSubmit(values) {
-    console.log("testing")
     var userLoggingIn = await axios.post('http://localhost:3001/login', values);
-    console.log('userLoggingIn :', userLoggingIn);
     this.setState({ values, errorMessage: userLoggingIn.data })
     if (userLoggingIn.data.length <= 0) {
-      this.props.history.push('/location');
+      this.props.history.push('/locationuser');
     }
   }
+
 
   render() {
     return (
@@ -32,18 +32,13 @@ class logIn extends Component {
         <div className="field">
           <label>Email </label>
           <Control.text model="log.email"
-            validators={{
-              required: (val) => val.length,
-              length: (val) => val.length > 4
-            }} required />
+          required
+          />
         </div>
 
         <div className='field' >
           <label>Password:</label>
-          <Control.text model="log.password" validators={{
-            required: (val) => val.length,
-            length: (val) => val.length > 4
-          }} required />
+          <Control.text model="log.password" required />
 
 
         </div>

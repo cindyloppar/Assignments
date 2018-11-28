@@ -24,7 +24,7 @@ class signUp extends Component {
     }
     render() {
         const isEmail = (val) => {
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            var re = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
             var results = re.test(val);
             if (!results && val.length > 0) {
                 this.setState({ errorPresent: true, errorMessage: "invalid email, please check your email!" })
@@ -64,7 +64,7 @@ class signUp extends Component {
                     <label>Email:</label>
                     <Control.text model="signUp.email" validators={{
                         required: (val) => val && val.length,
-                        isEmail, // ES6 property shorthand
+                        isEmail,
                     }} required />
                 </div>
 

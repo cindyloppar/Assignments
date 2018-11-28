@@ -13,12 +13,10 @@ class logInBusiness extends Component {
   }
 
   async handleSubmit(values) {
-    console.log("testing")
-    var userLoggingIn = await axios.post('http://localhost:3001/login', values);
-    console.log('userLoggingIn :', userLoggingIn);
+    var userLoggingIn = await axios.post('http://localhost:3001/logginbusinessowner', values);
     this.setState({ values, errorMessage: userLoggingIn.data })
     if (userLoggingIn.data.length <= 0) {
-      this.props.history.push('/locationuser');
+      this.props.history.push('/business');
     }
   }
 
@@ -31,21 +29,12 @@ class logInBusiness extends Component {
         <p>{this.state.errorMessage}</p>
         <div className="field">
           <label>Email </label>
-          <Control.text model="logIn.email"
-            validators={{
-              required:(val) => val.length,
-              length:(val) => val.length > 4
-            }} required />
+          <Control.text model="logIn.email" required />
         </div>
 
         <div className='field' >
           <label>Password:</label>
-          <Control.text model="logIn.password" validators={{
-            required: (val) => val.length,
-            length: (val) => val.length > 4
-          }} required />
-
-
+          <Control.text model="logIn.password" required />
         </div>
 
         <button className='submit' >Log in</button>
