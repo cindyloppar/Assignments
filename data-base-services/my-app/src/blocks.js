@@ -11,16 +11,16 @@ class blocksForm extends Component {
 
 
   async componentDidMount() {
+    console.log("entering");
     var locationDetails = await axios.get('http://localhost:3001/location');
+    console.log('locationDetails :', locationDetails);
     this.setState({ locationValues: locationDetails.data.rows });
   }
-
 
   async handleSubmit(values) {
     this.setState({ values })
     axios.post('http://localhost:3001/blocks', values);
     this.props.history.push('/unittypes');
-    
   }
 
   render() {
@@ -34,9 +34,9 @@ class blocksForm extends Component {
         <div className='field' >
           <label>Select Location</label>
         </div>
-        
+
         <div className='selectLocation'>
-        
+
           <Control.select model="blocks.selectLocation" required>
             <option>Select Location</option>
 
@@ -49,8 +49,8 @@ class blocksForm extends Component {
 
         <div className='field' >
           <label>Name: </label>
-          <Control.text model="blocks.name" 
-           required
+          <Control.text model="blocks.name"
+            required
           />
         </div>
 

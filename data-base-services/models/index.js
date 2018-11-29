@@ -9,9 +9,11 @@ const path = require('path');
 const port = 3001;
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-
-
-
+const router = express.Router();
+const passportJWT = require("passport-jwt");
+const jwt = require('jsonwebtoken');
+const ExtractJWT = passportJWT.ExtractJwt;
+const JWTStrategy = passportJWT.Strategy;
 
 const connectionString = process.env.DATABASE_URL || 'postgres://cindy:loppar123@localhost:5432/storage_unit';
 app.use(bodyParser.json())
@@ -19,6 +21,68 @@ app.use(cors());
 
 const client = new pg.Client(connectionString);
 client.connect();
+
+
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'email',
+    passwordField: 'password'
+  },
+  function (email, password, done) {
+    const text = `SELECT * FROM users WHERE email = $1`;
+    const values = [
+      email
+    ];
+    client.query(text, values).then(async user => {
+      if (user.rowCount <= 0) {
+        return done(null, false, { message: 'Incorrect email or password.' });
+      } else {
+        var passwordsMatch = await bcrypt.compare(password, user.rows[0].password);
+        if (passwordsMatch) {
+          return done(null, user.rows[0], { message: 'Logged in successfully.' });
+        } else {
+          return done(null, false, { message: 'Incorrect email or password.' });
+        }
+      }
+    })
+  }
+));
+
+
+passport.use(new JWTStrategy({
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey: 'KE_JWT_NTWE'
+},
+  function (jwtPayload, cb) {
+
+    //find the user in db if needed
+    const text = `SELECT * FROM users WHERE email = $1`;
+    const values = [
+      email
+    ];
+    // return UserModel.findOneById(jwtPayload.id)
+    client.query(text, values).then(user => {
+      return cb(null, user, jwtPayload.id);
+    })
+      .catch(err => {
+        return cb(err);
+      });
+  }
+));
+
+
+router.get('/', function (req, res, next) {
+  res.send('respond with a resource');
+});
+
+/* GET user profile. */
+router.get('/login', function (req, res, next) {
+  res.send(req.user.rows[0]);
+});
+
 
 app.get("/business", async (req, res) => {
   const findAllQuery = 'SELECT * FROM business';
@@ -109,8 +173,8 @@ app.post('/business', async (req, res) => {
       var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
 
       const text = `INSERT INTO
-          location(address_line1, address_line2, suburb, country ,region, store, business_id)
-          VALUES($1, $2, $3, $4, $5, $6, $7)
+          location(address_line1, address_line2, suburb, city, business_id)
+          VALUES($1, $2, $3, $4, $5)
           returning *`;
       const values = [
         req.body.address_line1,
@@ -123,6 +187,7 @@ app.post('/business', async (req, res) => {
       const { rows, rowCount } = await client.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {
+      console.log('error :', error);
       return res.status(400);
     }
   }),
@@ -199,14 +264,15 @@ app.post('/business', async (req, res) => {
       } else {
         var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
         const text = `INSERT INTO
-        users(name, last_name, email, password)
-        VALUES($1, $2, $3,$4)
+        users(name, last_name, email, password, role)
+        VALUES($1, $2, $3, $4, $5)
         returning *`;
         const values = [
           req.body.name,
           req.body.last_name,
           req.body.email,
-          hashedPassword
+          hashedPassword,
+          'Client'
         ];
 
         const { rows, rowCount } = await client.query(text, values);
@@ -220,50 +286,50 @@ app.post('/business', async (req, res) => {
 
   }),
 
-  app.post('/login', async (req, res) => {
-    try {
 
-      const text = `SELECT * FROM users WHERE email = $1`;
-      const values = [
-        req.body.email
-      ];
-      const { rows, rowCount } = await client.query(text, values);
-      if (rowCount > 0 && req.body.password) {
-        var passwordsMatch = await bcrypt.compare(req.body.password, rows[0].password);
-      } else {
-        return res.status(302).send('Please check your password and email').end();
+  app.post('/login', (req, res) => {
+    passport.authenticate('local', async function (err, user, info) {
+      var passwordsMatch = null;
+      if (err) {
+        return res.status(401).end();
       }
+      if (user) {
+        req.login(user, { session: false }, (err) => {
+          if (err) {
+            res.send(err);
+          }
+        })
 
-      if (!passwordsMatch) {
-        return res.status(302).send('Please check your password and email ').end()
+        const token = jwt.sign(user, 'your_jwt_secret');
+        return res.status(200).json({ user, token }).end();
       } else {
-        return res.status(201).end();
+        return res.status(401).json(info).end();
       }
-
-    } catch (error) {
-      console.log('error :', error);
-      return res.status(400);
-    }
+    })(req, res);
   }),
+
+
+
 
 
   app.post('/signupbusinessowner', async (req, res) => {
     try {
-      var businessExists = await client.query(`SELECT * FROM business_owners WHERE email = $1`, [req.body.email]);
+      var businessExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
       console.log('businessExists');
       if (businessExists.rowCount > 0) {
         return res.send('Email already exists').status(200).end();
       } else {
         var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
         const text = `INSERT INTO
-        business_owners(name, last_name, email, password)
-        VALUES($1, $2, $3,$4)
+        users(name, last_name, email, password, role)
+        VALUES($1, $2, $3, $4, $5)
         returning *`;
         const values = [
           req.body.name,
           req.body.last_name,
           req.body.email,
-          hashedPassword
+          hashedPassword,
+          'Business Owner'
         ];
 
         const { rows, rowCount } = await client.query(text, values);
@@ -279,7 +345,7 @@ app.post('/business', async (req, res) => {
 
   app.post('/logginbusinessowner', async (req, res) => {
     try {
-      const text = `SELECT * FROM business_owners WHERE email = $1`;
+      const text = `SELECT * FROM users WHERE email = $1`;
       const values = [
         req.body.email
       ];

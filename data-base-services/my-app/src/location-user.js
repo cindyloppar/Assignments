@@ -18,11 +18,7 @@ class LocationUser extends Component {
             <div>
              <h2>Select Location</h2>
              <div className='field'>
-                    <Control.select model="location.selectLocation"
-                     validators={{
-                        required: (val) => val.length,
-                        length: (val) => val.length > 4
-                    }} required
+                    <Control.select model="location.selectLocation" required
                     >
 
                      {this.state.locationValues.map(element => {

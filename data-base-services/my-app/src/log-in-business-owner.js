@@ -13,6 +13,7 @@ class logInBusiness extends Component {
   }
 
   async handleSubmit(values) {
+    console.log('values :', values);
     var userLoggingIn = await axios.post('http://localhost:3001/logginbusinessowner', values);
     this.setState({ values, errorMessage: userLoggingIn.data })
     if (userLoggingIn.data.length <= 0) {

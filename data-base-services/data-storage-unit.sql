@@ -41,13 +41,7 @@ CREATE TABLE IF NOT EXISTS users(
     name VARCHAR (100) NOT NULL,
     last_name VARCHAR (100) NOT NULL ,
     email VARCHAR (100) NOT NULL UNIQUE,
-    password VARCHAR (100)NOT NULL 
-);
-CREATE TABLE IF NOT EXISTS business_owners(
-    id serial PRIMARY KEY,
-    name VARCHAR (100) NOT NULL,
-    last_name VARCHAR (100) NOT NULL ,
-    email VARCHAR (100) NOT NULL UNIQUE,
+    role VARCHAR (100) NOT NULL,
     password VARCHAR (100)NOT NULL 
 );
 

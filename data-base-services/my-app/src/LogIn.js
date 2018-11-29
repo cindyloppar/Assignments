@@ -15,9 +15,14 @@ class logIn extends Component {
 
   async handleSubmit(values) {
     var userLoggingIn = await axios.post('http://localhost:3001/login', values);
-    this.setState({ values, errorMessage: userLoggingIn.data })
-    if (userLoggingIn.data.length <= 0) {
+    if (userLoggingIn.status === 200) {
+      console.log('userLoggingIn :', userLoggingIn);
+      sessionStorage.setItem('KEJWTNTWE', userLoggingIn.data.token);
+ 
       this.props.history.push('/locationuser');
+    } else {
+      this.setState({ values, errorMessage: userLoggingIn.data.message })
+
     }
   }
 
@@ -25,22 +30,18 @@ class logIn extends Component {
   render() {
     return (
       <Form
-        model="log"
+        model="logIn"
         onSubmit={(val) => this.handleSubmit(val)}
       >
         <p>{this.state.errorMessage}</p>
         <div className="field">
           <label>Email </label>
-          <Control.text model="log.email"
-          required
-          />
+          <Control.text model="logIn.email" required />
         </div>
 
         <div className='field' >
           <label>Password:</label>
-          <Control.text model="log.password" required />
-
-
+          <Control.text model="logIn.password" required />
         </div>
 
         <button className='submit' >Log in</button>
