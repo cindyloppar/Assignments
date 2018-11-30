@@ -173,10 +173,11 @@ app.post('/business', async (req, res) => {
       var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
 
       const text = `INSERT INTO
-          location(address_line1, address_line2, suburb, city, business_id)
-          VALUES($1, $2, $3, $4, $5)
+          location(province, address_line1, address_line2, suburb, city, business_id)
+          VALUES($1, $2, $3, $4, $5, $6)
           returning *`;
       const values = [
+        req.body.province,
         req.body.address_line1,
         req.body.address_line2,
         req.body.suburb,
@@ -192,6 +193,33 @@ app.post('/business', async (req, res) => {
     }
   }),
 
+
+  app.post('/locationuser', async (req, res) => {
+
+    try {
+      var locationId = await client.query("SELECT id FROM location WHERE suburb = $1", [req.body.selectLocation]);
+      var Province = await client.query("SELECT id FROM location WHERE province = $1", [req.body.selectProvince]);
+
+      const text = `INSERT INTO
+          location(province, address_line1, address_line2, suburb, city, business_id)
+          VALUES($1, $2, $3, $4, $5, $6)
+          returning *`;
+      const values = [
+        req.body.province,
+        req.body.address_line1,
+        req.body.address_line2,
+        req.body.suburb,
+        req.body.city,
+        businessId.rows[0].id,
+
+      ];
+      const { rows, rowCount } = await client.query(text, values);
+      return res.status(201).send(rows[0]);
+    } catch (error) {
+      console.log('error :', error);
+      return res.status(400);
+    }
+  }),
 
   app.post('/blocks', async (req, res) => {
 

@@ -6,7 +6,7 @@ import axios from 'axios';
 class locationForm extends Component {
     constructor() {
         super();
-        this.state = { values: '', businessValues: [] }
+        this.state = { values: '', businessValues: [], provinceValues: [] }
 
     }
 
@@ -15,6 +15,8 @@ class locationForm extends Component {
         this.setState({ businessValues: businessDetails.data.rows })
     }
 
+
+
     async handleSubmit(values) {
         this.setState({ values });
         axios.post('http://localhost:3001/location', values);
@@ -22,13 +24,6 @@ class locationForm extends Component {
 
     }
 
-    selectCountry(val) {
-        this.setState({ country: val });
-    }
-
-    selectRegion(val) {
-        this.setState({ region: val });
-    }
 
     render() {
         return (
@@ -39,6 +34,13 @@ class locationForm extends Component {
 
             >
 
+                {/* <div className="topnav">
+                    <a className="active" href="http://localhost:3000/">Home</a>
+                    <a href="http://localhost:3000/">Rent Storage</a>
+                    <a href="http://localhost:3000/business">Business Owner</a>
+                    <a href="http://localhost:3000/about">About</a>
+                    <a href="http://localhost:3000/logout">LogOut</a>
+                </div> */}
                 <div className='field' >
                     <label>Find your store </label>
                 </div>
@@ -49,20 +51,21 @@ class locationForm extends Component {
                 </div>
                 <div className='field'>
                     <Control.select model="location.selectBusiness"
-                    required
+                        required
                     >
                         {this.state.businessValues.map(element => {
                             return <option>{element.business_name}</option>
                         })}
 
-                       
+
                     </Control.select>
                 </div>
 
+             
                 <div className='field' >
                     <label>Address line 1 </label>
                     <Control.text model='location.address_line1'
-                         required
+                        required
                     />
                 </div>
 
@@ -86,9 +89,17 @@ class locationForm extends Component {
                 <div className='field' >
                     <label>Suburb</label>
                     <Control.text model='location.suburb'
-                         required
+                        required
                     />
                 </div>
+
+                <div className='field' >
+                    <label>Province </label>
+                    <Control.text model='location.province'
+                        required
+                    />
+                </div>
+
 
                 <button className='submit'>Next > </button>
             </Form>

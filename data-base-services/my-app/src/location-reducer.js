@@ -5,6 +5,7 @@ const initialState = {
   address_line2: '',
   city: '',
   suburb: '',
+  province: '',
   selectBusiness:''
 };
 export default function locationDetails(state = initialState, action) {

@@ -24,8 +24,8 @@ ReactDOM.render(
         <Router>
 
             <div>
-                
-                <Route exact path="/" component={MainScreen} />                
+
+                <Route exact path="/" component={MainScreen} />
                 <Route exact path="/login" component={logIn} />
                 <Route exact path="/signup" component={signUp} />
                 <Route exact path="/locationuser" component={LocationUser} />
@@ -34,9 +34,9 @@ ReactDOM.render(
                 <Route exact path="/location" component={locationForm} />
                 <Route exact path="/blocks" component={blocksForm} />
                 <Route exact path="/unittypes" component={unitTypeForm} />
-                <Route exact path="/about" component={About}/>
-                <Route exact path="/signupbusinessowner" component={SignUpBusiness}/>
-                <Route exact path="/logginbusinessowner" component={logInBusiness}/>
+                <Route exact path="/about" component={About} />
+                <Route exact path="/signupbusinessowner" component={SignUpBusiness} />
+                <Route exact path="/logginbusinessowner" component={logInBusiness} />
 
 
             </div>

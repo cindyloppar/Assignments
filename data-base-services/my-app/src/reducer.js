@@ -9,6 +9,7 @@ import signDetails from './sign-up-reducer';
 import logDetails from './log-in-reducer';
 import signDetailsForBusiness from './sign-up-business-reducer';
 import logInDetailsForBusiness from './log-in-business-reducer';
+import locationUserDetails from './location-user-reducer';
 
 const enhancers = compose( window.devToolsExtension ? window.devToolsExtension() : f => f)
 
@@ -28,6 +29,7 @@ export const store = createStore(combineForms({
   signUp:signDetails,
   logIn: logDetails,
   signUpBusiness: signDetailsForBusiness,
-  logInBusiness: logInDetailsForBusiness
+  logInBusiness: logInDetailsForBusiness,
+  LocationUser:locationUserDetails
 }),enhancers);
       

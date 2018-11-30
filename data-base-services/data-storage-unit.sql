@@ -1,12 +1,13 @@
 CREATE TABLE IF NOT EXISTS business(
     id serial PRIMARY KEY,
-    business_name VARCHAR (100) UNIQUE,
+    business_name VARCHAR (100) NOT NULL UNIQUE,
     contact_name VARCHAR (100)NOT NULL,
     telephone_number VARCHAR(20) NOT NULL,
     contact_email VARCHAR(100) NOT NULL
 ); 
 CREATE TABLE IF NOT EXISTS location(
     id serial PRIMARY KEY,
+    province VARCHAR (250) NOT NULL,
     address_line1 VARCHAR (250) NOT NULL,
     address_line2 VARCHAR (250) NOT NULL,
     suburb VARCHAR (250) NOT NULL,

@@ -18,9 +18,9 @@ class logIn extends Component {
     if (userLoggingIn.status === 200) {
       console.log('userLoggingIn :', userLoggingIn);
       sessionStorage.setItem('KEJWTNTWE', userLoggingIn.data.token);
- 
       this.props.history.push('/locationuser');
-    } else {
+    }
+     else {
       this.setState({ values, errorMessage: userLoggingIn.data.message })
 
     }
