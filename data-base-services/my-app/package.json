@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "moment": "^2.22.2",
     "react": "^16.5.2",
     "react-country-region-selector": "^1.4.1",
     "react-dom": "^16.5.2",
@@ -14,7 +15,12 @@
     "react-validation": "^3.0.7",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "styled-button-component": "^2.0.0",
+    "styled-components": "^4.1.2",
+    "styled-container-component": "^2.0.0",
+    "styled-navbar-component": "^2.0.0",
+    "styled-system": "^3.1.11"
   },
   "scripts": {
     "start": "react-scripts start",

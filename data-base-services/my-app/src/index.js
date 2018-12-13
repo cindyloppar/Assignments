@@ -1,46 +1,76 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import MyForm from './App';
+import MyForm from './components/App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import { store } from './reducer';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import unitTypeForm from './unit-types';
-import unitsForm from './units';
-import locationForm from './location';
-import blocksForm from './blocks';
-import logIn from './LogIn';
-import signUp from './sign-up';
-import MainScreen from './main-screen'
-import LocationUser from './location-user';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import UnitTypeForm from './components/unit-types';
+import UnitsForm from './components/units';
+import LocationForm from './components/location';
+import BlocksForm from './components/blocks';
+import LogIn from './components/LogIn';
+import SignUp from './components/sign-up';
+import MainScreen from './components/main-screen';
+import LocationUser from './components/location-user';
 import About from './about';
-import logInBusiness from './log-in-business-owner';
-import SignUpBusiness from './sign-up-business';
+import LogInBusiness from './components/log-in-business-owner';
+import SignUpBusiness from './components/sign-up-business';
+import LogOut from './components/log-out';
+import display from './components/user-details';
+import axios from 'axios';
 
+
+async function checkUser() {
+    var token = sessionStorage.getItem("token");
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = token;
+        return true
+    } else {
+        axios.defaults.headers.common['Authorization'] = null;
+        return false;
+    }
+}
+
+const fakeAuth = {
+    isAuthenticated: false,
+    authenticate(cb) {
+        this.isAuthenticated = true
+        setTimeout(cb, 100)
+    },
+    logOut(cb) {
+        this.isAuthenticated = false
+        setTimeout(cb, 100)
+    }
+}
+
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={(props) => (
+        checkUser()  ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
+    )} />
+)
 
 ReactDOM.render(
     <Provider store={store}>
         <Router>
-
             <div>
-
                 <Route exact path="/" component={MainScreen} />
-                <Route exact path="/login" component={logIn} />
-                <Route exact path="/signup" component={signUp} />
-                <Route exact path="/locationuser" component={LocationUser} />
-                <Route exact path="/business" component={MyForm} />
-                <Route exact path="/units" component={unitsForm} />
-                <Route exact path="/location" component={locationForm} />
-                <Route exact path="/blocks" component={blocksForm} />
-                <Route exact path="/unittypes" component={unitTypeForm} />
+                <Route exact path="/login" component={LogIn} />
+                <Route exact path="/signup" component={SignUp} />
                 <Route exact path="/about" component={About} />
+                <Route exact path="/logout" component={LogOut} />
                 <Route exact path="/signupbusinessowner" component={SignUpBusiness} />
-                <Route exact path="/logginbusinessowner" component={logInBusiness} />
-
-
+                <Route exact path="/logginbusinessowner" component={LogInBusiness} />
+                <PrivateRoute exact path="/locationuser" component={LocationUser} />
+                <PrivateRoute exact path="/business" component={MyForm} />
+                <PrivateRoute exact path="/units" component={UnitsForm} />
+                <PrivateRoute exact path="/location" component={LocationForm} />
+                <PrivateRoute exact path="/blocks" component={BlocksForm} />
+                <Route exact path="/unittypes" component={UnitTypeForm} />
+                <Route exact path="/userdetails" component={display} />
             </div>
-
         </Router>
     </Provider>
     , document.getElementById('root'));

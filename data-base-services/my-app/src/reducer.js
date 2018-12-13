@@ -1,16 +1,16 @@
 
 import { createStore, compose } from 'redux';
 import { combineForms } from 'react-redux-form';
-import locationDetails from './location-reducer';
-import blocksDetails from './block-reducer';
-import unitTypesDetails from './unit-types-reducer';
-import unitsDetails from './units-reducer';
-import signDetails from './sign-up-reducer';
-import logDetails from './log-in-reducer';
-import signDetailsForBusiness from './sign-up-business-reducer';
-import logInDetailsForBusiness from './log-in-business-reducer';
-import locationUserDetails from './location-user-reducer';
-
+import locationDetails from './reducers/location-reducer';
+import blocksDetails from './reducers/block-reducer';
+import unitTypesDetails from './reducers/unit-types-reducer';
+import unitsDetails from './reducers/units-reducer';
+import signDetails from './reducers/sign-up-reducer';
+import logDetails from './reducers/log-in-reducer';
+import signDetailsForBusiness from './reducers/sign-up-business-reducer';
+import logInDetailsForBusiness from './reducers/log-in-business-reducer';
+import locationUserDetails from './reducers/location-user-reducer';
+import customerReducer from './reducers/customer-reducer'
 const enhancers = compose( window.devToolsExtension ? window.devToolsExtension() : f => f)
 
 const initialUser = {
@@ -18,6 +18,7 @@ const initialUser = {
   contactName: '',
   telephoneNumber: '',
   contactEmail: '',
+  
 };
 
 export const store = createStore(combineForms({
@@ -30,6 +31,7 @@ export const store = createStore(combineForms({
   logIn: logDetails,
   signUpBusiness: signDetailsForBusiness,
   logInBusiness: logInDetailsForBusiness,
-  LocationUser:locationUserDetails
+  LocationUser:locationUserDetails,
+  CustomerStore:customerReducer
 }),enhancers);
       

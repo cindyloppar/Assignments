@@ -2,6 +2,8 @@
 
 const express = require('express');
 const bodyParser = require('body-parser')
+var textBody = require("body");
+var http = require("http");
 const pg = require('pg');
 const cors = require('cors');
 const app = express();
@@ -58,12 +60,10 @@ passport.use(new JWTStrategy({
 },
   function (jwtPayload, cb) {
 
-    //find the user in db if needed
     const text = `SELECT * FROM users WHERE email = $1`;
     const values = [
       email
     ];
-    // return UserModel.findOneById(jwtPayload.id)
     client.query(text, values).then(user => {
       return cb(null, user, jwtPayload.id);
     })
@@ -78,13 +78,25 @@ router.get('/', function (req, res, next) {
   res.send('respond with a resource');
 });
 
-/* GET user profile. */
 router.get('/login', function (req, res, next) {
   res.send(req.user.rows[0]);
 });
 
 
-app.get("/business", async (req, res) => {
+function generateToken(user) {
+
+  var newDetails = {
+    email: user.email,
+    role: user.role,
+  }
+  var token = jwt.sign(newDetails, "KEJWTNTWE", {
+    expiresIn: 60 * 60 * 24
+  });
+  return token;
+}
+
+
+app.get("/business", middlewareTest, async (req, res) => {
   const findAllQuery = 'SELECT * FROM business';
   try {
     const { rows, rowCount } = await client.query(findAllQuery);
@@ -94,8 +106,24 @@ app.get("/business", async (req, res) => {
   }
 })
 
+function middlewareTest(req, res, next) {
+  jwt.verify(req.headers.authorization, "KEJWTNTWE", function (err, user) {
+    var userDetails = client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
+    if (err) {
+      return res.status(401).json({
+        success: false,
+        message: 'Please register Log in using a valid email to submit posts'
+      });
+    }else if(userDetails){
+      return next()
+    }
+    
 
-app.get("/location", async (req, res) => {
+  }
+  )
+};
+
+app.get("/location", middlewareTest, async (req, res) => {
   const findAllQuery = 'SELECT * FROM location';
   try {
     const { rows, rowCount } = await client.query(findAllQuery);
@@ -105,7 +133,8 @@ app.get("/location", async (req, res) => {
   }
 })
 
-app.get("/blocks", async (req, res) => {
+
+app.get("/blocks", middlewareTest, async (req, res) => {
   const findAllQuery = 'SELECT * FROM blocks';
   try {
     const { rows, rowCount } = await client.query(findAllQuery);
@@ -115,7 +144,7 @@ app.get("/blocks", async (req, res) => {
   }
 })
 
-app.get("/unittypes", async (req, res) => {
+app.get("/unittypes", middlewareTest, async (req, res) => {
   const findAllQuery = 'SELECT * FROM unit_types';
   try {
     const { rows, rowCount } = await client.query(findAllQuery);
@@ -125,7 +154,7 @@ app.get("/unittypes", async (req, res) => {
   }
 })
 
-app.get("/units", async (req, res) => {
+app.get("/units", middlewareTest, async (req, res) => {
   const findAllQuery = 'SELECT * FROM location';
   try {
     const { rows, rowCount } = await client.query(findAllQuery);
@@ -136,18 +165,7 @@ app.get("/units", async (req, res) => {
 })
 
 
-// app.get("/locationuser", async (req, res) => {
-//   const findAllQuery = 'SELECT * FROM location';
-//   try {
-//     const { rows, rowCount } = await client.query(findAllQuery);
-//     return res.status(200).send({ rows, rowCount });
-//   } catch (error) {
-//     return res.status(400);
-//   }
-// })
-
-
-app.post('/business', async (req, res) => {
+app.post('/business', middlewareTest, async (req, res) => {
   const text = `INSERT INTO
   business(business_name, contact_name, telephone_number, contact_email)
       VALUES($1, $2, $3, $4)
@@ -167,7 +185,7 @@ app.post('/business', async (req, res) => {
 }),
 
 
-  app.post('/location', async (req, res) => {
+  app.post('/location', middlewareTest, async (req, res) => {
 
     try {
       var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
@@ -194,54 +212,49 @@ app.post('/business', async (req, res) => {
   }),
 
 
-  app.post('/locationuser', async (req, res) => {
-
+  app.get('/locationuser', middlewareTest, async (req, res) => {
+    var data = req.query
     try {
-      var locationId = await client.query("SELECT id FROM location WHERE suburb = $1", [req.body.selectLocation]);
-      var Province = await client.query("SELECT id FROM location WHERE province = $1", [req.body.selectProvince]);
 
-      const text = `INSERT INTO
-          location(province, address_line1, address_line2, suburb, city, business_id)
-          VALUES($1, $2, $3, $4, $5, $6)
-          returning *`;
-      const values = [
-        req.body.province,
-        req.body.address_line1,
-        req.body.address_line2,
-        req.body.suburb,
-        req.body.city,
-        businessId.rows[0].id,
+      const statement = `SELECT location.province, location.city, location.suburb, unit_types.name, business.business_name FROM business 
+      INNER JOIN location on location.business_id = business.id
+      INNER JOIN blocks on blocks.location_id = location.id
+      INNER JOIN units on units.blocks_id = blocks.id
+      INNER JOIN unit_types on units.unit_types_id = unit_types.id
+      WHERE location.province = $1 AND unit_types.name = $2 `
+        ;
+      let searchResults = await client.query(statement, [data.province, data.name])
+      console.log('searchResults :', searchResults);
+      return res.json(searchResults.rows[0])
 
-      ];
-      const { rows, rowCount } = await client.query(text, values);
-      return res.status(201).send(rows[0]);
     } catch (error) {
       console.log('error :', error);
-      return res.status(400);
+      return res.status(500);
     }
-  }),
+  })
 
-  app.post('/blocks', async (req, res) => {
 
-    try {
-      var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation]);
+app.post('/blocks', middlewareTest, async (req, res) => {
 
-      const text = `INSERT INTO
+  try {
+    var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation]);
+
+    const text = `INSERT INTO
       blocks(name,location_id)
       VALUES($1,$2)
       returning *`;
-      const values = [
-        req.body.name,
-        locationId.rows[0].id
-      ];
-      const { rows, rowCount } = await client.query(text, values);
-      return res.status(201).send(rows[0]);
-    } catch (error) {
-      return res.status(400);
-    }
-  }),
+    const values = [
+      req.body.name,
+      locationId.rows[0].id
+    ];
+    const { rows, rowCount } = await client.query(text, values);
+    return res.status(201).send(rows[0]);
+  } catch (error) {
+    return res.status(400);
+  }
+}),
 
-  app.post('/unittypes', async (req, res) => {
+  app.post('/unittypes', middlewareTest, async (req, res) => {
     const text = `INSERT INTO
       unit_types(name, length, width, height)
       VALUES($1, $2, $3, $4)
@@ -256,12 +269,11 @@ app.post('/business', async (req, res) => {
       const { rows, rowCount } = await client.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {
-      console.log('error :', error);
       return res.status(400);
     }
   }),
 
-  app.post('/units', async (req, res) => {
+  app.post('/units', middlewareTest, async (req, res) => {
     try {
       var unitsId = await client.query("SELECT id FROM blocks WHERE name = $1", [req.body.selectBlock]);
       var unitTypesId = await client.query("SELECT id FROM unit_types WHERE name = $1", [req.body.selectUnitType]);
@@ -284,32 +296,30 @@ app.post('/business', async (req, res) => {
 
 
   app.post('/signup', async (req, res) => {
-    try {
-      var userExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
-      console.log('userExists');
-      if (userExists.rowCount > 0) {
-        return res.send('Email already exists').status(200).end();
+    var userExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
+    if (userExists.rowCount > 0) {
+      return res.status(208).send('Email already exists').end();
+    } else {
+      var body = req.body;
+      var hash = bcrypt.hashSync(body.password.trim(), saltRounds);
+      const text = `INSERT INTO
+      users(name, last_name, email, password, role)
+      VALUES($1, $2, $3, $4, $5)
+      returning *`;
+      const values = [
+        req.body.name.trim(),
+        req.body.last_name.trim(),
+        req.body.email.trim(),
+        hash,
+        'Client'
+      ];
+      var insertUser = await client.query(text, values);
+      if (!insertUser || insertUser.rowCount <= 0) {
+        res.status(201).json({ message: "Sorry but there was a problem signing the user up." }).end();
       } else {
-        var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-        const text = `INSERT INTO
-        users(name, last_name, email, password, role)
-        VALUES($1, $2, $3, $4, $5)
-        returning *`;
-        const values = [
-          req.body.name,
-          req.body.last_name,
-          req.body.email,
-          hashedPassword,
-          'Client'
-        ];
-
-        const { rows, rowCount } = await client.query(text, values);
-        return res.status(201).send(rows[0]);
+        var token = generateToken(insertUser.rows[0])
+        res.status(201).json({ user: insertUser, token: token }).end();
       }
-
-    } catch (error) {
-      console.log('error :', error);
-      return res.status(400);
     }
 
   }),
@@ -319,7 +329,7 @@ app.post('/business', async (req, res) => {
     passport.authenticate('local', async function (err, user, info) {
       var passwordsMatch = null;
       if (err) {
-        return res.status(401).end();
+        return res.status(203).end();
       }
       if (user) {
         req.login(user, { session: false }, (err) => {
@@ -327,74 +337,68 @@ app.post('/business', async (req, res) => {
             res.send(err);
           }
         })
-
-        const token = jwt.sign(user, 'your_jwt_secret');
+        var token = generateToken(user);
         return res.status(200).json({ user, token }).end();
       } else {
-        return res.status(401).json(info).end();
+
+        return res.status(203).json(info).end();
+
       }
     })(req, res);
   }),
 
 
-
-
-
-  app.post('/signupbusinessowner', async (req, res) => {
-    try {
-      var businessExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
-      console.log('businessExists');
-      if (businessExists.rowCount > 0) {
-        return res.send('Email already exists').status(200).end();
-      } else {
-        var hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-        const text = `INSERT INTO
-        users(name, last_name, email, password, role)
-        VALUES($1, $2, $3, $4, $5)
-        returning *`;
-        const values = [
-          req.body.name,
-          req.body.last_name,
-          req.body.email,
-          hashedPassword,
-          'Business Owner'
-        ];
-
-        const { rows, rowCount } = await client.query(text, values);
-        return res.status(201).send(rows[0]);
-      }
-
-    } catch (error) {
-      console.log('error :', error);
-      return res.status(400);
-    }
-
-  }),
-
-  app.post('/logginbusinessowner', async (req, res) => {
-    try {
-      const text = `SELECT * FROM users WHERE email = $1`;
+  app.post('/signupbusinessowner', async (req, res, next) => {
+    var businessExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
+    if (businessExists.rowCount > 0) {
+      return res.status(208).send('Email already exists').end();
+    } else {
+      var body = req.body;
+      var hash = bcrypt.hashSync(body.password.trim(), saltRounds);
+      const text = `INSERT INTO
+      users(name, last_name, email, password, role)
+      VALUES($1, $2, $3, $4, $5)
+      returning *`;
       const values = [
-        req.body.email
+        req.body.name.trim(),
+        req.body.last_name.trim(),
+        req.body.email.trim(),
+        hash,
+        'Business Owner'
       ];
-      const { rows, rowCount } = await client.query(text, values);
-      if (rowCount > 0 && req.body.password) {
-        var passwordsMatch = await bcrypt.compare(req.body.password, rows[0].password);
+      var insertUser = await client.query(text, values);
+      if (!insertUser || insertUser.rowCount <= 0) {
+        res.status(201).json({ message: "Sorry but the was a problem signing the user up." }).end();
       } else {
-        return res.status(302).send('Please check your password and email').end();
+        var token = generateToken(insertUser.rows[0])
+        res.status(201).json({ user: insertUser, token: token }).end();
       }
-
-      if (!passwordsMatch) {
-        return res.status(302).send('Please check your password and email ').end()
-      } else {
-        return res.status(201).end();
-      }
-
-    } catch (error) {
-      console.log('error :', error);
-      return res.status(400);
     }
-  }),
+  })
+
+
+app.post('/logginbusinessowner', async (req, res) => {
+
+  passport.authenticate('local', async function (err, user, info) {
+    var passwordsMatch = null;
+    if (err) {
+      return res.status(203).end();
+    }
+    if (user) {
+      req.login(user, { session: false }, (err) => {
+        if (err) {
+          res.send(err);
+        }
+      })
+      var token = generateToken(user);
+      return res.status(200).json({ user, token }).end();
+    } else {
+      return res.status(203).json(info).end();
+    }
+  })(req, res);
+}),
+
+
 
   app.listen(port, () => console.log('server is running ' + port))
 

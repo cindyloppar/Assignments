@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS unit_types(
 );
 CREATE TABLE IF NOT EXISTS customer_units(
     id serial PRIMARY KEY,
-    units_id INT REFERENCES units(id)
-
+    customer_id INT REFERENCES users(id),
+    unit_id INT REFERENCES units(id),
 );
 CREATE TABLE IF NOT EXISTS users(
     id serial PRIMARY KEY,
@@ -67,18 +67,12 @@ SELECT * FROM business INNER JOIN location ON location.business_id = business.id
 SELECT * FROM units INNER JOIN unit_types ON units.unit_types_id = unit_types.id WHERE unit_types.name = 'Storage';
 SELECT * FROM units INNER JOIN unit_types ON units.unit_types_id = unit_types.id WHERE unit_types.width > '3';
 
--- SELECT * FROM units INNER JOIN blocks on units.blocks_id = blocks.id 
--- INNER JOIN location on blocks.location_id = location.id 
--- WHERE location.address_line1 = req.body.address_line1 
--- AND location.address_line2 = req.body.address_line2 
--- AND location.suburb = req.body.suburb
--- AND location.city = req.body.city;
 
--- INNER JOIN locations
--- ON businesses.id=locations.businesses_id
--- INNER JOIN blocks
--- ON locations.id=blocks.locations_id
--- INNER JOIN units
--- ON blocks.id=units.blocks_id
--- INNER JOIN units_types
--- ON units.units_type_id=units_types.id;
+SELECT location.province, unit_types.name, business.business_name FROM business 
+INNER JOIN location on location.business_id = business.id
+INNER JOIN blocks on blocks.location_id = location.id
+INNER JOIN units on units.blocks_id = blocks.id
+INNER JOIN unit_types on units.unit_types_id = unit_types.id
+WHERE location.province = 'Gauteng' AND unit_types.name = 'Wearhouse' 
+-- AND units.id not in (SELECT customer_units.units_id FROM units.id)
+;
