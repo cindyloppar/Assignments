@@ -53,13 +53,14 @@ class LocationUser extends Component {
                 <NavbarUser />
 
                 <div>
-                    <h3>Select Location and the unit type</h3>
+                    <h3>Rent Storage</h3>
 
                     <div className='field'>
                         <Control.select model="LocationUser.province" required >
                             <option>Select Province</option>
+                            
                             {this.state.provinceValues.map(element => {
-                                return <option onChange={this.handleSubmit}>{element.province}</option>
+                                return <option >{element.province}</option>
                             })}
 
                         </Control.select>

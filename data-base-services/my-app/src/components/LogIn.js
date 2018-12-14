@@ -19,7 +19,6 @@ class LogIn extends Component {
     var userLoggingIn = await axios.post('http://localhost:3001/login', values);
     if (userLoggingIn.status === 200) {
       sessionStorage.setItem('token', userLoggingIn.data.token);
-      console.log('whats going on here')
       this.props.history.push('/locationuser');
     }
 

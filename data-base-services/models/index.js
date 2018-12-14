@@ -107,20 +107,29 @@ app.get("/business", middlewareTest, async (req, res) => {
 })
 
 function middlewareTest(req, res, next) {
-  jwt.verify(req.headers.authorization, "KEJWTNTWE", function (err, user) {
-    var userDetails = client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
-    if (err) {
-      return res.status(401).json({
-        success: false,
-        message: 'Please register Log in using a valid email to submit posts'
-      });
-    }else if(userDetails){
-      return next()
-    }
-    
 
-  }
-  )
+  jwt.verify(req.headers.authorization, "KEJWTNTWE", function (err, user) {
+  //   if (err) {
+  //     return res.status(401).json({
+  //       success: false,
+  //       message: 'Please register Log in using a valid email to submit posts'
+  //     });
+  //   } else {
+
+  //     const userDetails = client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
+  //     const values = [
+  //       req.body.email,
+  //       req.body.role
+  //     ]
+
+  //     var token = generateToken(user)
+  //     res.json({
+  //       user: user,
+  //       token: token
+  //     })
+  //   }
+  })
+
 };
 
 app.get("/location", middlewareTest, async (req, res) => {
@@ -234,25 +243,52 @@ app.post('/business', middlewareTest, async (req, res) => {
   })
 
 
-app.post('/blocks', middlewareTest, async (req, res) => {
+// app.post('/locationuser', async (req, res) => {
 
-  try {
-    var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation]);
+//   try {
+//     var locationId = await client.query("SELECT id FROM location WHERE suburb = $1", [req.body.suburb]);
+//     var Province = await client.query("SELECT id FROM location WHERE province = $1", [req.body.province]);
 
-    const text = `INSERT INTO
+//     const text = `INSERT INTO
+//           location(province, address_line1, address_line2, suburb, city, business_id)
+//           VALUES($1, $2, $3, $4, $5, $6)
+//           returning *`;
+//     const values = [
+//       req.body.province,
+//       req.body.address_line1,
+//       req.body.address_line2,
+//       req.body.suburb,
+//       req.body.city,
+//       businessId.rows[0].id,
+
+//     ];
+//     const { rows, rowCount } = await client.query(text, values);
+//     return res.status(201).send(rows[0]);
+//   } catch (error) {
+//     console.log('error :', error);
+//     return res.status(400);
+//   }
+// }),
+
+  app.post('/blocks', middlewareTest, async (req, res) => {
+
+    try {
+      var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation]);
+
+      const text = `INSERT INTO
       blocks(name,location_id)
       VALUES($1,$2)
       returning *`;
-    const values = [
-      req.body.name,
-      locationId.rows[0].id
-    ];
-    const { rows, rowCount } = await client.query(text, values);
-    return res.status(201).send(rows[0]);
-  } catch (error) {
-    return res.status(400);
-  }
-}),
+      const values = [
+        req.body.name,
+        locationId.rows[0].id
+      ];
+      const { rows, rowCount } = await client.query(text, values);
+      return res.status(201).send(rows[0]);
+    } catch (error) {
+      return res.status(400);
+    }
+  }),
 
   app.post('/unittypes', middlewareTest, async (req, res) => {
     const text = `INSERT INTO

@@ -20,8 +20,6 @@ class LocationForm extends Component {
 
     async handleSubmit(values) {
         this.setState({ values });
-        // var token = sessionStorage.getItem("KEJWTNTWE");
-        // const headers = { headers: { authorization: token } }
         axios.post('http://localhost:3001/location', values );
         this.props.history.push('/blocks');
 

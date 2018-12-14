@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, isAuthenticated} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import MyForm from './components/App';
@@ -48,7 +48,7 @@ const fakeAuth = {
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
-        checkUser()  ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
+        checkUser() && isAuthenticated ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
     )} />
 )
 
@@ -59,17 +59,17 @@ ReactDOM.render(
                 <Route exact path="/" component={MainScreen} />
                 <Route exact path="/login" component={LogIn} />
                 <Route exact path="/signup" component={SignUp} />
-                <Route exact path="/about" component={About} />
-                <Route exact path="/logout" component={LogOut} />
                 <Route exact path="/signupbusinessowner" component={SignUpBusiness} />
                 <Route exact path="/logginbusinessowner" component={LogInBusiness} />
+                <Route exact path="/logout" component={LogOut} />
+                <PrivateRoute exact path="/about" component={About} />
                 <PrivateRoute exact path="/locationuser" component={LocationUser} />
                 <PrivateRoute exact path="/business" component={MyForm} />
                 <PrivateRoute exact path="/units" component={UnitsForm} />
                 <PrivateRoute exact path="/location" component={LocationForm} />
                 <PrivateRoute exact path="/blocks" component={BlocksForm} />
-                <Route exact path="/unittypes" component={UnitTypeForm} />
-                <Route exact path="/userdetails" component={display} />
+                <PrivateRoute exact path="/unittypes" component={UnitTypeForm} />
+                <PrivateRoute exact path="/userdetails" component={display} />
             </div>
         </Router>
     </Provider>
