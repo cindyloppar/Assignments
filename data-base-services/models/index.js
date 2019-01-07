@@ -243,32 +243,32 @@ app.post('/business', middlewareTest, async (req, res) => {
   })
 
 
-// app.post('/locationuser', async (req, res) => {
+app.post('/locationuser', async (req, res) => {
 
-//   try {
-//     var locationId = await client.query("SELECT id FROM location WHERE suburb = $1", [req.body.suburb]);
-//     var Province = await client.query("SELECT id FROM location WHERE province = $1", [req.body.province]);
+  try {
+    var locationId = await client.query("SELECT id FROM location WHERE suburb = $1", [req.body.suburb]);
+    var Province = await client.query("SELECT id FROM location WHERE province = $1", [req.body.province]);
 
-//     const text = `INSERT INTO
-//           location(province, address_line1, address_line2, suburb, city, business_id)
-//           VALUES($1, $2, $3, $4, $5, $6)
-//           returning *`;
-//     const values = [
-//       req.body.province,
-//       req.body.address_line1,
-//       req.body.address_line2,
-//       req.body.suburb,
-//       req.body.city,
-//       businessId.rows[0].id,
+    const text = `INSERT INTO
+          location(province, address_line1, address_line2, suburb, city, business_id)
+          VALUES($1, $2, $3, $4, $5, $6)
+          returning *`;
+    const values = [
+      req.body.province,
+      req.body.address_line1,
+      req.body.address_line2,
+      req.body.suburb,
+      req.body.city,
+      businessId.rows[0].id,
 
-//     ];
-//     const { rows, rowCount } = await client.query(text, values);
-//     return res.status(201).send(rows[0]);
-//   } catch (error) {
-//     console.log('error :', error);
-//     return res.status(400);
-//   }
-// }),
+    ];
+    const { rows, rowCount } = await client.query(text, values);
+    return res.status(201).send(rows[0]);
+  } catch (error) {
+    console.log('error :', error);
+    return res.status(400);
+  }
+}),
 
   app.post('/blocks', middlewareTest, async (req, res) => {
 
