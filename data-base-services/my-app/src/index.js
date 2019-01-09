@@ -1,4 +1,4 @@
-import React, { Component, isAuthenticated} from 'react';
+import React, { isAuthenticated} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import MyForm from './components/App';
@@ -48,7 +48,7 @@ const fakeAuth = {
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
-        checkUser() && isAuthenticated ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
+        checkUser() || isAuthenticated ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
     )} />
 )
 

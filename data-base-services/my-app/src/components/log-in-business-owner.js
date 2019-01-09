@@ -14,15 +14,16 @@ class LogInBusiness extends Component {
   }
 
   async handleSubmit(values) {
-    console.log('values :', values);
     var userLoggingIn = await axios.post('http://localhost:3001/logginbusinessowner', values);
+    console.log('values :', values);
     if (userLoggingIn.status === 200) {
       sessionStorage.setItem('token', userLoggingIn.data.token);
       this.props.history.push('/business');
+      console.log('userLoggingIn :', userLoggingIn);
     }
 
     else {
-      this.setState({ values, errorMessage: userLoggingIn.data.message })
+      this.setState({ values, errorMessage: "Incorrect user log in info" })
 
     }
   }
@@ -34,6 +35,7 @@ class LogInBusiness extends Component {
         onSubmit={(val) => this.handleSubmit(val)}
       >
         <NavbarLight />
+
         <p>{this.state.errorMessage}</p>
         <div className="field">
           <label>Email </label>
@@ -46,7 +48,6 @@ class LogInBusiness extends Component {
         </div>
 
         <button className='submit' >Log in</button>
-
 
       </Form>
     );

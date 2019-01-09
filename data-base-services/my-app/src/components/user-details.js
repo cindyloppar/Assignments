@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar } from 'styled-navbar-component/lib/components/Navbar';
+// import { Navbar } from 'styled-navbar-component/lib/components/Navbar';
 import NavbarUser from './navbar-user';
 import { connect } from 'react-redux';
 

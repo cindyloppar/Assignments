@@ -21,16 +21,13 @@ class LogIn extends Component {
       sessionStorage.setItem('token', userLoggingIn.data.token);
       this.props.history.push('/locationuser');
     }
-
     else {
       this.setState({ values, errorMessage: userLoggingIn.data.message })
 
     }
   }
 
-
   render() {
-
     return (
 
       <Form

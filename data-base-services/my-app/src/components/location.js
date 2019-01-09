@@ -12,11 +12,14 @@ class LocationForm extends Component {
     }
 
     async componentDidMount() {
-        var businessDetails = await axios.get('http://localhost:3001/business');
+        console.log('values :', this.state.values);
+       var getToken=  sessionStorage.getItem("token")
+        var businessDetails = await axios.get('http://localhost:3001/business' , {headers:{
+            KEJWTNTWE: getToken
+        }});
+console.log('businessDetails.data.rows :', businessDetails.data.rows);
         this.setState({ businessValues: businessDetails.data.rows })
     }
-
-
 
     async handleSubmit(values) {
         this.setState({ values });
@@ -25,8 +28,8 @@ class LocationForm extends Component {
 
     }
 
-
     render() {
+        console.log('this.state.businessValues :', this.state.businessValues);
         return (
 
             <Form

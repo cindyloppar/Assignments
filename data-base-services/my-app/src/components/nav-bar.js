@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Container } from 'styled-container-component';
 import { Button } from 'styled-button-component';
 import { Navbar, NavbarLink } from 'styled-navbar-component';
