@@ -15,11 +15,9 @@ class LogInBusiness extends Component {
 
   async handleSubmit(values) {
     var userLoggingIn = await axios.post('http://localhost:3001/logginbusinessowner', values);
-    console.log('values :', values);
     if (userLoggingIn.status === 200) {
       sessionStorage.setItem('token', userLoggingIn.data.token);
       this.props.history.push('/business');
-      console.log('userLoggingIn :', userLoggingIn);
     }
 
     else {

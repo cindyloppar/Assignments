@@ -95,15 +95,26 @@ function generateToken(user) {
   return token;
 }
 
-app.get("/fake",middlewareTest, async (req, res) => {
-  const findAllQuery = 'SELECT * FROM business';
-  console.log('findAllQuery :', findAllQuery);
-  // 
-})
 
-app.get("/business",middlewareTest, async (req, res) => {
+function middlewareTest(req, res, next) {
+  jwt.verify(req.headers.authorization, "KEJWTNTWE", function (err, user) {
+    if (err) {
+      return res.status(401).json({
+        success: false,
+        message: 'Please register Log in using a valid email to submit posts'
+      });
+    }
+    if (!user) {
+      return res.status(401)
+    }
+
+  });
+  next()
+};
+
+
+app.get("/business", middlewareTest, async (req, res) => {
   const findAllQuery = 'SELECT * FROM business';
-  console.log('findAllQuery :', findAllQuery);
   try {
     const { rows, rowCount } = await client.query(findAllQuery);
     return res.status(200).send({ rows, rowCount });
@@ -112,43 +123,6 @@ app.get("/business",middlewareTest, async (req, res) => {
   }
 })
 
-function middlewareTest (req, res, next){
-  console.log('req.headers.authorization :', req.headers.authorization);
-   jwt.verify(req.headers.authorization, "KEJWTNTWE",  function (err, user) {
-     console.log('user :', user);
-     if (err) {
-          return res.status(401).json({
-            success: false,
-            message: 'Please register Log in using a valid email to submit posts'
-          });
-        } 
-        if(!user){
-          return res.status(401)
-        }
-
-  });
-  // jwt.verify(req.headers.authorization, "KEJWTNTWE", function (err, user) {
-  //   if (err) {
-  //     return res.status(401).json({
-  //       success: false,
-  //       message: 'Please register Log in using a valid email to submit posts'
-  //     });
-  //   } 
-  //   else {
-      
-  //     const userDetails = client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
-  //     const values = [
-  //       req.body.email,
-  //       req.body.role
-  //     ]
-  //     return res.status(201).json({
-  //       user: user,
-  //     })
-     
-  //   }
-  // })
-next()
-};
 
 app.get("/location", async (req, res) => {
   const findAllQuery = 'SELECT * FROM location';
@@ -192,7 +166,7 @@ app.get("/units", middlewareTest, async (req, res) => {
 })
 
 
-app.post('/business',middlewareTest, async (req, res) => {
+app.post('/business', middlewareTest, async (req, res) => {
   const text = `INSERT INTO
   business(business_name, contact_name, telephone_number, contact_email)
       VALUES($1, $2, $3, $4)
@@ -212,7 +186,7 @@ app.post('/business',middlewareTest, async (req, res) => {
 }),
 
 
-  app.post('/location',middlewareTest, async (req, res) => {
+  app.post('/location', middlewareTest, async (req, res) => {
 
     try {
       var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
@@ -233,7 +207,6 @@ app.post('/business',middlewareTest, async (req, res) => {
       const { rows, rowCount } = await client.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {
-      console.log('error :', error);
       return res.status(400);
     }
   }),
@@ -251,17 +224,15 @@ app.post('/business',middlewareTest, async (req, res) => {
       WHERE location.province = $1 AND unit_types.name = $2 `
         ;
       let searchResults = await client.query(statement, [data.province, data.name])
-      console.log('searchResults :', searchResults);
       return res.json(searchResults.rows[0])
 
     } catch (error) {
-      console.log('error :', error);
       return res.status(500);
     }
   })
 
 
-app.post('/locationuser', async (req, res) => {
+app.post('/locationuser',middlewareTest, async (req, res) => {
 
   try {
     var locationId = await client.query("SELECT id FROM location WHERE suburb = $1", [req.body.suburb]);
@@ -283,12 +254,11 @@ app.post('/locationuser', async (req, res) => {
     const { rows, rowCount } = await client.query(text, values);
     return res.status(201).send(rows[0]);
   } catch (error) {
-    console.log('error :', error);
     return res.status(400);
   }
 }),
 
-  app.post('/blocks', async (req, res) => {
+  app.post('/blocks', middlewareTest, async (req, res) => {
 
     try {
       var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation]);
