@@ -19,17 +19,20 @@ class LocationUser extends Component {
     }
     async componentDidMount() {
         var locationDetails = await axios.get('http://localhost:3001/location');
+        console.log('locationDetails :', locationDetails);
         var provinceDetails = await axios.get('http://localhost:3001/location');
         var unitTypeDetails = await axios.get('http://localhost:3001/unittypes');
 
         this.setState({
             locationValues: locationDetails.data.rows,
-            provinceValues: provinceDetails.data.rows, unitTypeValues: unitTypeDetails.data.rows
+            provinceValues: provinceDetails.data.rows, 
+            unitTypeValues: unitTypeDetails.data.rows
         })
     }
 
     async handleSubmit(values) {
         this.setState({ values })
+        console.log('values :', values);
         const getData = await axios.get('http://localhost:3001/locationuser', {
             params: {
 
