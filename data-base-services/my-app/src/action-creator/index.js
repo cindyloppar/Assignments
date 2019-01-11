@@ -1,5 +1,4 @@
 import { RECEIVED_SEARCH_RESULTS } from '../action-types/index';
-// import {SAVED_DATA_OF_USER} from '.../action-types/index';
 
 
 export const updateCustomerSearchResults = (data) => {
@@ -8,10 +7,3 @@ export const updateCustomerSearchResults = (data) => {
         payload: data
     }
 }
-
-// export const updateCustomerRentedDetails = (data) => {
-//     return {
-//         type: SAVED_DATA_OF_USER,
-//         payload: data
-//     }
-// }
