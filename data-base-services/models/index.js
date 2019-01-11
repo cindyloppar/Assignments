@@ -216,7 +216,7 @@ app.post('/business', middlewareTest, async (req, res) => {
     var data = req.query
     try {
 
-      const statement = `SELECT location.province, location.city, location.suburb, unit_types.name, business.business_name FROM business 
+      const statement = `SELECT location.province, units.name as unitName, location.city, location.suburb, unit_types.name, business.business_name FROM business 
       INNER JOIN location on location.business_id = business.id
       INNER JOIN blocks on blocks.location_id = location.id
       INNER JOIN units on units.blocks_id = blocks.id
@@ -224,7 +224,7 @@ app.post('/business', middlewareTest, async (req, res) => {
       WHERE location.province = $1 AND unit_types.name = $2 `
         ;
       let searchResults = await client.query(statement, [data.province, data.name])
-      return res.json(searchResults.rows[0])
+      return res.json(searchResults.rows)
 
     } catch (error) {
       return res.status(500);
@@ -232,7 +232,7 @@ app.post('/business', middlewareTest, async (req, res) => {
   })
 
 
-app.post('/locationuser',middlewareTest, async (req, res) => {
+app.post('/locationuser', middlewareTest, async (req, res) => {
 
   try {
     var locationId = await client.query("SELECT id FROM location WHERE suburb = $1", [req.body.suburb]);

@@ -37,7 +37,6 @@ class LocationUser extends Component {
                 ...values
             }
         })
-
         this.props.updateCustomerSearchResults(getData.data)
         this.props.history.push('/userdetails');
     }

@@ -34,7 +34,6 @@ class SignUp extends Component {
             return results;
         };
 
-        console.log(this.state);
         return (
 
             <Form

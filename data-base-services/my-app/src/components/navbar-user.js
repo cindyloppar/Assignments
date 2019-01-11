@@ -13,6 +13,7 @@ class NavbarUser extends React.Component {
   }
  
   handleOpenCloseNav() {
+    
     this.setState({
       hidden: !this.state.hidden,
     });

@@ -13,8 +13,6 @@ class UnitForm extends Component {
   async componentDidMount() {
     var blockDetails = await axios.get('http://localhost:3001/blocks');
     var unitTypeDetails = await axios.get('http://localhost:3001/unittypes');
-    console.log('blockDetails :', blockDetails.data.rows);
-    console.log('unitTypeDetails :', unitTypeDetails.data.rows);
     this.setState({ blockValues: blockDetails.data.rows, unitTypeValues: unitTypeDetails.data.rows })
   }
 

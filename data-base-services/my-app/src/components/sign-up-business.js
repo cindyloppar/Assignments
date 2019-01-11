@@ -14,7 +14,6 @@ class SignUpBusiness extends Component {
 
     async handleSubmit(values) {
         var checkUserEmail = await axios.post('http://localhost:3001/signupbusinessowner', values);
-        console.log(checkUserEmail);
         if (checkUserEmail.status === 200) {
             this.setState({ values, errorPresent: true, errorMessage: checkUserEmail.data })
         } else if (checkUserEmail.status === 201) {

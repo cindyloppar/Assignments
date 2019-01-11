@@ -27,7 +27,6 @@ class display extends React.Component {
                             <th>Province</th>
                             <th>City</th>
                             <th>Suburb</th>
-                            <th>Units</th>
                             <th>Unit_Type</th>
 
                         </tr>
@@ -39,7 +38,6 @@ class display extends React.Component {
                                 <td>{singleUserDetails.province}</td>
                                 <td>{singleUserDetails.city}</td>
                                 <td>{singleUserDetails.suburb}</td>
-                                <td>{singleUserDetails.unitname}</td>
                                 <td>{singleUserDetails.name}</td>
                             </tr>
                         })}

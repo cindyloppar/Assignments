@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS unit_types(
 CREATE TABLE IF NOT EXISTS customer_units(
     id serial PRIMARY KEY,
     customer_id INT REFERENCES users(id),
-    unit_id INT REFERENCES units(id),
+    units_id INT REFERENCES units(id) UNIQUE
 );
 CREATE TABLE IF NOT EXISTS users(
     id serial PRIMARY KEY,
