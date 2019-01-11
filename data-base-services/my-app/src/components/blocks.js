@@ -11,9 +11,7 @@ class BlocksForm extends Component {
 
 
   async componentDidMount() {
-    console.log("entering");
     var locationDetails = await axios.get('http://localhost:3001/location');
-    console.log('locationDetails :', locationDetails);
     this.setState({ locationValues: locationDetails.data.rows });
   }
 
@@ -29,9 +27,10 @@ class BlocksForm extends Component {
 
       <Form
         model="blocks"
-        onSubmit={(val) => this.handleSubmit(val)}
-      >
-<NavbarLight/>
+        onSubmit={(val) => this.handleSubmit(val)} >
+        
+        <NavbarLight />
+
         <div className='field' >
           <label>Select Location</label>
         </div>
@@ -50,9 +49,7 @@ class BlocksForm extends Component {
 
         <div className='field' >
           <label>Name: </label>
-          <Control.text model="blocks.name"
-            required
-          />
+          < Control.text model="blocks.name" required />
         </div>
 
         <button className='submit'>Next ></button>

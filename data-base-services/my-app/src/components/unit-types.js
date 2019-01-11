@@ -15,7 +15,7 @@ class UnitTypesForm extends Component {
     this.setState({ values })
     axios.post('http://localhost:3001/unittypes', values)
     this.props.history.push('/units');
-    
+
   }
 
   render() {
@@ -23,20 +23,21 @@ class UnitTypesForm extends Component {
 
       <Form
         model="unitTypes"
-        onSubmit={(val) => this.handleSubmit(val)}
-      >
-<NavbarLight/>
+        onSubmit={(val) => this.handleSubmit(val)} >
+
+        <NavbarLight />
+
         <div className='field' >
           <label>Name:</label>
-          <Control.text model="unitTypes.name"  required
-          />
+          < Control.text model="unitTypes.name" required />
         </div>
+
         <div>
           <label className='selectComp'>Select your unit size</label>
         </div>
+
         <div className='selectOption'>
-          <Control.select model="unitTypes.length" required
-          >
+          <Control.select model="unitTypes.length" required>
             <option>Length</option>
             <option value="1">1</option>
             <option value="3">3</option>
@@ -47,8 +48,7 @@ class UnitTypesForm extends Component {
         </div>
 
         <div className='selectOption'>
-          <Control.select model="unitTypes.width" required
-          >
+          <Control.select model="unitTypes.width" required >
             <option>Width</option>
             <option value="1">1</option>
             <option value="3">3</option>
@@ -59,8 +59,7 @@ class UnitTypesForm extends Component {
         </div>
 
         <div className='selectOption'>
-          <Control.select model="unitTypes.height" required
-          >
+          <Control.select model="unitTypes.height" required >
             <option>height</option>
             <option value="1">1</option>
             <option value="3">3</option>
@@ -79,9 +78,11 @@ class UnitTypesForm extends Component {
           <label>meters deep</label>
           <label>meters high </label>
         </div>
+
         <div>
           <label>Recommended for: </label>
         </div>
+
         <button className='submit'>Next > </button>
 
       </Form>

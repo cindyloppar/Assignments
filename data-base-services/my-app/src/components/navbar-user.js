@@ -38,6 +38,7 @@ class NavbarUser extends React.Component {
             </Nav>
             <Nav pullRight start collapse expandSm hidden={hidden} >
               <NavbarLink light active href="/" >Home</NavbarLink>
+              <NavbarLink light active href="/locationuser" >Rent More</NavbarLink>              
               <NavbarLink light disabled href="/logout">Logout</NavbarLink>
             </Nav>
           </Navbar>

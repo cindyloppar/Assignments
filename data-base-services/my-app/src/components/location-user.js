@@ -19,20 +19,18 @@ class LocationUser extends Component {
     }
     async componentDidMount() {
         var locationDetails = await axios.get('http://localhost:3001/location');
-        console.log('locationDetails :', locationDetails);
         var provinceDetails = await axios.get('http://localhost:3001/location');
         var unitTypeDetails = await axios.get('http://localhost:3001/unittypes');
 
         this.setState({
             locationValues: locationDetails.data.rows,
-            provinceValues: provinceDetails.data.rows, 
+            provinceValues: provinceDetails.data.rows,
             unitTypeValues: unitTypeDetails.data.rows
         })
     }
 
     async handleSubmit(values) {
         this.setState({ values })
-        console.log('values :', values);
         const getData = await axios.get('http://localhost:3001/locationuser', {
             params: {
 
@@ -40,8 +38,6 @@ class LocationUser extends Component {
             }
         })
 
-
-        console.log('getdata.response :', getData.data);
         this.props.updateCustomerSearchResults(getData.data)
         this.props.history.push('/userdetails');
     }
@@ -61,7 +57,7 @@ class LocationUser extends Component {
                     <div className='field'>
                         <Control.select model="LocationUser.province" required >
                             <option>Select Province</option>
-                            
+
                             {this.state.provinceValues.map(element => {
                                 return <option >{element.province}</option>
                             })}
@@ -106,4 +102,4 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(updateCustomerSearchResults(data))
     }
 }
-export default connect(null ,mapDispatchToProps)(LocationUser);
+export default connect(null, mapDispatchToProps)(LocationUser);
