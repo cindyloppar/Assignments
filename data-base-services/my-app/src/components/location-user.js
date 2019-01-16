@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
 import '../App.css';
 import axios from 'axios';
-import NavbarUser from '../components/navbar-user';
+import NavbarUserDetails from '../components/nav-bar-user-details';
 import { connect } from 'react-redux';
 import { updateCustomerSearchResults } from '../action-creator'
 
@@ -10,7 +10,8 @@ class LocationUser extends Component {
     constructor() {
         super();
         this.state = {
-            values: '', locationValues: [], provinceValues: [], unitTypeValues: [], searchResults: {
+            values: "", locationValues: [], provinceValues: [], unitTypeValues: [],
+            searchResults: {
                 province: "",
                 unitTypeDetails: "",
                 locationsSuburb: ""
@@ -18,10 +19,13 @@ class LocationUser extends Component {
         }
     }
     async componentDidMount() {
+        
         var locationDetails = await axios.get('http://localhost:3001/location');
         var provinceDetails = await axios.get('http://localhost:3001/location');
         var unitTypeDetails = await axios.get('http://localhost:3001/unittypes');
-
+        if(unitTypeDetails === unitTypeDetails[0]){
+            
+        }
         this.setState({
             locationValues: locationDetails.data.rows,
             provinceValues: provinceDetails.data.rows,
@@ -30,25 +34,26 @@ class LocationUser extends Component {
     }
 
     async handleSubmit(values) {
-        this.setState({ values })
+        this.setState({ values });
         const getData = await axios.get('http://localhost:3001/locationuser', {
             params: {
-
+                
                 ...values
             }
         })
+        console.log('getData :', getData);
         this.props.updateCustomerSearchResults(getData.data)
         this.props.history.push('/userdetails');
     }
 
     render() {
+        console.log('this.state :', this.state);
         return (
             <Form
                 model="LocationUser"
-                onSubmit={(val) => this.handleSubmit(val)}
-            >
+                onSubmit={(val) => this.handleSubmit(val)} >
 
-                <NavbarUser />
+                <NavbarUserDetails />
 
                 <div>
                     <h3>Rent Storage</h3>
@@ -87,9 +92,9 @@ class LocationUser extends Component {
                         </Control.select>
                     </div>
 
-                    <button className="submit">Next ></button>
 
                 </div>
+                <button className='submit'>Next > </button>
             </Form>
         );
     }

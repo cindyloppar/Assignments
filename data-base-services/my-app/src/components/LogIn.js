@@ -36,7 +36,7 @@ class LogIn extends Component {
       >
         <NavbarUser />
 
-        <p>{this.state.errorMessage}</p>
+        <p style={{ color: "red" }}>{this.state.errorMessage}</p>
 
         <div className="field">
           <label>Email </label>

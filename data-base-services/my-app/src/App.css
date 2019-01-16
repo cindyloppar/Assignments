@@ -1,14 +1,3 @@
-body {
-  /* font-family: Lato, Helvetica, sans-serif;
-  padding: 1rem;
-  display: flex;
-  margin-bottom: 0.5rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%; */
-}
-
 Form {
   font-family: Lato, Helvetica, sans-serif;
   padding: 1rem;
@@ -68,17 +57,18 @@ input {
 }
 
 .next {
-  padding: 1rem 2rem;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  background: transparent;
-  color: rgb(77, 74, 74);
-  border-color: #1695A3;
-  border-radius: 4px;
-  margin: 0.8rem 0;
-  margin-left: 1rem;
-  position: relative;
+  font-size: 80%;
+  background: #1695A3;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  margin-right: 0.2rem;
+  width: 30%;
+  height: 40px;
+  margin-top: 2%;
 }
+
 
 .selectOption {
   border-radius: 0px;
@@ -135,8 +125,8 @@ input {
   text-align: center;
   color: #1695A3;
   font-size: 2rem;
-  font-family: Georgia, serif;;
-  ;
+  font-family: Georgia, serif;
+  
 }
 
 #customers {
@@ -151,9 +141,13 @@ input {
   padding: 8px;
 }
 
-#customers tr:nth-child(even){background-color: #f2f2f2;}
+#customers tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
-#customers tr:hover {background-color: #ddd;}
+#customers tr:hover {
+  background-color: #ddd;
+}
 
 #customers th {
   padding-top: 12px;
@@ -163,17 +157,14 @@ input {
   color: white;
 }
 
-
-  .select {
-    position: relative;
-    font-family: Arial;
-    display: none; 
-    background-color: DodgerBlue;
-    position: absolute;
+.select {
+  position: relative;
+  font-family: Arial;
+  display: none;
+  background-color: DodgerBlue;
+  position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   z-index: 99;
-  }
-  
-
+}

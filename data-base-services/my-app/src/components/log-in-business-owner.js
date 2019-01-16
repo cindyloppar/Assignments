@@ -21,7 +21,7 @@ class LogInBusiness extends Component {
     }
 
     else {
-      this.setState({ values, errorMessage: "Incorrect user log in info" })
+      this.setState({ values, errorMessage: "Incorrect user login info" })
 
     }
   }
@@ -34,7 +34,7 @@ class LogInBusiness extends Component {
       >
         <NavbarLight />
 
-        <p>{this.state.errorMessage}</p>
+       <p style={{ color: "red" }}>{this.state.errorMessage}</p>
         <div className="field">
           <label>Email </label>
           <Control.text model="logIn.email" required />

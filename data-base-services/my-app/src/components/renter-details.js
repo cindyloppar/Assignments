@@ -3,7 +3,7 @@ import React from 'react';
 import NavbarUser from './navbar-user';
 import { connect } from 'react-redux';
 
-class display extends React.Component {
+class userDetails extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -33,6 +33,7 @@ class display extends React.Component {
                     </thead>
                     <tbody>
                         {this.props.searchResults.map(singleUserDetails => {
+                            console.log('searchResults :', searchResults);
                             return <tr name={`row-${singleUserDetails.id}`} >
                                 <td>{singleUserDetails.business_name}</td>
                                 <td>{singleUserDetails.province}</td>
@@ -53,4 +54,4 @@ const mapStateToProps = (state) => {
         searchResults: state.CustomerStore.searchResults
     }
 }
-export default connect(mapStateToProps)(display);
+export default connect(mapStateToProps)(userDetails);

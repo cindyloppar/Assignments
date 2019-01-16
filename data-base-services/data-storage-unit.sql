@@ -32,11 +32,6 @@ CREATE TABLE IF NOT EXISTS unit_types(
     blocks_id INT REFERENCES blocks(id),
     unit_types_id INT REFERENCES unit_types(id)
 );
-CREATE TABLE IF NOT EXISTS customer_units(
-    id serial PRIMARY KEY,
-    customer_id INT REFERENCES users(id),
-    units_id INT REFERENCES units(id) UNIQUE
-);
 CREATE TABLE IF NOT EXISTS users(
     id serial PRIMARY KEY,
     name VARCHAR (100) NOT NULL,
@@ -44,6 +39,11 @@ CREATE TABLE IF NOT EXISTS users(
     email VARCHAR (100) NOT NULL UNIQUE,
     role VARCHAR (100) NOT NULL,
     password VARCHAR (100)NOT NULL 
+);
+CREATE TABLE IF NOT EXISTS customer_units(
+    id serial PRIMARY KEY,
+    customer_id INT REFERENCES users(id),
+    unit_id INT REFERENCES units(id) UNIQUE
 );
 
 INSERT INTO business(business_name, contact_name, telephone_number, contact_email) VALUES ('Tutu.com', 'Temba', '0726263325', 'ssdressers@gmail.com');

@@ -165,6 +165,16 @@ app.get("/units", middlewareTest, async (req, res) => {
   }
 })
 
+app.get("/userdetails", middlewareTest, async (req, res) => {
+  const findAllQuery = 'SELECT * FROM customer_units';
+  try {
+    const { rows, rowCount } = await client.query(findAllQuery);
+    return res.status(200).send({ rows, rowCount });
+  } catch (error) {
+    return res.status(400);
+  }
+})
+
 
 app.post('/business', middlewareTest, async (req, res) => {
   const text = `INSERT INTO
@@ -221,9 +231,9 @@ app.post('/business', middlewareTest, async (req, res) => {
       INNER JOIN blocks on blocks.location_id = location.id
       INNER JOIN units on units.blocks_id = blocks.id
       INNER JOIN unit_types on units.unit_types_id = unit_types.id
-      WHERE location.province = $1 AND unit_types.name = $2 `
-        ;
+      WHERE location.suburb = $1 AND unit_types.name = $2 `;
       let searchResults = await client.query(statement, [data.province, data.name])
+      console.log('searchResults :', searchResults);
       return res.json(searchResults.rows)
 
     } catch (error) {
@@ -318,6 +328,25 @@ app.post('/locationuser', middlewareTest, async (req, res) => {
     }
   }),
 
+  app.post('userdetails', middlewareTest, async(req,res)=>{
+    try {
+      var unitsId = await client.query("SELECT id FROM units WHERE name = $1", [req.body.name]);
+      var customerId = await client.query("SELECT id FROM users WHERE name = $1", [req.body.name]);
+
+      const text = `INSERT INTO
+     customer_units( customer_units_id, units_id)
+      VALUES($1,$2)
+      returning *`;
+      const values = [
+        unitsId.rows[0].id,
+        customerId.rows[0].id
+      ];
+      const { rows } = await client.query(text, values);
+      return res.status(201).send(rows[0]);
+    } catch (error) {
+      return res.status(400);
+    }
+  }),
 
   app.post('/signup', async (req, res) => {
     var userExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);

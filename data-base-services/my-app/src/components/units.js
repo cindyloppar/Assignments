@@ -32,8 +32,8 @@ class UnitForm extends Component {
         <NavbarLight />
 
         <div className='field' >
-          <label>Name: </label>
-          < Control.text model="units.name" required />
+          <label>Unit Name: </label>
+          < Control.text model="units.name" placeholder=" e.g unit 7" required />
         </div>
 
         <div className='field' >

@@ -4,7 +4,7 @@ import { Button } from 'styled-button-component';
 import { Navbar, NavbarLink } from 'styled-navbar-component';
 import { Nav } from 'styled-nav-component';
  
-class NavbarUser extends React.Component {
+class NavBarUserDetails extends React.Component {
   constructor(props) {
     super();
     this.state = {
@@ -39,6 +39,7 @@ class NavbarUser extends React.Component {
             </Nav>
             <Nav pullRight start collapse expandSm hidden={hidden} >
               <NavbarLink light active href="/" >Home</NavbarLink>
+              <NavbarLink light active href="/userdetails" >Rented</NavbarLink>
               <NavbarLink light disabled href="/logout">Logout</NavbarLink>
             </Nav>
           </Navbar>
@@ -48,4 +49,4 @@ class NavbarUser extends React.Component {
   }
 };
 
-export default NavbarUser;
+export default NavBarUserDetails;

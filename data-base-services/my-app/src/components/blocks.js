@@ -48,8 +48,8 @@ class BlocksForm extends Component {
         </div>
 
         <div className='field' >
-          <label>Name: </label>
-          < Control.text model="blocks.name" required />
+          <label>Block Name: </label>
+          < Control.text model="blocks.name" placeholder='e.g Block A' required />
         </div>
 
         <button className='submit'>Next ></button>

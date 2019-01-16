@@ -27,7 +27,7 @@ class SignUp extends Component {
             var re = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
             var results = re.test(val);
             if (!results && val.length > 0) {
-                this.setState({ errorPresent: true, errorMessage: "invalid email, please check your email!" })
+                this.setState({ errorPresent: true, errorMessage: "Invalid email, please check your email!" })
             } else {
                 this.setState({ errorPresent: false })
             }
@@ -42,7 +42,7 @@ class SignUp extends Component {
             >
             <NavbarUser />
                 {this.state.errorPresent && (
-                    <p>{this.state.errorMessage}</p>
+                    <p style={{ color: "red" }}>{this.state.errorMessage}</p>
                 )}
                 <div className='field' >
                     <label>Name: </label>
