@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS customer_units(
 INSERT INTO business(business_name, contact_name, telephone_number, contact_email) VALUES ('Tutu.com', 'Temba', '0726263325', 'ssdressers@gmail.com');
 INSERT INTO location(address_line1) VALUES ('258 Fourways');
 INSERT INTO unit_types(name, width) VALUES ('Storage', '3');
-INSERT INTO blocks(name) VALUES ('Super');
-INSERT INTO units(name) VALUES ('Bloem');
+INSERT INTO blocks(name) VALUES ('Block P');
+INSERT INTO units(name) VALUES ('unit 29');
 
 
 SELECT * FROM blocks;

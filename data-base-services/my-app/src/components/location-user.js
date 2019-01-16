@@ -23,9 +23,9 @@ class LocationUser extends Component {
         var locationDetails = await axios.get('http://localhost:3001/location');
         var provinceDetails = await axios.get('http://localhost:3001/location');
         var unitTypeDetails = await axios.get('http://localhost:3001/unittypes');
-        if(unitTypeDetails === unitTypeDetails[0]){
+        // if(unitTypeDetails === unitTypeDetails[0]){
             
-        }
+        // }
         this.setState({
             locationValues: locationDetails.data.rows,
             provinceValues: provinceDetails.data.rows,
@@ -42,7 +42,7 @@ class LocationUser extends Component {
             }
         })
         console.log('getData :', getData);
-        this.props.updateCustomerSearchResults(getData.data)
+        this.props.updateCustomerSearchResults(getData.data);
         this.props.history.push('/userdetails');
     }
 

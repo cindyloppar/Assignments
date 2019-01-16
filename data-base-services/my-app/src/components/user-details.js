@@ -1,6 +1,6 @@
 import React from 'react';
 // import { Navbar } from 'styled-navbar-component/lib/components/Navbar';
-import NavbarUser from './navbar-user';
+import NavbarUserDetails from './navbar-user';
 import { connect } from 'react-redux';
 
 class display extends React.Component {
@@ -17,7 +17,7 @@ class display extends React.Component {
         }
         return (
             <div>
-                <NavbarUser />
+                <NavbarUserDetails />
 
                 <table id="customers">
                     <thead>
