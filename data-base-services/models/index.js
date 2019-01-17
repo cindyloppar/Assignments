@@ -219,46 +219,80 @@ app.post('/business', middlewareTest, async (req, res) => {
     } catch (error) {
       return res.status(400);
     }
-  }),
+  })
 
+app.get('/location-unit-types/:province/:suburb', middlewareTest, async (req, res) => {
+  var statement = "SELECT unit_types.name as unittypename, units.name as unitname, unit_types.id  FROM unit_types inner join units on unit_types.id = units.unit_types_id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id where location.province = $1 and location.suburb = $2";
+  let searchResults = await client.query(statement, [req.params.province, req.params.suburb]);
+  res.json(searchResults.rows).status(200).end();
+})
 
-  app.get('/locationuser', middlewareTest, async (req, res) => {
-    var data = req.query
-    try {
+app.get('/suburb-for-province/:province', middlewareTest, async (req, res) => {
+  var statement = "SELECT suburb  FROM public.location where province= $1;"
+  var selectedProvince = req.params.province;
+  let searchResults = await client.query(statement, [selectedProvince]);
+  res.json(searchResults.rows).status(200).end();
+})
 
-      const statement = `SELECT location.province, units.name as unitName, location.city, location.suburb, unit_types.name, business.business_name FROM business 
+app.get('/locationuser', middlewareTest, async (req, res) => {
+  var data = req.query
+  try {
+
+    const statement = `SELECT location.province, units.name as unitName, location.city, location.suburb, unit_types.name, business.business_name FROM business 
       INNER JOIN location on location.business_id = business.id
       INNER JOIN blocks on blocks.location_id = location.id
       INNER JOIN units on units.blocks_id = blocks.id
       INNER JOIN unit_types on units.unit_types_id = unit_types.id
-
       WHERE unit_types.name = $1 AND location.suburb =$2`;
-      let searchResults = await client.query(statement, [data.name, data.suburb])
-      return res.json(searchResults.rows);
+    let searchResults = await client.query(statement, [data.name, data.suburb]);
 
-    } catch (error) {
-      return res.status(500);
-    }
-  })
+    return res.json(searchResults.rows);
+
+  } catch (error) {
+    return res.status(500);
+  }
+})
 
 app.post('/locationuser', middlewareTest, async (req, res) => {
+  const units = `SELECT units.id FROM units INNER JOIN unit_types on unit_types.id = units.unit_types_id INNER JOIN blocks on blocks.units.id = units.blocks_id INNER JOIN location on location.id = location.location_id WHERE  location.province = $1 AND location.suburb = $2 AND unit_types.id = $3 AND units.name = $4`
+  console.log('req.body :', req.body);
+  res.status(200).end();
+  // try {
+  //   var locationId = await client.query("SELECT id FROM users WHERE email = $1", [req.body.email]);
+  //   var Province = await client.query("SELECT id FROM units WHERE province = $1", [req.body.province]);
+
+  //   const text = `INSERT INTO
+  //         location(province, address_line1, address_line2, suburb, city, business_id)
+  //         VALUES($1, $2, $3, $4, $5, $6)
+  //         returning *`;
+  //   const values = [
+  //     req.body.province,
+  //     req.body.address_line1,
+  //     req.body.address_line2,
+  //     req.body.suburb,
+  //     req.body.city,
+  //     businessId.rows[0].id,
+
+  //   ];
+  //   const { rows, rowCount } = await client.query(text, values);
+  //   return res.status(201).send(rows[0]);
+  // } catch (error) {
+  //   return res.status(400);
+  // }
+})
+
+app.post('/blocks', middlewareTest, async (req, res) => {
 
   try {
-    var locationId = await client.query("SELECT id FROM location WHERE suburb = $1", [req.body.suburb]);
-    var Province = await client.query("SELECT id FROM location WHERE province = $1", [req.body.province]);
+    var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation]);
 
     const text = `INSERT INTO
-          location(province, address_line1, address_line2, suburb, city, business_id)
-          VALUES($1, $2, $3, $4, $5, $6)
-          returning *`;
+      blocks(name,location_id)
+      VALUES($1,$2)
+      returning *`;
     const values = [
-      req.body.province,
-      req.body.address_line1,
-      req.body.address_line2,
-      req.body.suburb,
-      req.body.city,
-      businessId.rows[0].id,
-
+      req.body.name,
+      locationId.rows[0].id
     ];
     const { rows, rowCount } = await client.query(text, values);
     return res.status(201).send(rows[0]);
@@ -266,26 +300,6 @@ app.post('/locationuser', middlewareTest, async (req, res) => {
     return res.status(400);
   }
 }),
-
-  app.post('/blocks', middlewareTest, async (req, res) => {
-
-    try {
-      var locationId = await client.query("SELECT id FROM location WHERE address_line1 = $1", [req.body.selectLocation]);
-
-      const text = `INSERT INTO
-      blocks(name,location_id)
-      VALUES($1,$2)
-      returning *`;
-      const values = [
-        req.body.name,
-        locationId.rows[0].id
-      ];
-      const { rows, rowCount } = await client.query(text, values);
-      return res.status(201).send(rows[0]);
-    } catch (error) {
-      return res.status(400);
-    }
-  }),
 
   app.post('/unittypes', middlewareTest, async (req, res) => {
     const text = `INSERT INTO
@@ -327,7 +341,7 @@ app.post('/locationuser', middlewareTest, async (req, res) => {
     }
   }),
 
-  app.post('/userdetails', middlewareTest, async(req,res)=>{
+  app.post('/userdetails', middlewareTest, async (req, res) => {
     try {
       var unitsId = await client.query("SELECT id FROM units WHERE name = $1", [req.body.name]);
       var customerId = await client.query("SELECT id FROM users WHERE name = $1", [req.body.name]);

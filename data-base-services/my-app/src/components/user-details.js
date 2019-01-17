@@ -1,20 +1,15 @@
 import React from 'react';
-// import { Navbar } from 'styled-navbar-component/lib/components/Navbar';
 import NavbarUserDetails from './navbar-user';
 import { connect } from 'react-redux';
+import axios from 'axios';
+
 
 class display extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
 
     render() {
-        if (this.props.searchResults.length <= 0) {
-            this.props.history.push("/")
-        }
+        // if (this.props.searchResults.length <= 0) {
+        //     this.props.history.push("/")
+        // }
         return (
             <div>
                 <NavbarUserDetails />

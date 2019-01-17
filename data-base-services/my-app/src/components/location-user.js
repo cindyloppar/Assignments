@@ -4,50 +4,82 @@ import '../App.css';
 import axios from 'axios';
 import NavbarUserDetails from '../components/nav-bar-user-details';
 import { connect } from 'react-redux';
-import { updateCustomerSearchResults } from '../action-creator'
+import { updateCustomerSearchResults } from '../action-creator';
+import jwt_decode from 'jwt-decode';
 
 class LocationUser extends Component {
     constructor() {
         super();
         this.state = {
-            values: "", locationValues: [], provinceValues: [], unitTypeValues: [],
+            values: "", locationValues: [], provinceValues: [], unitTypeValues: [], unitsValues: [],
             searchResults: {
                 province: "",
                 unitTypeDetails: "",
-                locationsSuburb: ""
+                locationsSuburb: "",
+                unitsDetails: ""
             }
         }
+        this.getAllUnits = this.getAllUnits.bind(this);
     }
     async componentDidMount() {
-        
-        var locationDetails = await axios.get('http://localhost:3001/location');
         var provinceDetails = await axios.get('http://localhost:3001/location');
-        var unitTypeDetails = await axios.get('http://localhost:3001/unittypes');
-        // if(unitTypeDetails === unitTypeDetails[0]){
-            
-        // }
+        var validProvinces = [];
+        provinceDetails.data.rows.forEach(element => {
+            if (validProvinces.indexOf(element.province) < 0) {
+                validProvinces.push(element.province);
+            }
+        });
         this.setState({
-            locationValues: locationDetails.data.rows,
-            provinceValues: provinceDetails.data.rows,
-            unitTypeValues: unitTypeDetails.data.rows
+            provinceValues: validProvinces
         })
     }
+    async getLocationUnitTypes() {
+        if (this.props.currentState.suburb.length > 0) {
+            var locationDetails = await axios.get('http://localhost:3001/location-unit-types/' + this.props.currentState.province + "/" + this.props.currentState.suburb);
+            var validUnitTypes = [];
+            locationDetails.data.forEach(element => {
+                var elementFound = validUnitTypes.find(item => {
+                    return item.id === element.id
+                })
+                if (elementFound) {
+                    validUnitTypes[validUnitTypes.indexOf(elementFound)].units = [...validUnitTypes[validUnitTypes.indexOf(elementFound)].units, element.unitname];
+                } else {
+                    element.units = [element.unitname]
+                    validUnitTypes.push(element)
+                }
+            });
+            this.setState({ unitTypeValues: validUnitTypes })
+        }
+    }
+    async getSuburbs() {
+        if (this.props.currentState.province.length > 0) {
+            var locationDetails = await axios.get('http://localhost:3001/suburb-for-province/' + this.props.currentState.province);
+            this.setState({ locationValues: locationDetails.data })
+        }
+    }
+    getAllUnits(e) {
+        var selectedUnit = this.state.unitTypeValues.find(item => {
+            return item.id === +e.target.value
+        });
+        if (selectedUnit) {
+            this.setState({ unitsValues: selectedUnit.units })
+        }
+    }
+
 
     async handleSubmit(values) {
         this.setState({ values });
-        const getData = await axios.get('http://localhost:3001/locationuser', {
-            params: {
-                
-                ...values
+        var jwt = sessionStorage.getItem('token');
+        var decoded = jwt_decode(jwt);
+        await axios.post('http://localhost:3001/locationuser', {
+            email: decoded.email,
+            unitDetails: {
+                ...this.props.currentState
             }
         })
-        console.log('getData :', getData);
-        this.props.updateCustomerSearchResults(getData.data);
         this.props.history.push('/userdetails');
     }
-
     render() {
-        console.log('this.state :', this.state);
         return (
             <Form
                 model="LocationUser"
@@ -59,11 +91,12 @@ class LocationUser extends Component {
                     <h3>Rent Storage</h3>
 
                     <div className='field'>
-                        <Control.select model="LocationUser.province" required >
+
+                        <Control.select model="LocationUser.province" required ref="selectedProvince" onClick={() => this.getSuburbs()}>
                             <option>Select Province</option>
 
                             {this.state.provinceValues.map(element => {
-                                return <option >{element.province}</option>
+                                return <option >{element}</option>
                             })}
 
                         </Control.select>
@@ -71,9 +104,8 @@ class LocationUser extends Component {
 
 
                     <div className='field'>
-                        <Control.select model="LocationUser.suburb" required >
+                        <Control.select model="LocationUser.suburb" onClick={() => this.getLocationUnitTypes()} required >
                             <option>Select Suburb</option>
-
                             {this.state.locationValues.map(element => {
                                 return <option>{element.suburb}</option>
                             })}
@@ -82,16 +114,26 @@ class LocationUser extends Component {
                     </div>
 
                     <div className='field'>
-                        <Control.select model="LocationUser.name" required >
+                        <Control.select model="LocationUser.name" onClick={this.getAllUnits} required >
                             <option >Select Unit Type</option>
 
                             {this.state.unitTypeValues.map(element => {
-                                return <option>{element.name}</option>
+                                return <option value={element.id}>{element.unittypename}</option>
                             })}
 
                         </Control.select>
                     </div>
 
+                    <div className='field'>
+                        <Control.select model="LocationUser.unitName" required >
+                            <option >Select Unit</option>
+
+                            {this.state.unitsValues.map(element => {
+                                return <option>{element}</option>
+                            })}
+
+                        </Control.select>
+                    </div>
 
                 </div>
                 <button className='submit'>Next > </button>
@@ -106,4 +148,10 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(updateCustomerSearchResults(data))
     }
 }
-export default connect(null, mapDispatchToProps)(LocationUser);
+
+const mapStateToProps = (state) => {
+    return {
+        currentState: state.LocationUser
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LocationUser);
