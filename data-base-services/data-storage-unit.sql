@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS customer_units(
     id serial PRIMARY KEY,
     customer_id INT REFERENCES users(id),
-    unit_id INT REFERENCES units(id) UNIQUE
+    units_id INT REFERENCES units(id) UNIQUE
 );
 
 INSERT INTO business(business_name, contact_name, telephone_number, contact_email) VALUES ('Tutu.com', 'Temba', '0726263325', 'ssdressers@gmail.com');

@@ -3,7 +3,6 @@ import { Container } from 'styled-container-component';
 import { Button } from 'styled-button-component';
 import { Navbar, NavbarLink } from 'styled-navbar-component';
 import { Nav } from 'styled-nav-component';
-import Axios from 'axios';
  
 class NavBarUserDetails extends React.Component {
   constructor(props) {

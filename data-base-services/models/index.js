@@ -254,31 +254,23 @@ app.get('/locationuser', middlewareTest, async (req, res) => {
 })
 
 app.post('/locationuser', middlewareTest, async (req, res) => {
-  const units = `SELECT units.id FROM units INNER JOIN unit_types on unit_types.id = units.unit_types_id INNER JOIN blocks on blocks.units.id = units.blocks_id INNER JOIN location on location.id = location.location_id WHERE  location.province = $1 AND location.suburb = $2 AND unit_types.id = $3 AND units.name = $4`
-  console.log('req.body :', req.body);
-  res.status(200).end();
-  // try {
-  //   var locationId = await client.query("SELECT id FROM users WHERE email = $1", [req.body.email]);
-  //   var Province = await client.query("SELECT id FROM units WHERE province = $1", [req.body.province]);
+  try {
+    const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.body.email]);
+    const queryForUnitsId = await client.query("SELECT units.id FROM units INNER JOIN unit_types on units.unit_types_id= unit_types.id INNER JOIN blocks on units.blocks_id = blocks.id INNER JOIN location on blocks.location_id = location.id  WHERE  location.province = $1 AND location.suburb = $2 AND unit_types.id = $3 AND units.name = $4", [req.body.unitDetails.province,req.body.unitDetails.suburb,+req.body.unitDetails.name, req.body.unitDetails.unitName ]);
+    const text = `INSERT INTO 
+    customer_units(units_id, customer_id)
+    VALUES($1,$2)
+    returning*;`
+    const values = [
+      queryForUnitsId.rows[0].id,
+      queryForUserId.rows[0].id
+    ];
+    const { rows, rowCount } = await client.query(text, values);
+    return res.status(201).send(rows[0]);
+  } catch (error) {
+    return res.status(400);
+  }
 
-  //   const text = `INSERT INTO
-  //         location(province, address_line1, address_line2, suburb, city, business_id)
-  //         VALUES($1, $2, $3, $4, $5, $6)
-  //         returning *`;
-  //   const values = [
-  //     req.body.province,
-  //     req.body.address_line1,
-  //     req.body.address_line2,
-  //     req.body.suburb,
-  //     req.body.city,
-  //     businessId.rows[0].id,
-
-  //   ];
-  //   const { rows, rowCount } = await client.query(text, values);
-  //   return res.status(201).send(rows[0]);
-  // } catch (error) {
-  //   return res.status(400);
-  // }
 })
 
 app.post('/blocks', middlewareTest, async (req, res) => {

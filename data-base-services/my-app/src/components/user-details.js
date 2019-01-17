@@ -2,9 +2,16 @@ import React from 'react';
 import NavbarUserDetails from './navbar-user';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 
 class display extends React.Component {
+
+    async componentDidMount(){
+        var jwt = sessionStorage.getItem('token');
+        var decoded = jwt_decode(jwt);
+       await axios.get('http://localhost:3001/locationuser', decoded.jwt);
+    }
 
     render() {
         // if (this.props.searchResults.length <= 0) {
