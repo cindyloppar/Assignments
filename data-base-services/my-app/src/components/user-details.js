@@ -6,17 +6,24 @@ import jwt_decode from 'jwt-decode';
 
 
 class display extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            units: []
+        }
+    }
 
-    async componentDidMount(){
+
+    async componentDidMount() {
         var jwt = sessionStorage.getItem('token');
         var decoded = jwt_decode(jwt);
-       await axios.get('http://localhost:3001/locationuser', decoded.jwt);
+        console.log('jwt :', decoded);
+        var getRentedDetails = await axios.get('http://localhost:3001/getAllUserUnits/' + decoded.email);
+        this.setState({ units: getRentedDetails.data })
     }
 
     render() {
-        // if (this.props.searchResults.length <= 0) {
-        //     this.props.history.push("/")
-        // }
+       
         return (
             <div>
                 <NavbarUserDetails />
@@ -35,14 +42,14 @@ class display extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.searchResults.map(singleUserDetails => {
+                        {this.state.units.map(singleUserDetails => {
                             return <tr name={`row-${singleUserDetails.id}`} >
                                 <td>{singleUserDetails.business_name}</td>
                                 <td>{singleUserDetails.province}</td>
                                 <td>{singleUserDetails.city}</td>
                                 <td>{singleUserDetails.suburb}</td>
-                                <td>{singleUserDetails.unitname}</td>
                                 <td>{singleUserDetails.name}</td>
+                                <td>{singleUserDetails.unittypesname}</td>
                             </tr>
                         })}
                     </tbody>

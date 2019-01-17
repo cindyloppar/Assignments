@@ -252,11 +252,20 @@ app.get('/locationuser', middlewareTest, async (req, res) => {
     return res.status(500);
   }
 })
+app.get("/getAllUserUnits/:userEmail", middlewareTest, async (req, res) => {
+  try {
+    const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
+    const userUnits = await client.query("SELECT business.business_name, location.province, location.suburb, units.name, unit_types.name as unitTypesName FROM public.customer_units inner join units on customer_units.units_id = units.id inner join unit_types on units.unit_types_id = unit_types.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id where customer_units.customer_id = $1;", [queryForUserId.rows[0].id]);
+    res.send(userUnits.rows).status(200).end();
+  } catch (error) {
+    res.status(200).end();
 
+  }
+})
 app.post('/locationuser', middlewareTest, async (req, res) => {
   try {
     const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.body.email]);
-    const queryForUnitsId = await client.query("SELECT units.id FROM units INNER JOIN unit_types on units.unit_types_id= unit_types.id INNER JOIN blocks on units.blocks_id = blocks.id INNER JOIN location on blocks.location_id = location.id  WHERE  location.province = $1 AND location.suburb = $2 AND unit_types.id = $3 AND units.name = $4", [req.body.unitDetails.province,req.body.unitDetails.suburb,+req.body.unitDetails.name, req.body.unitDetails.unitName ]);
+    const queryForUnitsId = await client.query("SELECT units.id FROM units INNER JOIN unit_types on units.unit_types_id= unit_types.id INNER JOIN blocks on units.blocks_id = blocks.id INNER JOIN location on blocks.location_id = location.id  WHERE  location.province = $1 AND location.suburb = $2 AND unit_types.id = $3 AND units.name = $4", [req.body.unitDetails.province, req.body.unitDetails.suburb, +req.body.unitDetails.name, req.body.unitDetails.unitName]);
     const text = `INSERT INTO 
     customer_units(units_id, customer_id)
     VALUES($1,$2)
