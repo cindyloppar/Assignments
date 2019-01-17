@@ -3,6 +3,7 @@ import NavbarUserDetails from './navbar-user';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import NavBarUsersTable from './navbar-users-table';
 
 
 class display extends React.Component {
@@ -26,7 +27,7 @@ class display extends React.Component {
        
         return (
             <div>
-                <NavbarUserDetails />
+                <NavBarUsersTable/>
 
                 <table id="customers">
                     <thead>

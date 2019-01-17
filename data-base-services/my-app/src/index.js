@@ -20,6 +20,8 @@ import SignUpBusiness from './components/sign-up-business';
 import LogOut from './components/log-out';
 import display from './components/user-details';
 import axios from 'axios';
+import userDetails from './components/renter-details';
+
 
 
 async function checkUser() {
@@ -48,7 +50,7 @@ const fakeAuth = {
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
-        checkUser() || isAuthenticated ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
+        checkUser() || fakeAuth.isAuthenticated === true? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
     )} />
 )
 
@@ -70,6 +72,8 @@ ReactDOM.render(
                 <PrivateRoute exact path="/blocks" component={BlocksForm} />
                 <PrivateRoute exact path="/unittypes" component={UnitTypeForm} />
                 <PrivateRoute exact path="/userdetails" component={display} />
+                <PrivateRoute exact path="/displayuserdetails" component={userDetails} />
+                
             </div>
         </Router>
     </Provider>

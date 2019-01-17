@@ -2,22 +2,32 @@ import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
 import '../App.css';
 import axios from 'axios';
-import NavbarLight from '../components/nav-bar'
+import {connect} from 'react-redux';
+import { updateBusinessSearchResults } from '../action-creator';
+import NavbarDisplayRentedUnits from '../components/navbar-rented-units'
 
 class LocationForm extends Component {
     constructor() {
         super();
-        this.state = { values: '', businessValues: [], provinceValues: [] }
+        this.state = { values: '', businessValues: [], provinceValues: [],
+        searchResults: {
+            province: "",
+            unitTypeDetails: "",
+            locationsSuburb: "",
+            unitsDetails: ""
+        }
+    }
 
     }
 
     async componentDidMount() {
-        var getToken = sessionStorage.getItem("token")
+        var getToken = sessionStorage.getItem("token");
         var businessDetails = await axios.get('http://localhost:3001/business', {
             headers: {
                 KEJWTNTWE: getToken
             }
         });
+        console.log('businessDetails :', businessDetails);
         this.setState({ businessValues: businessDetails.data.rows })
     }
 
@@ -35,7 +45,7 @@ class LocationForm extends Component {
                 model="location"
                 onSubmit={(val) => this.handleSubmit(val)} >
 
-                <NavbarLight />
+                <NavbarDisplayRentedUnits />
 
                 <div className='field' >
                     <label>Select Business</label>
@@ -82,5 +92,16 @@ class LocationForm extends Component {
         );
     }
 }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateBusinessSearchResults: (data) =>
+            dispatch(updateBusinessSearchResults(data))
+    }
+}
 
-export default LocationForm;
+const mapStateToProps = (state) => {
+    return {
+        currentState: state.LocationForm
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LocationForm);

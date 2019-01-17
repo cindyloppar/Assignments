@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
 import '../App.css';
 import axios from 'axios';
-import NavbarLight from '../components/nav-bar'
+import NavbarDisplayRentedUnits from '../components/navbar-rented-units'
 class MyForm extends Component {
   constructor() {
     super();
@@ -28,7 +28,7 @@ class MyForm extends Component {
       }
         
       >
-      <NavbarLight/>
+      <NavbarDisplayRentedUnits/>
       
         <div className='field' >
           <label>Business name: </label>

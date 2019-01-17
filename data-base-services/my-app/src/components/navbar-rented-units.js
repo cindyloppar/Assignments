@@ -4,7 +4,7 @@ import { Button } from 'styled-button-component';
 import { Navbar, NavbarLink } from 'styled-navbar-component';
 import { Nav } from 'styled-nav-component';
  
-class NavBarUserDetails extends React.Component {
+class NavbarDisplayForBusiness extends React.Component {
   constructor(props) {
     super();
     this.state = {
@@ -13,6 +13,7 @@ class NavBarUserDetails extends React.Component {
   }
  
   handleOpenCloseNav() {
+
     this.setState({
       hidden: !this.state.hidden,
     });
@@ -38,7 +39,8 @@ class NavBarUserDetails extends React.Component {
             </Nav>
             <Nav pullRight start collapse expandSm hidden={hidden} >
               <NavbarLink light active href="/" >Home</NavbarLink>
-              <NavbarLink light active href="/userdetails" >Rented</NavbarLink>
+              <NavbarLink light active href="/displayuserdetails" >Rented</NavbarLink> 
+              <NavbarLink light active href="/showavailableunitsdetails" >Available Units</NavbarLink>                                         
               <NavbarLink light disabled href="/logout">Logout</NavbarLink>
             </Nav>
           </Navbar>
@@ -48,4 +50,4 @@ class NavBarUserDetails extends React.Component {
   }
 };
 
-export default NavBarUserDetails;
+export default NavbarDisplayForBusiness;

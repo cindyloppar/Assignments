@@ -1,5 +1,6 @@
 import React from 'react';
-import NavbarDisplayRentedUnits from './navbar-rented-units';
+// import { Navbar } from 'styled-navbar-component/lib/components/Navbar';
+import NavbarUser from './navbar-user';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -15,7 +16,8 @@ class userDetails extends React.Component {
     async componentDidMount() {
         var jwt = sessionStorage.getItem('token');
         var decoded = jwt_decode(jwt);
-        var getRentedDetails = await axios.get('http://localhost:3001/getAllUnits/' + decoded.email);
+        var getRentedDetails = await axios.get('http://localhost:3001/getExistingUnits/' + decoded.email);
+        console.log('getRentedDetails :', getRentedDetails);
         this.setState({ units: getRentedDetails.data })
     }
 
@@ -24,7 +26,7 @@ class userDetails extends React.Component {
        
         return (
             <div>
-                <NavbarDisplayRentedUnits />
+                <NavbarUser />
 
                 <table id="customers">
                     <thead>

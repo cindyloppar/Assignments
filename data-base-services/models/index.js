@@ -196,33 +196,76 @@ app.post('/business', middlewareTest, async (req, res) => {
 }),
 
 
-  app.post('/location', middlewareTest, async (req, res) => {
+  // var queryAllUnits = "SELECT *FROM public.customer_units inner join units on customer_units.units_id = units.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id;"
+  // let searchResults = await client.query(statement, [req.params.province, req.params.suburb]);
+  // res.json(searchResults.rows).status(200).end();
 
+  app.get('/getAllUnits/:userEmail', middlewareTest, async (req, res) => {
     try {
-      var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
-
-      const text = `INSERT INTO
-          location(province, address_line1, address_line2, suburb, city, business_id)
-          VALUES($1, $2, $3, $4, $5, $6)
-          returning *`;
-      const values = [
-        req.body.province,
-        req.body.address_line1,
-        req.body.address_line2,
-        req.body.suburb,
-        req.body.city,
-        businessId.rows[0].id,
-
-      ];
-      const { rows, rowCount } = await client.query(text, values);
-      return res.status(201).send(rows[0]);
+      const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
+      const userUnits = await client.query("SELECT * FROM customer_units inner join units on customer_units.units_id = units.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id ");
+      res.send(userUnits.rows).status(200).end();
     } catch (error) {
-      return res.status(400);
+      res.status(200).end();
+
     }
   })
 
+// app.get('/getExistingUnits', middlewareTest, async (req, res) => {
+//   var queryForNotRentedUnits = "SELECT * FROM units WHERE NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id)",
+//   let searchResults = await client.query(statement, [req.params.province, req.params.suburb]);
+//   res.json(searchResults.rows).status(200).end();
+// })
+
+
+
+app.get('/location', middlewareTest, async (req, res) => {
+  var data = req.query
+  try {
+
+    const statement = `SELECT location.province, units.name as unitName, location.city, location.suburb, unit_types.name, business.business_name FROM business 
+      INNER JOIN location on location.business_id = business.id
+      INNER JOIN blocks on blocks.location_id = location.id
+      INNER JOIN units on units.blocks_id = blocks.id
+      INNER JOIN unit_types on units.unit_types_id = unit_types.id
+      WHERE unit_types.name = $1 AND location.suburb =$2`;
+    let searchResults = await client.query(statement, [data.name, data.suburb]);
+
+    return res.json(searchResults.rows);
+
+  } catch (error) {
+    return res.status(500);
+  }
+})
+
+
+app.post('/location', middlewareTest, async (req, res) => {
+
+  try {
+    var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
+
+    const text = `INSERT INTO
+          location(province, address_line1, address_line2, suburb, city, business_id)
+          VALUES($1, $2, $3, $4, $5, $6)
+          returning *`;
+    const values = [
+      req.body.province,
+      req.body.address_line1,
+      req.body.address_line2,
+      req.body.suburb,
+      req.body.city,
+      businessId.rows[0].id,
+
+    ];
+    const { rows, rowCount } = await client.query(text, values);
+    return res.status(201).send(rows[0]);
+  } catch (error) {
+    return res.status(400);
+  }
+})
+
 app.get('/location-unit-types/:province/:suburb', middlewareTest, async (req, res) => {
-  var statement = "SELECT unit_types.name as unittypename, units.name as unitname, unit_types.id  FROM unit_types inner join units on unit_types.id = units.unit_types_id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id where location.province = $1 and location.suburb = $2";
+  var statement = "SELECT unit_types.name as unittypename, units.name as unitname, unit_types.id  FROM unit_types inner join units on unit_types.id = units.unit_types_id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id where location.province = $1 and location.suburb = $2 and NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id)";
   let searchResults = await client.query(statement, [req.params.province, req.params.suburb]);
   res.json(searchResults.rows).status(200).end();
 })
@@ -255,7 +298,7 @@ app.get('/locationuser', middlewareTest, async (req, res) => {
 app.get("/getAllUserUnits/:userEmail", middlewareTest, async (req, res) => {
   try {
     const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
-    const userUnits = await client.query("SELECT business.business_name, location.province, location.suburb, units.name, unit_types.name as unitTypesName FROM public.customer_units inner join units on customer_units.units_id = units.id inner join unit_types on units.unit_types_id = unit_types.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id where customer_units.customer_id = $1;", [queryForUserId.rows[0].id]);
+    const userUnits = await client.query("SELECT business.business_name, location.province, location.city,location.suburb, units.name, unit_types.name as unitTypesName FROM public.customer_units inner join units on customer_units.units_id = units.id inner join unit_types on units.unit_types_id = unit_types.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id where customer_units.customer_id = $1;", [queryForUserId.rows[0].id]);
     res.send(userUnits.rows).status(200).end();
   } catch (error) {
     res.status(200).end();
