@@ -1,4 +1,4 @@
-import React, { isAuthenticated} from 'react';
+import React, { isAuthenticated } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import MyForm from './components/App';
@@ -21,10 +21,11 @@ import LogOut from './components/log-out';
 import display from './components/user-details';
 import axios from 'axios';
 import userDetails from './components/renter-details';
+import existingUserUnits from './components/existing-units';
 
 
 
-async function checkUser() {
+ function checkUser() {
     var token = sessionStorage.getItem("token");
     if (token) {
         axios.defaults.headers.common['Authorization'] = token;
@@ -37,20 +38,20 @@ async function checkUser() {
 
 const fakeAuth = {
     isAuthenticated: false,
-    authenticate(cb) {
-        this.isAuthenticated = true
-        setTimeout(cb, 100)
+    authenticate(callback) {
+        this.isAuthenticated = true;
+        setTimeout(callback, 300);
     },
     logOut(cb) {
         this.isAuthenticated = false
-        setTimeout(cb, 100)
+        setTimeout(cb, 300)
     }
 }
 
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
-        checkUser() || fakeAuth.isAuthenticated === true? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
+        checkUser() || fakeAuth.isAuthenticated ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
     )} />
 )
 
@@ -73,7 +74,9 @@ ReactDOM.render(
                 <PrivateRoute exact path="/unittypes" component={UnitTypeForm} />
                 <PrivateRoute exact path="/userdetails" component={display} />
                 <PrivateRoute exact path="/displayuserdetails" component={userDetails} />
-                
+                <PrivateRoute exact path="/showavailableunitsdetails" component={existingUserUnits} />
+
+
             </div>
         </Router>
     </Provider>

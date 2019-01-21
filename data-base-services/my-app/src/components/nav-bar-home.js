@@ -25,7 +25,7 @@ class NavbarHome extends React.Component {
         <Container fluid>
           <Navbar expandSm light>
             <Nav start>
-              <NavbarLink light brand href="#">RENTAL STORAGE</NavbarLink>
+              <NavbarLink light brand href="/">RENTAL STORAGE</NavbarLink>
               <Button
                 light
                 outline

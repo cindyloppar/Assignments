@@ -19,7 +19,7 @@ class UnitForm extends Component {
   async handleSubmit(values) {
     this.setState({ values })
     axios.post('http://localhost:3001/units', values)
-    this.props.history.push('/displayuserdetails')
+    this.props.history.push('/showavailableunitsdetails')
   }
 
   render() {

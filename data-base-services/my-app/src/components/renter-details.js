@@ -34,7 +34,7 @@ class userDetails extends React.Component {
                             <th>Province</th>
                             <th>City</th>
                             <th>Suburb</th>
-                            <th>Unit_Type</th>
+                            <th>Block</th>
 
                         </tr>
                     </thead>

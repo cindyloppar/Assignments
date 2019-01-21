@@ -18,9 +18,11 @@ class display extends React.Component {
     async componentDidMount() {
         var jwt = sessionStorage.getItem('token');
         var decoded = jwt_decode(jwt);
-        console.log('jwt :', decoded);
         var getRentedDetails = await axios.get('http://localhost:3001/getAllUserUnits/' + decoded.email);
-        this.setState({ units: getRentedDetails.data })
+        this.setState({ units: getRentedDetails.data });
+        if (getRentedDetails === []) {
+            return <p> Sorry no available units!!</p>
+        }
     }
 
     render() {

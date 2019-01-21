@@ -1,11 +1,11 @@
 import React from 'react';
-// import { Navbar } from 'styled-navbar-component/lib/components/Navbar';
 import NavbarUser from './navbar-user';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import NavbarDisplayRentedUnits from '../components/navbar-rented-units';
 
-class userDetails extends React.Component {
+class existingUserUnits extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -16,17 +16,22 @@ class userDetails extends React.Component {
     async componentDidMount() {
         var jwt = sessionStorage.getItem('token');
         var decoded = jwt_decode(jwt);
-        var getRentedDetails = await axios.get('http://localhost:3001/getExistingUnits/' + decoded.email);
-        console.log('getRentedDetails :', getRentedDetails);
-        this.setState({ units: getRentedDetails.data })
+
+        var getAvailableDetails = await axios.get('http://localhost:3001/getExistingUnits/' + decoded.email);
+        console.log('getAvailaleDetails :', getAvailableDetails);
+        this.setState({ units: getAvailableDetails.data });
+        if (getAvailableDetails === []) {
+            return <p> Sorry all units are rented!!</p>
+        }
+
     }
 
 
     render() {
-       
+
         return (
             <div>
-                <NavbarUser />
+                <NavbarDisplayRentedUnits />
 
                 <table id="customers">
                     <thead>
@@ -36,10 +41,11 @@ class userDetails extends React.Component {
                             <th>Province</th>
                             <th>City</th>
                             <th>Suburb</th>
-                            <th>Unit_Type</th>
+                            <th>Blocks</th>
 
                         </tr>
                     </thead>
+
                     <tbody>
                         {this.state.units.map(singleUserDetails => {
                             return <tr name={`row-${singleUserDetails.id}`} >
@@ -62,4 +68,4 @@ const mapStateToProps = (state) => {
         searchResults: state.CustomerStore.searchResults
     }
 }
-export default connect(mapStateToProps)(userDetails);
+export default connect(mapStateToProps)(existingUserUnits);

@@ -10,9 +10,10 @@ const longEnough = (val) => val && val.length > 8;
 class LogIn extends Component {
   constructor() {
     super();
-    this.state = { values: '', errorMessage: '' }
+    this.state = { values: '', errorMessage: ''}
 
   }
+
 
   async handleSubmit(values) {
 
@@ -28,11 +29,11 @@ class LogIn extends Component {
   }
 
   render() {
-    return (
 
+    return (
       <Form
-        model="logIn"
-        onSubmit={(val) => this.handleSubmit(val)}
+      model="logIn"
+      onSubmit={(val) => this.handleSubmit(val)}
       >
         <NavbarUser />
 

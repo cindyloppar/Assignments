@@ -94,7 +94,6 @@ class LocationUser extends Component {
 
                         <Control.select model="LocationUser.province" required ref="selectedProvince" onClick={() => this.getSuburbs()}>
                             <option>Select Province</option>
-
                             {this.state.provinceValues.map(element => {
                                 return <option >{element}</option>
                             })}

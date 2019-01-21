@@ -1,5 +1,4 @@
 
-
 const express = require('express');
 const bodyParser = require('body-parser')
 var textBody = require("body");
@@ -195,11 +194,6 @@ app.post('/business', middlewareTest, async (req, res) => {
   }
 }),
 
-
-  // var queryAllUnits = "SELECT *FROM public.customer_units inner join units on customer_units.units_id = units.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id;"
-  // let searchResults = await client.query(statement, [req.params.province, req.params.suburb]);
-  // res.json(searchResults.rows).status(200).end();
-
   app.get('/getAllUnits/:userEmail', middlewareTest, async (req, res) => {
     try {
       const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
@@ -211,11 +205,16 @@ app.post('/business', middlewareTest, async (req, res) => {
     }
   })
 
-// app.get('/getExistingUnits', middlewareTest, async (req, res) => {
-//   var queryForNotRentedUnits = "SELECT * FROM units WHERE NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id)",
-//   let searchResults = await client.query(statement, [req.params.province, req.params.suburb]);
-//   res.json(searchResults.rows).status(200).end();
-// })
+app.get('/getExistingUnits/:userEmail', middlewareTest, async (req, res) => {
+  try {
+    const queryForUserEmail = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);    
+    const queryForNotRentedUnits = await client.query("SELECT * FROM units inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id WHERE NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id);")
+    res.send(queryForNotRentedUnits.rows).status(200).end()
+  } catch (error) {
+    res.status(200).end();
+  }
+
+})
 
 
 

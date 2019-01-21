@@ -27,7 +27,6 @@ class LocationForm extends Component {
                 KEJWTNTWE: getToken
             }
         });
-        console.log('businessDetails :', businessDetails);
         this.setState({ businessValues: businessDetails.data.rows })
     }
 
