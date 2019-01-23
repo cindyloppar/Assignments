@@ -42,9 +42,9 @@ const fakeAuth = {
         this.isAuthenticated = true;
         setTimeout(callback, 300);
     },
-    logOut(cb) {
+    logOut(callback) {
         this.isAuthenticated = false
-        setTimeout(cb, 300)
+        setTimeout(callback, 300)
     }
 }
 

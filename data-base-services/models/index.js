@@ -194,20 +194,20 @@ app.post('/business', middlewareTest, async (req, res) => {
   }
 }),
 
-  app.get('/getAllUnits/:userEmail', middlewareTest, async (req, res) => {
-    try {
-      const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
-      const userUnits = await client.query("SELECT * FROM customer_units inner join units on customer_units.units_id = units.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id ");
-      res.send(userUnits.rows).status(200).end();
-    } catch (error) {
-      res.status(200).end();
+app.get('/getAllUnits/:userEmail', middlewareTest, async (req, res) => {
+  try {
+    const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
+    const userUnits = await client.query("SELECT * FROM customer_units inner join units on customer_units.units_id = units.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id ");
+    res.send(userUnits.rows).status(200).end();
+  } catch (error) {
+    res.status(200).end();
 
-    }
-  })
+  }
+})
 
 app.get('/getExistingUnits/:userEmail', middlewareTest, async (req, res) => {
   try {
-    const queryForUserEmail = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);    
+    const queryForUserEmail = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
     const queryForNotRentedUnits = await client.query("SELECT * FROM units inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id WHERE NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id);")
     res.send(queryForNotRentedUnits.rows).status(200).end()
   } catch (error) {
@@ -215,28 +215,6 @@ app.get('/getExistingUnits/:userEmail', middlewareTest, async (req, res) => {
   }
 
 })
-
-
-
-app.get('/location', middlewareTest, async (req, res) => {
-  var data = req.query
-  try {
-
-    const statement = `SELECT location.province, units.name as unitName, location.city, location.suburb, unit_types.name, business.business_name FROM business 
-      INNER JOIN location on location.business_id = business.id
-      INNER JOIN blocks on blocks.location_id = location.id
-      INNER JOIN units on units.blocks_id = blocks.id
-      INNER JOIN unit_types on units.unit_types_id = unit_types.id
-      WHERE unit_types.name = $1 AND location.suburb =$2`;
-    let searchResults = await client.query(statement, [data.name, data.suburb]);
-
-    return res.json(searchResults.rows);
-
-  } catch (error) {
-    return res.status(500);
-  }
-})
-
 
 app.post('/location', middlewareTest, async (req, res) => {
 
@@ -506,7 +484,6 @@ app.post('/logginbusinessowner', async (req, res) => {
     }
   })(req, res);
 }),
-
 
 
   app.listen(port, () => console.log('server is running ' + port))
