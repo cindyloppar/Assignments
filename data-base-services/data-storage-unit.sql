@@ -21,10 +21,10 @@ CREATE TABLE IF NOT EXISTS blocks(
 ); 
 CREATE TABLE IF NOT EXISTS unit_types(
     id serial PRIMARY KEY,
-    name VARCHAR (100) UNIQUE,
-    length DECIMAL (100),
-    width DECIMAL (100),
-    height DECIMAL (100)
+    name VARCHAR (100),
+    length DECIMAL (100) UNIQUE,
+    width DECIMAL (100) UNIQUE,
+    height DECIMAL (100) UNIQUE
 );
  CREATE TABLE IF NOT EXISTS units(
     id serial PRIMARY KEY,

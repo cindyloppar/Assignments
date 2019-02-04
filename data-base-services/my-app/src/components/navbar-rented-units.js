@@ -40,8 +40,9 @@ class NavbarDisplayForBusiness extends React.Component {
             </Nav>
             <Nav pullRight start collapse expandSm hidden={hidden} >
               <NavbarLink light active href="/" >Home</NavbarLink>
-              <NavbarLink light active href="/displayuserdetails" >Rented</NavbarLink> 
-              <NavbarLink light active href="/showavailableunitsdetails" >Available Units</NavbarLink>                                         
+              {/* <NavbarLink light active href="/displayuserdetails" >Rented Out Units</NavbarLink> */}
+              <NavbarLink light active href="/unittypes" >Add Units</NavbarLink>                
+              {/* <NavbarLink light active href="/showavailableunitsdetails" >Available Units</NavbarLink>                                          */}
               <NavbarLink light disabled href="/logout">Logout</NavbarLink>
             </Nav>
           </Navbar>

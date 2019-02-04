@@ -20,20 +20,6 @@ class MyForm extends Component {
 
   render() {
 
-
-    // const isTelephone = (val) => {
-    //   var telRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
-    //   console.log('telRegex :', telRegex);
-    //   var check = telRegex.test(val);
-    //   console.log('check :', check);
-    //   if (!check && val.length > 0) {
-    //     this.setState({ errorPresent: true, errorMessage: "Please check telephone number!" })
-    //   } else {
-    //     this.setState({ errorPresent: false })
-    //   }
-    //   return check;
-    // };
-
     const isEmail = (val) => {
       var re = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
       var results = re.test(val);
@@ -45,6 +31,18 @@ class MyForm extends Component {
       return results;
     };
 
+
+    // const isValidTel =(validate) =>{
+    //   var testDomain = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+    //   var test = testDomain.test(validate);
+    //   console.log('test :', test);
+    //   if (!validate) {
+    //     this.setState({errorPresent: true, errorMessage: "Invalid phone number, please check"})
+    //   }else{
+    //     this.setState({errorPresent: false})
+    //   }
+    //   return test;
+    // }
 
     return (
 
@@ -79,7 +77,7 @@ class MyForm extends Component {
           <Control.text model="user.telephoneNumber"
             // validators={{
             //   required: (val) => val && val.length,
-            // isTelephone,
+            //   isValidTel,
             // }}
             required />
         </div>

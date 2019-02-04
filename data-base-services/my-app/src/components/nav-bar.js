@@ -38,7 +38,6 @@ class NavbarLight extends React.Component {
             </Nav>
             <Nav start collapse expandSm hidden={hidden}>
               <NavbarLink light href="/" pullRight>Home</NavbarLink>
-              <NavbarLink light disabled href="/logout">Logout</NavbarLink>
             </Nav>
           </Navbar>
         </Container>

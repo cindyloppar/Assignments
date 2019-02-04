@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken');
 const ExtractJWT = passportJWT.ExtractJwt;
 const JWTStrategy = passportJWT.Strategy;
 
-const connectionString = process.env.DATABASE_URL || 'postgres://cindy:loppar123@localhost:5432/storage_unit';
+const connectionString = process.env.DATABASE_URL;
 app.use(bodyParser.json())
 app.use(cors());
 
@@ -323,6 +323,8 @@ app.post('/blocks', middlewareTest, async (req, res) => {
 }),
 
   app.post('/unittypes', middlewareTest, async (req, res) => {
+    try {
+      
     const text = `INSERT INTO
       unit_types(name, length, width, height)
       VALUES($1, $2, $3, $4)
@@ -333,7 +335,6 @@ app.post('/blocks', middlewareTest, async (req, res) => {
       req.body.width,
       req.body.height,
     ];
-    try {
       const { rows, rowCount } = await client.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {

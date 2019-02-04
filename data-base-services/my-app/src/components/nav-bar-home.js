@@ -37,10 +37,10 @@ class NavbarHome extends React.Component {
               </Button>
             </Nav>
             <Nav start collapse expandSm hidden={hidden}>
-              <NavbarLink light href="/signup" pullRight>SignUp</NavbarLink>
+              <NavbarLink light href="/signup" pullRight>Sign up</NavbarLink>
               <NavbarLink light disabled href="/login">Login</NavbarLink>
-              <NavbarLink light href="/signupbusinessowner" pullRight>SignUpAsBusiness</NavbarLink>
-              <NavbarLink light disabled href="/logginbusinessowner">LoginAsBusiness</NavbarLink>
+              <NavbarLink light href="/signupbusinessowner" pullRight>Sign up as Business</NavbarLink>
+              <NavbarLink light disabled href="/logginbusinessowner">Login as Business</NavbarLink>
             </Nav>
           </Navbar>
         </Container>
