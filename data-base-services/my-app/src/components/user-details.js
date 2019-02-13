@@ -1,5 +1,4 @@
 import React from 'react';
-import NavbarUserDetails from './navbar-user';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';

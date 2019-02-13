@@ -2,27 +2,30 @@ import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
 import '../App.css';
 import axios from 'axios';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 import { updateBusinessSearchResults } from '../action-creator';
 import NavbarDisplayRentedUnits from '../components/navbar-rented-units'
 
 class LocationForm extends Component {
     constructor() {
         super();
-        this.state = { values: '', businessValues: [], provinceValues: [],
-        searchResults: {
-            province: "",
-            unitTypeDetails: "",
-            locationsSuburb: "",
-            unitsDetails: ""
+        this.state = {
+            values: '', businessValues: [], provinceValues: [],
+            searchResults: {
+                province: "",
+                unitTypeDetails: "",
+                locationsSuburb: "",
+                unitsDetails: ""
+            }
         }
-    }
 
     }
 
     async componentDidMount() {
         var getToken = sessionStorage.getItem("token");
-        var businessDetails = await axios.get('http://localhost:3001/business', {
+        var userEmail = jwtDecode(getToken).email;
+        var businessDetails = await axios.get('http://localhost:3001/business/' + userEmail, {
             headers: {
                 KEJWTNTWE: getToken
             }

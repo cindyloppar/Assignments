@@ -17,7 +17,7 @@ class SignUp extends Component {
         if (checkUserEmail.status === 200) {
             this.setState({ values, errorPresent: true, errorMessage:checkUserEmail.data })
         }else if(checkUserEmail.status === 201){
-            this.props.history.push('/login');
+            this.props.history.push('/locationuser');
         }else{
             this.setState({ values, errorPresent: true, errorMessage: "Opps! Something went wrong please try again later" })
         }

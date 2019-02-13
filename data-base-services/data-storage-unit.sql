@@ -1,9 +1,18 @@
+CREATE TABLE IF NOT EXISTS users(
+    id serial PRIMARY KEY,
+    name VARCHAR (100) NOT NULL,
+    last_name VARCHAR (100) NOT NULL ,
+    email VARCHAR (100) NOT NULL UNIQUE,
+    role VARCHAR (100) NOT NULL,
+    password VARCHAR (100)NOT NULL 
+);
 CREATE TABLE IF NOT EXISTS business(
     id serial PRIMARY KEY,
     business_name VARCHAR (100) NOT NULL UNIQUE,
     contact_name VARCHAR (100)NOT NULL,
     telephone_number VARCHAR(20) NOT NULL,
-    contact_email VARCHAR(100) NOT NULL
+    contact_email VARCHAR(100) NOT NULL,
+    businessOwnerId INT REFERENCES users(id)
 ); 
 CREATE TABLE IF NOT EXISTS location(
     id serial PRIMARY KEY,
@@ -32,21 +41,16 @@ CREATE TABLE IF NOT EXISTS unit_types(
     blocks_id INT REFERENCES blocks(id),
     unit_types_id INT REFERENCES unit_types(id)
 );
-CREATE TABLE IF NOT EXISTS users(
-    id serial PRIMARY KEY,
-    name VARCHAR (100) NOT NULL,
-    last_name VARCHAR (100) NOT NULL ,
-    email VARCHAR (100) NOT NULL UNIQUE,
-    role VARCHAR (100) NOT NULL,
-    password VARCHAR (100)NOT NULL 
-);
+
 CREATE TABLE IF NOT EXISTS customer_units(
     id serial PRIMARY KEY,
-    customer_id INT REFERENCES users(id),
+    customer_id INT REFERENCES users(id) UNIQUE,
     units_id INT REFERENCES units(id) UNIQUE
 );
 
-INSERT INTO business(business_name, contact_name, telephone_number, contact_email) VALUES ('Tutu.com', 'Temba', '0726263325', 'ssdressers@gmail.com');
+INSERT INTO users (name, last_name, email,role, password) VALUES('sabelo', 'msibi', 'sabelo@gmail.com', 'Business Owner', 'ldskja3wr4wedsfew32');
+
+INSERT INTO business(business_name, contact_name, telephone_number, contact_email, businessOwnerId) VALUES ('Tutu.com', 'Temba', '0726263325', 'ssdressers@gmail.com', 1);
 INSERT INTO location(address_line1) VALUES ('258 Fourways');
 INSERT INTO unit_types(name, width) VALUES ('Storage', '3');
 INSERT INTO blocks(name) VALUES ('Block P');

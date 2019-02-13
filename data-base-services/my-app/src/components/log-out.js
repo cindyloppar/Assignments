@@ -7,7 +7,7 @@ class LogOut extends Component {
   componentDidMount() {
    
     sessionStorage.removeItem("token");
-    this.props.history.push("/");
+    this.props.history.push("/login");
   }
 
   render() {

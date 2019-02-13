@@ -1,12 +1,12 @@
 
 const express = require('express');
 const bodyParser = require('body-parser')
-var textBody = require("body");
-var http = require("http");
+// var textBody = require("body");
+// var http = require("http");
 const pg = require('pg');
 const cors = require('cors');
 const app = express();
-const path = require('path');
+// const path = require('path');
 const port = 3001;
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -15,6 +15,7 @@ const passportJWT = require("passport-jwt");
 const jwt = require('jsonwebtoken');
 const ExtractJWT = passportJWT.ExtractJwt;
 const JWTStrategy = passportJWT.Strategy;
+require('dotenv').config()
 
 const connectionString = process.env.DATABASE_URL;
 app.use(bodyParser.json())
@@ -22,7 +23,6 @@ app.use(cors());
 
 const client = new pg.Client(connectionString);
 client.connect();
-
 
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
@@ -73,10 +73,6 @@ passport.use(new JWTStrategy({
 ));
 
 
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
-});
-
 router.get('/login', function (req, res, next) {
   res.send(req.user.rows[0]);
 });
@@ -112,10 +108,11 @@ function middlewareTest(req, res, next) {
 };
 
 
-app.get("/business", middlewareTest, async (req, res) => {
-  const findAllQuery = 'SELECT * FROM business';
+app.get("/business/:userEmail", middlewareTest, async (req, res) => {
+  const getEmail = await client.query('SELECT id FROM users WHERE email = $1', [req.params.userEmail])
+  const findAllQuery = 'SELECT * FROM business where businessOwnerId = $1';
   try {
-    const { rows, rowCount } = await client.query(findAllQuery);
+    const { rows, rowCount } = await client.query(findAllQuery, [getEmail.rows[0].id]);
     return res.status(200).send({ rows, rowCount });
   } catch (error) {
     return res.status(400);
@@ -175,29 +172,10 @@ app.get("/userdetails", middlewareTest, async (req, res) => {
 })
 
 
-app.post('/business', middlewareTest, async (req, res) => {
-  const text = `INSERT INTO
-  business(business_name, contact_name, telephone_number, contact_email)
-      VALUES($1, $2, $3, $4)
-      returning *`;
-  const values = [
-    req.body.businessName,
-    req.body.contactName,
-    req.body.telephoneNumber,
-    req.body.contactEmail,
-  ];
-  try {
-    const { rows, rowCount } = await client.query(text, values);
-    return res.status(201).send(rows[0]);
-  } catch (error) {
-    return res.status(400);
-  }
-}),
-
 app.get('/getAllUnits/:userEmail', middlewareTest, async (req, res) => {
   try {
     const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
-    const userUnits = await client.query("SELECT * FROM customer_units inner join units on customer_units.units_id = units.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id ");
+    const userUnits = await client.query("SELECT * FROM customer_units inner join units on customer_units.units_id = units.id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id ", [queryForUserId.rows[0].id]);
     res.send(userUnits.rows).status(200).end();
   } catch (error) {
     res.status(200).end();
@@ -208,7 +186,7 @@ app.get('/getAllUnits/:userEmail', middlewareTest, async (req, res) => {
 app.get('/getExistingUnits/:userEmail', middlewareTest, async (req, res) => {
   try {
     const queryForUserEmail = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
-    const queryForNotRentedUnits = await client.query("SELECT * FROM units inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id WHERE NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id);")
+    const queryForNotRentedUnits = await client.query("SELECT * FROM units inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id inner join business on location.business_id = business.id WHERE NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id)", [queryForUserEmail.rows[0].id])
     res.send(queryForNotRentedUnits.rows).status(200).end()
   } catch (error) {
     res.status(200).end();
@@ -216,30 +194,7 @@ app.get('/getExistingUnits/:userEmail', middlewareTest, async (req, res) => {
 
 })
 
-app.post('/location', middlewareTest, async (req, res) => {
 
-  try {
-    var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
-
-    const text = `INSERT INTO
-          location(province, address_line1, address_line2, suburb, city, business_id)
-          VALUES($1, $2, $3, $4, $5, $6)
-          returning *`;
-    const values = [
-      req.body.province,
-      req.body.address_line1,
-      req.body.address_line2,
-      req.body.suburb,
-      req.body.city,
-      businessId.rows[0].id,
-
-    ];
-    const { rows, rowCount } = await client.query(text, values);
-    return res.status(201).send(rows[0]);
-  } catch (error) {
-    return res.status(400);
-  }
-})
 
 app.get('/location-unit-types/:province/:suburb', middlewareTest, async (req, res) => {
   var statement = "SELECT unit_types.name as unittypename, units.name as unitname, unit_types.id  FROM unit_types inner join units on unit_types.id = units.unit_types_id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id where location.province = $1 and location.suburb = $2 and NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id)";
@@ -272,6 +227,7 @@ app.get('/locationuser', middlewareTest, async (req, res) => {
     return res.status(500);
   }
 })
+
 app.get("/getAllUserUnits/:userEmail", middlewareTest, async (req, res) => {
   try {
     const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
@@ -282,6 +238,56 @@ app.get("/getAllUserUnits/:userEmail", middlewareTest, async (req, res) => {
 
   }
 })
+
+
+app.post('/business', middlewareTest, async (req, res) => {
+  const userDetails = await client.query('SELECT * from users where email = $1', [req.body.userEmail]);
+  const text = `INSERT INTO
+  business(business_name, contact_name, telephone_number, contact_email, businessOwnerId)
+      VALUES($1, $2, $3, $4,$5)
+      returning *`;
+  const values = [
+    req.body.businessName,
+    req.body.contactName,
+    req.body.telephoneNumber,
+    req.body.contactEmail,
+    userDetails.rows[0].id
+  ];
+  try {
+    const { rows, rowCount } = await client.query(text, values);
+    return res.status(200).send(rows[0]);
+  } catch (error) {
+    return res.status(400);
+  }
+}),
+
+
+
+  app.post('/location', middlewareTest, async (req, res) => {
+
+    try {
+      var businessId = await client.query("SELECT id FROM business WHERE business_name = $1", [req.body.selectBusiness]);
+
+      const text = `INSERT INTO
+          location(province, address_line1, address_line2, suburb, city, business_id)
+          VALUES($1, $2, $3, $4, $5, $6)
+          returning *`;
+      const values = [
+        req.body.province,
+        req.body.address_line1,
+        req.body.address_line2,
+        req.body.suburb,
+        req.body.city,
+        businessId.rows[0].id,
+
+      ];
+      const { rows, rowCount } = await client.query(text, values);
+      return res.status(200).send(rows[0]);
+    } catch (error) {
+      return res.status(400);
+    }
+  })
+
 app.post('/locationuser', middlewareTest, async (req, res) => {
   try {
     const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.body.email]);
@@ -295,7 +301,7 @@ app.post('/locationuser', middlewareTest, async (req, res) => {
       queryForUserId.rows[0].id
     ];
     const { rows, rowCount } = await client.query(text, values);
-    return res.status(201).send(rows[0]);
+    return res.status(200).send(rows[0]);
   } catch (error) {
     return res.status(400);
   }
@@ -316,7 +322,7 @@ app.post('/blocks', middlewareTest, async (req, res) => {
       locationId.rows[0].id
     ];
     const { rows, rowCount } = await client.query(text, values);
-    return res.status(201).send(rows[0]);
+    return res.status(200).send(rows[0]);
   } catch (error) {
     return res.status(400);
   }
@@ -324,19 +330,19 @@ app.post('/blocks', middlewareTest, async (req, res) => {
 
   app.post('/unittypes', middlewareTest, async (req, res) => {
     try {
-      
-    const text = `INSERT INTO
+
+      const text = `INSERT INTO
       unit_types(name, length, width, height)
       VALUES($1, $2, $3, $4)
       returning *`;
-    const values = [
-      req.body.name,
-      req.body.length,
-      req.body.width,
-      req.body.height,
-    ];
+      const values = [
+        req.body.name,
+        req.body.length,
+        req.body.width,
+        req.body.height,
+      ];
       const { rows, rowCount } = await client.query(text, values);
-      return res.status(201).send(rows[0]);
+      return res.status(200).send(rows[0]);
     } catch (error) {
       return res.status(400);
     }
@@ -357,7 +363,7 @@ app.post('/blocks', middlewareTest, async (req, res) => {
         unitTypesId.rows[0].id
       ];
       const { rows } = await client.query(text, values);
-      return res.status(201).send(rows[0]);
+      return res.status(200).send(rows[0]);
     } catch (error) {
       return res.status(400);
     }
@@ -377,7 +383,7 @@ app.post('/blocks', middlewareTest, async (req, res) => {
         customerId.rows[0].id
       ];
       const { rows } = await client.query(text, values);
-      return res.status(201).send(rows[0]);
+      return res.status(200).send(rows[0]);
     } catch (error) {
       return res.status(400);
     }
@@ -403,7 +409,7 @@ app.post('/blocks', middlewareTest, async (req, res) => {
       ];
       var insertUser = await client.query(text, values);
       if (!insertUser || insertUser.rowCount <= 0) {
-        res.status(201).json({ message: "Sorry but there was a problem signing the user up." }).end();
+        res.status(200).json({ message: "Sorry but there was a problem signing the user up." }).end();
       } else {
         var token = generateToken(insertUser.rows[0])
         res.status(201).json({ user: insertUser, token: token }).end();
@@ -456,7 +462,7 @@ app.post('/blocks', middlewareTest, async (req, res) => {
       ];
       var insertUser = await client.query(text, values);
       if (!insertUser || insertUser.rowCount <= 0) {
-        res.status(201).json({ message: "Sorry but the was a problem signing the user up." }).end();
+        res.status(208).send("Sorry but the was a problem signing the user up.").end();
       } else {
         var token = generateToken(insertUser.rows[0])
         res.status(201).json({ user: insertUser, token: token }).end();

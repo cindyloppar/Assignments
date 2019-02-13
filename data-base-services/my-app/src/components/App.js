@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
+import jwtDecode from 'jwt-decode';
 import '../App.css';
 import axios from 'axios';
 import NavbarDisplayRentedUnits from '../components/navbar-rented-units';
@@ -12,14 +13,15 @@ class MyForm extends Component {
 
   async handleSubmit(values) {
     this.setState({ values })
-    axios.post('http://localhost:3001/business', values)
+    var token = sessionStorage.getItem("token");
+    var userDetails = jwtDecode(token);
+    axios.post('http://localhost:3001/business', { ...values, userEmail: userDetails.email })
     this.props.history.push('/location');
 
   }
 
 
   render() {
-
     const isEmail = (val) => {
       var re = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
       var results = re.test(val);
@@ -31,18 +33,6 @@ class MyForm extends Component {
       return results;
     };
 
-
-    // const isValidTel =(validate) =>{
-    //   var testDomain = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
-    //   var test = testDomain.test(validate);
-    //   console.log('test :', test);
-    //   if (!validate) {
-    //     this.setState({errorPresent: true, errorMessage: "Invalid phone number, please check"})
-    //   }else{
-    //     this.setState({errorPresent: false})
-    //   }
-    //   return test;
-    // }
 
     return (
 
@@ -75,10 +65,6 @@ class MyForm extends Component {
         <div className='field' >
           <label>Telephone number: </label>
           <Control.text model="user.telephoneNumber"
-            // validators={{
-            //   required: (val) => val && val.length,
-            //   isValidTel,
-            // }}
             required />
         </div>
         <div className='field' >
