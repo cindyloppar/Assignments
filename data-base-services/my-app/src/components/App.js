@@ -19,8 +19,7 @@ class MyForm extends Component {
     this.props.history.push('/location');
 
   }
-
-
+  
   render() {
     const isEmail = (val) => {
       var re = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;

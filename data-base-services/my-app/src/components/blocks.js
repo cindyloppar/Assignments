@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Control } from 'react-redux-form';
 import '../App.css';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 import NavbarLight from '../components/nav-bar'
 class BlocksForm extends Component {
   constructor() {
@@ -11,8 +12,10 @@ class BlocksForm extends Component {
 
 
   async componentDidMount() {
-    var locationDetails = await axios.get('http://localhost:3001/location');
-    this.setState({ locationValues: locationDetails.data.rows });
+    var token = sessionStorage.getItem("token");
+    var userDetails = jwtDecode(token);
+    var locationDetails = await axios.get('http://localhost:3001/location/' + userDetails.email);
+    this.setState({ locationValues: locationDetails.data });
   }
 
   async handleSubmit(values) {
@@ -28,7 +31,7 @@ class BlocksForm extends Component {
       <Form
         model="blocks"
         onSubmit={(val) => this.handleSubmit(val)} >
-        
+
         <NavbarLight />
 
         <div className='field' >
@@ -39,7 +42,6 @@ class BlocksForm extends Component {
 
           <Control.select model="blocks.selectLocation" required>
             <option>Select Location</option>
-
             {this.state.locationValues.map(element => {
               return <option>{element.address_line1}</option>
             })}

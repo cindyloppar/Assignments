@@ -34,10 +34,11 @@ class LocationForm extends Component {
     }
 
     async handleSubmit(values) {
+        var getToken = sessionStorage.getItem("token");
+        var userEmail = jwtDecode(getToken).email;
         this.setState({ values });
-        axios.post('http://localhost:3001/location', values);
+        axios.post('http://localhost:3001/location', { ...values, userEmailForLocation: userEmail.email});
         this.props.history.push('/blocks');
-
     }
 
     render() {
@@ -54,9 +55,8 @@ class LocationForm extends Component {
                 </div>
 
                 <div className='field'>
-                    <Control.select model="location.selectBusiness"
-                        required
-                    >
+                    <Control.select model="location.selectBusiness" required                    >
+                        <option value="business name">business name</option>
                         {this.state.businessValues.map(element => {
                             return <option>{element.business_name}</option>
                         })}

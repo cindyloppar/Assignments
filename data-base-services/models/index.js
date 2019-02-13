@@ -110,7 +110,7 @@ function middlewareTest(req, res, next) {
 
 app.get("/business/:userEmail", middlewareTest, async (req, res) => {
   const getEmail = await client.query('SELECT id FROM users WHERE email = $1', [req.params.userEmail])
-  const findAllQuery = 'SELECT * FROM business where businessOwnerId = $1';
+  const findAllQuery = 'SELECT * FROM business WHERE businessOwnerId = $1';
   try {
     const { rows, rowCount } = await client.query(findAllQuery, [getEmail.rows[0].id]);
     return res.status(200).send({ rows, rowCount });
@@ -120,11 +120,19 @@ app.get("/business/:userEmail", middlewareTest, async (req, res) => {
 })
 
 
-app.get("/location", async (req, res) => {
-  const findAllQuery = 'SELECT * FROM location';
+app.get("/location/:userEmail", middlewareTest, async (req, res) => {
+  const getEmailForLocation = await client.query('SELECT id FROM users WHERE email = $1', [req.params.userEmail])
+  const findUserId = 'SELECT id FROM business WHERE businessOwnerId = $1';
+  const { rows, rowCount } = await client.query(findUserId, [getEmailForLocation.rows[0].id]);
+  var arr = []
+
+  for (let index = 0; index < rows.length; index++) {
+    const findAllQuery = 'SELECT * FROM location WHERE business_id = $1';
+    const businessLocations = await client.query(findAllQuery, [rows[index].id]);
+    arr.push(businessLocations.rows[0])
+  }
   try {
-    const { rows, rowCount } = await client.query(findAllQuery);
-    return res.status(200).send({ rows, rowCount });
+    return res.status(200).json(arr);
   } catch (error) {
     return res.status(400);
   }

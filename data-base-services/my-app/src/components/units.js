@@ -3,6 +3,7 @@ import { Form, Control } from 'react-redux-form';
 import '../App.css';
 import axios from 'axios';
 import NavbarLight from '../components/nav-bar';
+import jwtDecode from 'jwt-decode';
 
 class UnitForm extends Component {
   constructor() {
@@ -18,7 +19,9 @@ class UnitForm extends Component {
 
   async handleSubmit(values) {
     this.setState({ values })
-    axios.post('http://localhost:3001/units', values)
+    var token = sessionStorage.getItem("token");
+    var userDetails = jwtDecode(token);
+    axios.post('http://localhost:3001/units', {...values, userEmail: userDetails.email})
     this.props.history.push('/showavailableunitsdetails')
   }
 
