@@ -179,7 +179,6 @@ app.get("/userdetails", middlewareTest, async (req, res) => {
   }
 })
 
-
 app.get('/getAllUnits/:userEmail', middlewareTest, async (req, res) => {
   try {
     const queryForUserId = await client.query("SELECT id FROM users WHERE email = $1", [req.params.userEmail]);
@@ -201,8 +200,6 @@ app.get('/getExistingUnits/:userEmail', middlewareTest, async (req, res) => {
   }
 
 })
-
-
 
 app.get('/location-unit-types/:province/:suburb', middlewareTest, async (req, res) => {
   var statement = "SELECT unit_types.name as unittypename, units.name as unitname, unit_types.id  FROM unit_types inner join units on unit_types.id = units.unit_types_id inner join blocks on units.blocks_id = blocks.id inner join location on blocks.location_id = location.id where location.province = $1 and location.suburb = $2 and NOT EXISTS (SELECT * FROM customer_units WHERE customer_units.units_id = units.id)";
@@ -243,10 +240,8 @@ app.get("/getAllUserUnits/:userEmail", middlewareTest, async (req, res) => {
     res.send(userUnits.rows).status(200).end();
   } catch (error) {
     res.status(200).end();
-
   }
 })
-
 
 app.post('/business', middlewareTest, async (req, res) => {
   const userDetails = await client.query('SELECT * from users where email = $1', [req.body.userEmail]);
@@ -268,8 +263,6 @@ app.post('/business', middlewareTest, async (req, res) => {
     return res.status(400);
   }
 }),
-
-
 
   app.post('/location', middlewareTest, async (req, res) => {
 
@@ -426,7 +419,6 @@ app.post('/blocks', middlewareTest, async (req, res) => {
 
   }),
 
-
   app.post('/login', (req, res) => {
     passport.authenticate('local', async function (err, user, info) {
       var passwordsMatch = null;
@@ -448,7 +440,6 @@ app.post('/blocks', middlewareTest, async (req, res) => {
       }
     })(req, res);
   }),
-
 
   app.post('/signupbusinessowner', async (req, res, next) => {
     var businessExists = await client.query(`SELECT * FROM users WHERE email = $1`, [req.body.email]);
@@ -478,7 +469,6 @@ app.post('/blocks', middlewareTest, async (req, res) => {
     }
   })
 
-
 app.post('/logginbusinessowner', async (req, res) => {
 
   passport.authenticate('local', async function (err, user, info) {
@@ -499,7 +489,6 @@ app.post('/logginbusinessowner', async (req, res) => {
     }
   })(req, res);
 }),
-
 
   app.listen(port, () => console.log('server is running ' + port))
 

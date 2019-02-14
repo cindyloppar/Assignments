@@ -18,6 +18,7 @@ class SignUpBusiness extends Component {
             this.setState({ values, errorPresent: true, errorMessage: typeof checkUserEmail.data === "String" ? checkUserEmail.data : null })
 
         } else if (checkUserEmail.status === 201) {
+            sessionStorage.setItem('token', checkUserEmail.data.token);
             this.props.history.push('/business');
         } else {
             this.setState({ values, errorPresent: true, errorMessage: checkUserEmail.data })

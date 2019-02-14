@@ -51,7 +51,7 @@ const fakeAuth = {
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
-        checkUser() || fakeAuth.isAuthenticated ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
+        checkUser() || fakeAuth.isAuthenticated ? <Component {...props} /> : <Redirect to={{ pathname: '/' }} />
     )} />
 )
 

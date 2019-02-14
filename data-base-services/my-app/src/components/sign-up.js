@@ -15,10 +15,12 @@ class SignUp extends Component {
     async handleSubmit(values) {
         var checkUserEmail = await axios.post('http://localhost:3001/signup', values);
         if (checkUserEmail.status === 200) {
-            this.setState({ values, errorPresent: true, errorMessage:checkUserEmail.data })
-        }else if(checkUserEmail.status === 201){
+            this.setState({ values, errorPresent: true, errorMessage: checkUserEmail.data })
+        } else if (checkUserEmail.status === 201) {
+            sessionStorage.setItem('token', checkUserEmail.data.token);
+
             this.props.history.push('/locationuser');
-        }else{
+        } else {
             this.setState({ values, errorPresent: true, errorMessage: "Opps! Something went wrong please try again later" })
         }
     }
@@ -34,14 +36,14 @@ class SignUp extends Component {
             return results;
         };
 
-       
+
         return (
 
             <Form
                 model="signUp"
-                onSubmit={(val) => this.handleSubmit(val) }
+                onSubmit={(val) => this.handleSubmit(val)}
             >
-            <NavbarUser />
+                <NavbarUser />
                 {this.state.errorPresent && (
                     <p style={{ color: "red" }}>{this.state.errorMessage}</p>
                 )}
